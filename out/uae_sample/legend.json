@@ -1,0 +1,66 @@
+{
+  "father": {
+    "color": "#1f77b4",
+    "style": "solid"
+  },
+  "mother": {
+    "color": "#ff7f0e",
+    "style": "solid"
+  },
+  "spouse": {
+    "color": "#2ca02c",
+    "style": "solid"
+  },
+  "child": {
+    "color": "#d62728",
+    "style": "solid"
+  },
+  "sibling": {
+    "color": "#9467bd",
+    "style": "dashed"
+  },
+  "relative": {
+    "color": "#8c564b",
+    "style": "dotted"
+  },
+  "partner": {
+    "color": "#e377c2",
+    "style": "solid"
+  },
+  "position_held": {
+    "color": "#7f7f7f",
+    "style": "solid"
+  },
+  "member_of_party": {
+    "color": "#bcbd22",
+    "style": "solid"
+  },
+  "member_of": {
+    "color": "#17becf",
+    "style": "solid"
+  },
+  "employer": {
+    "color": "#aec7e8",
+    "style": "solid"
+  },
+  "educated_at": {
+    "color": "#ffbb78",
+    "style": "solid"
+  },
+  "head_of_government": {
+    "color": "#98df8a",
+    "style": "solid"
+  },
+  "head_of_state": {
+    "color": "#ff9896",
+    "style": "solid"
+  },
+  "chairperson": {
+    "color": "#c5b0d5",
+    "style": "solid"
+  },
+  "officeholder": {
+    "color": "#c49c94",
+    "style": "solid"
+  }
+}

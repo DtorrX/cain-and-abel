@@ -1,0 +1,110 @@
+[
+  {
+    "source": "QMohammed",
+    "target": "QHamdan",
+    "relation": "father",
+    "pid": "P22",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QMohammed",
+    "target": "QMaktoum",
+    "relation": "father",
+    "pid": "P22",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QMohammed",
+    "target": "QLatifa",
+    "relation": "father",
+    "pid": "P22",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QMohammed",
+    "target": "QHind",
+    "relation": "spouse",
+    "pid": "P26",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QZayed",
+    "target": "QMohammedNahyan",
+    "relation": "father",
+    "pid": "P22",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QZayed",
+    "target": "QTahnoon",
+    "relation": "father",
+    "pid": "P22",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QZayed",
+    "target": "QHazza",
+    "relation": "father",
+    "pid": "P22",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QZayed",
+    "target": "QMansour",
+    "relation": "father",
+    "pid": "P22",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QMohammedNahyan",
+    "target": "QMohammed",
+    "relation": "relative",
+    "pid": "P1038",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QMohammedNahyan",
+    "target": "QHazza",
+    "relation": "sibling",
+    "pid": "P3373",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QMohammedNahyan",
+    "target": "QTahnoon",
+    "relation": "sibling",
+    "pid": "P3373",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "source": "QMohammedNahyan",
+    "target": "QMansour",
+    "relation": "sibling",
+    "pid": "P3373",
+    "source_system": "manual",
+    "evidence_url": "https://example.com/uae",
+    "retrieved_at": "2024-01-01T00:00:00Z"
+  }
+]
