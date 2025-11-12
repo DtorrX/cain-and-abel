@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+.wikinet-cache/
+.out/

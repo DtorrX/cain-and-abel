@@ -1,0 +1,42 @@
+[
+  {
+    "id": "QMohammed",
+    "label": "Sheikh Mohammed bin Rashid Al Maktoum"
+  },
+  {
+    "id": "QHamdan",
+    "label": "Sheikh Hamdan bin Mohammed Al Maktoum"
+  },
+  {
+    "id": "QMaktoum",
+    "label": "Sheikh Maktoum bin Mohammed Al Maktoum"
+  },
+  {
+    "id": "QLatifa",
+    "label": "Sheikha Latifa bint Mohammed Al Maktoum"
+  },
+  {
+    "id": "QHind",
+    "label": "Sheikha Hind bint Maktoum bin Juma Al Maktoum"
+  },
+  {
+    "id": "QZayed",
+    "label": "Sheikh Zayed bin Sultan Al Nahyan"
+  },
+  {
+    "id": "QMohammedNahyan",
+    "label": "Sheikh Mohammed bin Zayed Al Nahyan"
+  },
+  {
+    "id": "QTahnoon",
+    "label": "Sheikh Tahnoun bin Zayed Al Nahyan"
+  },
+  {
+    "id": "QHazza",
+    "label": "Sheikh Hazza bin Zayed Al Nahyan"
+  },
+  {
+    "id": "QMansour",
+    "label": "Sheikh Mansour bin Zayed Al Nahyan"
+  }
+]

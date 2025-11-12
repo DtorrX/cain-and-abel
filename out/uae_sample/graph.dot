@@ -1,0 +1,24 @@
+digraph wikinet {
+  "QMohammed" [label="Sheikh Mohammed bin Rashid Al Maktoum"];
+  "QHamdan" [label="Sheikh Hamdan bin Mohammed Al Maktoum"];
+  "QMaktoum" [label="Sheikh Maktoum bin Mohammed Al Maktoum"];
+  "QLatifa" [label="Sheikha Latifa bint Mohammed Al Maktoum"];
+  "QHind" [label="Sheikha Hind bint Maktoum bin Juma Al Maktoum"];
+  "QZayed" [label="Sheikh Zayed bin Sultan Al Nahyan"];
+  "QMohammedNahyan" [label="Sheikh Mohammed bin Zayed Al Nahyan"];
+  "QTahnoon" [label="Sheikh Tahnoun bin Zayed Al Nahyan"];
+  "QHazza" [label="Sheikh Hazza bin Zayed Al Nahyan"];
+  "QMansour" [label="Sheikh Mansour bin Zayed Al Nahyan"];
+  "QMohammed" -> "QHamdan" [label="father"];
+  "QMohammed" -> "QMaktoum" [label="father"];
+  "QMohammed" -> "QLatifa" [label="father"];
+  "QMohammed" -> "QHind" [label="spouse"];
+  "QZayed" -> "QMohammedNahyan" [label="father"];
+  "QZayed" -> "QTahnoon" [label="father"];
+  "QZayed" -> "QHazza" [label="father"];
+  "QZayed" -> "QMansour" [label="father"];
+  "QMohammedNahyan" -> "QMohammed" [label="relative"];
+  "QMohammedNahyan" -> "QHazza" [label="sibling"];
+  "QMohammedNahyan" -> "QTahnoon" [label="sibling"];
+  "QMohammedNahyan" -> "QMansour" [label="sibling"];
+}

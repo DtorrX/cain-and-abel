@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wikinet"
+version = "0.1.0"
+description = "Wikidata + Wikipedia family and political network crawler"
+authors = [{name = "Stealth Founder", email = "founder@example.com"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31.0",
+    "networkx>=3.1",
+    "pydantic>=1.10",
+    "rich>=13.0",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+visual = ["pygraphviz>=1.11"]
+
+[project.scripts]
+wikinet = "wikinet.cli:main"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
