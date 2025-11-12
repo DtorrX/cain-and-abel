@@ -70,3 +70,11 @@ Full codebase, fully runnable.
 Example command lines to generate Bahrain & UAE royal graphs.
 Tests passing via pytest -q.
 Clear acceptance criteria in README.
+
+Next-Step Insight (when Codex generates the full project)
+Add edge styling rules (e.g., red = family, blue = political) in legend.json and apply in DOT/PNG export.
+Implement rate limiting & caching (SQLite or disk JSONL) and a --resume flag.
+Add language switching for Arabic (--lang ar) to resolve titles in local languages while still fetching English labels as fallback.
+Expand relationship coverage (e.g., P3372 “genealogical ancestor”, P7/P35/P6 transitions, dynastic houses).
+Ship pytest and a Makefile/uv project file to harden reproducibility.
+Add a Streamlit or FastAPI frontend to browse graphs and click through to Wikipedia/Wikidata.
