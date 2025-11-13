@@ -1,0 +1,6142 @@
+[
+  {
+    "source": "Q153284",
+    "target": "Q140686",
+    "type": "P39"
+  },
+  {
+    "source": "Q153284",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q153284",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q153284",
+    "target": "Q115725302",
+    "type": "P463"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q40970",
+    "type": "P463"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q106181156",
+    "type": "P39"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q110964264",
+    "type": "P39"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q125497760",
+    "type": "P39"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q48774199",
+    "type": "P39"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q106181156",
+    "type": "P39"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q110964337",
+    "type": "P39"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q106181156",
+    "type": "P39"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q106181285",
+    "type": "P39"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q106181563",
+    "type": "P39"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q30101519",
+    "type": "P39"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q110964267",
+    "type": "P39"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q2257104",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q3379198",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q3379198",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q7398257",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q30101519",
+    "type": "P39"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q48774199",
+    "type": "P39"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q110964264",
+    "type": "P39"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q110964267",
+    "type": "P39"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q51840013",
+    "type": "P3373"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q66103593",
+    "type": "P3373"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q111083817",
+    "type": "P3373"
+  },
+  {
+    "source": "Q106370260",
+    "target": "Q57655",
+    "type": "P26"
+  },
+  {
+    "source": "Q106370260",
+    "target": "Q3379198",
+    "type": "P40"
+  },
+  {
+    "source": "Q106370260",
+    "target": "Q17403156",
+    "type": "P40"
+  },
+  {
+    "source": "Q106370260",
+    "target": "Q51840013",
+    "type": "P40"
+  },
+  {
+    "source": "Q106370260",
+    "target": "Q66103593",
+    "type": "P40"
+  },
+  {
+    "source": "Q131681111",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q131681111",
+    "target": "Q272117",
+    "type": "P25"
+  },
+  {
+    "source": "Q153284",
+    "target": "Q713801",
+    "type": "P22"
+  },
+  {
+    "source": "Q153284",
+    "target": "Q30519512",
+    "type": "P26"
+  },
+  {
+    "source": "Q153284",
+    "target": "Q30525816",
+    "type": "P40"
+  },
+  {
+    "source": "Q153284",
+    "target": "Q733312",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q269437",
+    "type": "P25"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q57655",
+    "type": "P26"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q131681062",
+    "type": "P40"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q131681111",
+    "type": "P40"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q4667904",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q272117",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q2257104",
+    "type": "P25"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q6746819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q7294934",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q7462442",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q12244819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556586",
+    "target": "Q17403156",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q4120127",
+    "type": "P25"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q6746819",
+    "type": "P26"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q58301",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q1573260",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q1951896",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q5688471",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q7398258",
+    "type": "P3373"
+  },
+  {
+    "source": "Q556607",
+    "target": "Q85804913",
+    "type": "P3373"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q733312",
+    "type": "P22"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q125494502",
+    "type": "P25"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q57655",
+    "type": "P3373"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q215477",
+    "type": "P3373"
+  },
+  {
+    "source": "Q712839",
+    "target": "Q401634",
+    "type": "P3373"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q713801",
+    "type": "P22"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q57655",
+    "type": "P40"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q215477",
+    "type": "P40"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q401634",
+    "type": "P40"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q712839",
+    "type": "P40"
+  },
+  {
+    "source": "Q733312",
+    "target": "Q153284",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2257104",
+    "target": "Q57655",
+    "type": "P26"
+  },
+  {
+    "source": "Q2257104",
+    "target": "Q556586",
+    "type": "P40"
+  },
+  {
+    "source": "Q2257104",
+    "target": "Q7294934",
+    "type": "P40"
+  },
+  {
+    "source": "Q2257104",
+    "target": "Q7462442",
+    "type": "P40"
+  },
+  {
+    "source": "Q2257104",
+    "target": "Q12244819",
+    "type": "P40"
+  },
+  {
+    "source": "Q3379198",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q3379198",
+    "target": "Q106370260",
+    "type": "P25"
+  },
+  {
+    "source": "Q3379198",
+    "target": "Q17403156",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3379198",
+    "target": "Q51840013",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3379198",
+    "target": "Q66103593",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q47166700",
+    "type": "P25"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q556607",
+    "type": "P26"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q556586",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q7294934",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6746819",
+    "target": "Q7462442",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7398257",
+    "target": "Q215477",
+    "type": "P22"
+  },
+  {
+    "source": "Q7398257",
+    "target": "Q4725349",
+    "type": "P25"
+  },
+  {
+    "source": "Q7398257",
+    "target": "Q15614152",
+    "type": "P26"
+  },
+  {
+    "source": "Q7462442",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q7462442",
+    "target": "Q2257104",
+    "type": "P25"
+  },
+  {
+    "source": "Q7462442",
+    "target": "Q6967647",
+    "type": "P26"
+  },
+  {
+    "source": "Q7462442",
+    "target": "Q556586",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7462442",
+    "target": "Q6746819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7462442",
+    "target": "Q7294934",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7462442",
+    "target": "Q12244819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q9317476",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q106370260",
+    "type": "P25"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q556586",
+    "type": "P3373"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q3379198",
+    "type": "P3373"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q6746819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q17403156",
+    "target": "Q12244819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q733312",
+    "type": "P22"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q125494502",
+    "type": "P25"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q272117",
+    "type": "P26"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q2257104",
+    "type": "P26"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q106370260",
+    "type": "P26"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q556586",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q3379198",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q6746819",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q7294934",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q7462442",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q9317476",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q12244819",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q17403156",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q51840013",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q66103593",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q111083817",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q122355675",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q131681062",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q131681111",
+    "type": "P40"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q215477",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q401634",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57655",
+    "target": "Q712839",
+    "type": "P3373"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q955006",
+    "type": "P39"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q30101519",
+    "type": "P39"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q110964267",
+    "type": "P39"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q401135",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q401634",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q575618",
+    "target": "Q1573631",
+    "type": "P1365"
+  },
+  {
+    "source": "Q575618",
+    "target": "Q17020147",
+    "type": "P1365"
+  },
+  {
+    "source": "Q713801",
+    "target": "Q110964267",
+    "type": "P39"
+  },
+  {
+    "source": "Q713801",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q140686",
+    "type": "P39"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q7294934",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q106181156",
+    "type": "P39"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q106181285",
+    "type": "P39"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q106181563",
+    "type": "P39"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q51840013",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q51840013",
+    "target": "Q5914644",
+    "type": "P53"
+  },
+  {
+    "source": "Q111083817",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q122355675",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q2762318",
+    "type": "P39"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q14625123",
+    "type": "P39"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q124535896",
+    "type": "P39"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q733312",
+    "type": "P22"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q125494502",
+    "type": "P25"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q4725349",
+    "type": "P26"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q7398257",
+    "type": "P40"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q57655",
+    "type": "P3373"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q401634",
+    "type": "P3373"
+  },
+  {
+    "source": "Q215477",
+    "target": "Q712839",
+    "type": "P3373"
+  },
+  {
+    "source": "Q401135",
+    "target": "Q4276421",
+    "type": "P3373"
+  },
+  {
+    "source": "Q401634",
+    "target": "Q733312",
+    "type": "P22"
+  },
+  {
+    "source": "Q401634",
+    "target": "Q125494502",
+    "type": "P25"
+  },
+  {
+    "source": "Q401634",
+    "target": "Q57655",
+    "type": "P3373"
+  },
+  {
+    "source": "Q401634",
+    "target": "Q215477",
+    "type": "P3373"
+  },
+  {
+    "source": "Q401634",
+    "target": "Q712839",
+    "type": "P3373"
+  },
+  {
+    "source": "Q713801",
+    "target": "Q340089",
+    "type": "P22"
+  },
+  {
+    "source": "Q713801",
+    "target": "Q153284",
+    "type": "P40"
+  },
+  {
+    "source": "Q713801",
+    "target": "Q733312",
+    "type": "P40"
+  },
+  {
+    "source": "Q4276421",
+    "target": "Q401135",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6893466",
+    "target": "Q1371101",
+    "type": "P22"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q57352",
+    "type": "P22"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q118352516",
+    "type": "P25"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q7462442",
+    "type": "P26"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q58140",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q328211",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q4666100",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q16157209",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q118352367",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6967647",
+    "target": "Q118352392",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7294934",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q7294934",
+    "target": "Q2257104",
+    "type": "P25"
+  },
+  {
+    "source": "Q7294934",
+    "target": "Q556586",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7294934",
+    "target": "Q6746819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7294934",
+    "target": "Q7462442",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7294934",
+    "target": "Q12244819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q2257104",
+    "type": "P25"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q556586",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q3379198",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q6746819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q7294934",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q7462442",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q17403156",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12244819",
+    "target": "Q111083817",
+    "type": "P3373"
+  },
+  {
+    "source": "Q51840013",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q51840013",
+    "target": "Q106370260",
+    "type": "P25"
+  },
+  {
+    "source": "Q51840013",
+    "target": "Q3379198",
+    "type": "P3373"
+  },
+  {
+    "source": "Q51840013",
+    "target": "Q17403156",
+    "type": "P3373"
+  },
+  {
+    "source": "Q51840013",
+    "target": "Q66103593",
+    "type": "P3373"
+  },
+  {
+    "source": "Q66103593",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q66103593",
+    "target": "Q106370260",
+    "type": "P25"
+  },
+  {
+    "source": "Q66103593",
+    "target": "Q3379198",
+    "type": "P3373"
+  },
+  {
+    "source": "Q66103593",
+    "target": "Q17403156",
+    "type": "P3373"
+  },
+  {
+    "source": "Q66103593",
+    "target": "Q51840013",
+    "type": "P3373"
+  },
+  {
+    "source": "Q111083817",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q111083817",
+    "target": "Q556586",
+    "type": "P3373"
+  },
+  {
+    "source": "Q111083817",
+    "target": "Q6746819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q111083817",
+    "target": "Q7294934",
+    "type": "P3373"
+  },
+  {
+    "source": "Q111083817",
+    "target": "Q12244819",
+    "type": "P3373"
+  },
+  {
+    "source": "Q111083817",
+    "target": "Q17403156",
+    "type": "P3373"
+  },
+  {
+    "source": "Q122355675",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q125494502",
+    "target": "Q60786126",
+    "type": "P22"
+  },
+  {
+    "source": "Q125494502",
+    "target": "Q57655",
+    "type": "P40"
+  },
+  {
+    "source": "Q125494502",
+    "target": "Q215477",
+    "type": "P40"
+  },
+  {
+    "source": "Q125494502",
+    "target": "Q401634",
+    "type": "P40"
+  },
+  {
+    "source": "Q125494502",
+    "target": "Q712839",
+    "type": "P40"
+  },
+  {
+    "source": "Q131681062",
+    "target": "Q57655",
+    "type": "P22"
+  },
+  {
+    "source": "Q131681062",
+    "target": "Q272117",
+    "type": "P25"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q269898",
+    "type": "P25"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q200678",
+    "type": "P26"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q981927",
+    "type": "P40"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q5146516",
+    "type": "P40"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q7244056",
+    "type": "P40"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q13574439",
+    "type": "P40"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q4667904",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q57464",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q955006",
+    "type": "P39"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q28471402",
+    "type": "P39"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q174570",
+    "target": "Q590631",
+    "type": "P463"
+  },
+  {
+    "source": "Q174570",
+    "target": "Q868940",
+    "type": "P463"
+  },
+  {
+    "source": "Q174570",
+    "target": "Q5275956",
+    "type": "P463"
+  },
+  {
+    "source": "Q174570",
+    "target": "Q7894986",
+    "type": "P463"
+  },
+  {
+    "source": "Q174570",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q174570",
+    "target": "Q84314566",
+    "type": "P463"
+  },
+  {
+    "source": "Q174570",
+    "target": "Q126722671",
+    "type": "P463"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q955006",
+    "type": "P39"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q28471402",
+    "type": "P39"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q1544739",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q1544739",
+    "target": "Q59974849",
+    "type": "P463"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q955006",
+    "type": "P39"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q28471402",
+    "type": "P39"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q1963822",
+    "type": "P53"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q95373175",
+    "type": "P39"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q7398258",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q7419214",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q7675603",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q47499755",
+    "target": "Q140686",
+    "type": "P39"
+  },
+  {
+    "source": "Q47499755",
+    "target": "Q125497756",
+    "type": "P39"
+  },
+  {
+    "source": "Q47499755",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q110964346",
+    "type": "P39"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q110964354",
+    "type": "P39"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q6409495",
+    "type": "P22"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q20383754",
+    "type": "P25"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q4120127",
+    "type": "P26"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q5679463",
+    "type": "P26"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q16730773",
+    "type": "P26"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q58301",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q556607",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q1059948",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q1573260",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q1951896",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q2073929",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q4118852",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q5431619",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q5644454",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q5688471",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q7398258",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q7400024",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q7636761",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q16018226",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q85804913",
+    "type": "P40"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q2661904",
+    "type": "P3373"
+  },
+  {
+    "source": "Q167846",
+    "target": "Q12249936",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q5679463",
+    "type": "P25"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q10781516",
+    "type": "P26"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q16196176",
+    "type": "P40"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q16733119",
+    "type": "P40"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q58301",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q556607",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q1573260",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q1951896",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q2073929",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q5644454",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q5688471",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q7398258",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q7400024",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q7636761",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1059948",
+    "target": "Q85804913",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q4120127",
+    "type": "P25"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q58301",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q556607",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q1951896",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q5688471",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1573260",
+    "target": "Q85804913",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q4120127",
+    "type": "P25"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q47499755",
+    "type": "P40"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q58301",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q556607",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q1573260",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q5688471",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q7398258",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1951896",
+    "target": "Q85804913",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q167846",
+    "type": "P26"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q58301",
+    "type": "P40"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q556607",
+    "type": "P40"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q1573260",
+    "type": "P40"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q1951896",
+    "type": "P40"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q5688471",
+    "type": "P40"
+  },
+  {
+    "source": "Q4120127",
+    "target": "Q85804913",
+    "type": "P40"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q4120127",
+    "type": "P25"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q58301",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q556607",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q1573260",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q1951896",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5688471",
+    "target": "Q85804913",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7398258",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q7398258",
+    "target": "Q556607",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7398258",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7398258",
+    "target": "Q1951896",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7675603",
+    "target": "Q54875089",
+    "type": "P22"
+  },
+  {
+    "source": "Q7675603",
+    "target": "Q6751816",
+    "type": "P40"
+  },
+  {
+    "source": "Q47499755",
+    "target": "Q1951896",
+    "type": "P22"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q4120127",
+    "type": "P25"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q115725499",
+    "type": "P26"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q58301",
+    "type": "P3373"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q556607",
+    "type": "P3373"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q1573260",
+    "type": "P3373"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q1951896",
+    "type": "P3373"
+  },
+  {
+    "source": "Q85804913",
+    "target": "Q5688471",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q4120127",
+    "type": "P25"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q556607",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q1573260",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q1951896",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q5688471",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58301",
+    "target": "Q85804913",
+    "type": "P3373"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q294365",
+    "type": "P22"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q4116074",
+    "type": "P25"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q240575",
+    "type": "P26"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q269437",
+    "type": "P26"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q269898",
+    "type": "P26"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q2914726",
+    "type": "P26"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q57464",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q272117",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q461192",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q524703",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q1532902",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q2817328",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q3307706",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q4667904",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q7244519",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q7244527",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q7244790",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q7244873",
+    "type": "P40"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q689964",
+    "type": "P3373"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q2817261",
+    "type": "P3373"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q4867793",
+    "type": "P3373"
+  },
+  {
+    "source": "Q269437",
+    "target": "Q28115156",
+    "type": "P22"
+  },
+  {
+    "source": "Q269437",
+    "target": "Q146906",
+    "type": "P26"
+  },
+  {
+    "source": "Q269437",
+    "target": "Q272117",
+    "type": "P40"
+  },
+  {
+    "source": "Q269437",
+    "target": "Q524703",
+    "type": "P40"
+  },
+  {
+    "source": "Q269437",
+    "target": "Q4667904",
+    "type": "P40"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q269898",
+    "type": "P25"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244526",
+    "type": "P26"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q131382183",
+    "type": "P26"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244189",
+    "type": "P40"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244514",
+    "type": "P40"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244555",
+    "type": "P40"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244812",
+    "type": "P40"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q269437",
+    "type": "P25"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q177715",
+    "type": "P26"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q16297680",
+    "type": "P40"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q55381977",
+    "type": "P40"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q4667904",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q240575",
+    "type": "P25"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q9062823",
+    "type": "P40"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4667904",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q4667904",
+    "target": "Q269437",
+    "type": "P25"
+  },
+  {
+    "source": "Q4667904",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4667904",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q269898",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q29588937",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q117470780",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q4667904",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q2914726",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q14625123",
+    "type": "P39"
+  },
+  {
+    "source": "Q146906",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q269437",
+    "target": "Q115345222",
+    "type": "P39"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q128212331",
+    "type": "P39"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q461192",
+    "target": "Q40970",
+    "type": "P463"
+  },
+  {
+    "source": "Q467144",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q1255921",
+    "type": "P39"
+  },
+  {
+    "source": "Q524703",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q2817328",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244519",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q60786126",
+    "target": "Q28471402",
+    "type": "P39"
+  },
+  {
+    "source": "Q40970",
+    "target": "Q475646",
+    "type": "P463"
+  },
+  {
+    "source": "Q40970",
+    "target": "Q125891646",
+    "type": "P463"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244527",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q269898",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244873",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q57464",
+    "type": "P22"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q200678",
+    "type": "P25"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q117151107",
+    "type": "P26"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q837521",
+    "type": "P40"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q981927",
+    "type": "P3373"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q5146516",
+    "type": "P3373"
+  },
+  {
+    "source": "Q13574439",
+    "target": "Q7244056",
+    "type": "P3373"
+  },
+  {
+    "source": "Q47166700",
+    "target": "Q6746819",
+    "type": "P40"
+  },
+  {
+    "source": "Q60786126",
+    "target": "Q4119330",
+    "type": "P22"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q112148518",
+    "type": "P22"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q57464",
+    "type": "P26"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q981927",
+    "type": "P40"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q5146516",
+    "type": "P40"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q7244056",
+    "type": "P40"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q13574439",
+    "type": "P40"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q12250694",
+    "type": "P22"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q96316895",
+    "type": "P25"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q146906",
+    "type": "P26"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q57464",
+    "type": "P40"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q461192",
+    "type": "P40"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q7244519",
+    "type": "P40"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q7244873",
+    "type": "P40"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q192780",
+    "type": "P22"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q6940198",
+    "type": "P25"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q4116074",
+    "type": "P26"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q146906",
+    "type": "P40"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q689964",
+    "type": "P40"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q2817261",
+    "type": "P40"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q4867793",
+    "type": "P40"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q12479977",
+    "type": "P3373"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q57464",
+    "type": "P22"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q200678",
+    "type": "P25"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q113553273",
+    "type": "P26"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q128405486",
+    "type": "P40"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q5146516",
+    "type": "P3373"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q7244056",
+    "type": "P3373"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q13574439",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q240575",
+    "type": "P25"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q7244558",
+    "type": "P26"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q7244768",
+    "type": "P26"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q240575",
+    "type": "P25"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q7244790",
+    "type": "P3373"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5146516",
+    "target": "Q57464",
+    "type": "P22"
+  },
+  {
+    "source": "Q5146516",
+    "target": "Q200678",
+    "type": "P25"
+  },
+  {
+    "source": "Q5146516",
+    "target": "Q981927",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5146516",
+    "target": "Q7244056",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5146516",
+    "target": "Q13574439",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244056",
+    "target": "Q57464",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244056",
+    "target": "Q200678",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244056",
+    "target": "Q981927",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244056",
+    "target": "Q5146516",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244056",
+    "target": "Q13574439",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q146906",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q240575",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q65930512",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q57464",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q272117",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q461192",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q524703",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q1532902",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q2817328",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q3307706",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q7244519",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q7244527",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q7244873",
+    "type": "P3373"
+  },
+  {
+    "source": "Q128047",
+    "target": "Q4810007",
+    "type": "P463"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q115345222",
+    "type": "P39"
+  },
+  {
+    "source": "Q200678",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q115345222",
+    "type": "P39"
+  },
+  {
+    "source": "Q269898",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q14625123",
+    "type": "P39"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q54900644",
+    "type": "P39"
+  },
+  {
+    "source": "Q294365",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q981927",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q1532902",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q3307706",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q5146516",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244056",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244790",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q180432",
+    "target": "Q19755",
+    "type": "P463"
+  },
+  {
+    "source": "Q180432",
+    "target": "Q623633",
+    "type": "P463"
+  },
+  {
+    "source": "Q180432",
+    "target": "Q47492690",
+    "type": "P463"
+  },
+  {
+    "source": "Q180432",
+    "target": "Q110736643",
+    "type": "P463"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q42719346",
+    "type": "P39"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q125693554",
+    "type": "P39"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q340089",
+    "target": "Q110964267",
+    "type": "P39"
+  },
+  {
+    "source": "Q340089",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q5059850",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q5137991",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q519427",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q1371101",
+    "target": "Q110964700",
+    "type": "P39"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q2469483",
+    "type": "P22"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q5746145",
+    "type": "P26"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q57352",
+    "type": "P40"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q124412894",
+    "type": "P40"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q125272183",
+    "type": "P40"
+  },
+  {
+    "source": "Q309650",
+    "target": "Q124354158",
+    "type": "P3373"
+  },
+  {
+    "source": "Q340089",
+    "target": "Q340171",
+    "type": "P22"
+  },
+  {
+    "source": "Q340089",
+    "target": "Q713801",
+    "type": "P40"
+  },
+  {
+    "source": "Q1371101",
+    "target": "Q60785966",
+    "type": "P22"
+  },
+  {
+    "source": "Q1371101",
+    "target": "Q18702978",
+    "type": "P25"
+  },
+  {
+    "source": "Q1371101",
+    "target": "Q6893466",
+    "type": "P40"
+  },
+  {
+    "source": "Q30519512",
+    "target": "Q153284",
+    "type": "P26"
+  },
+  {
+    "source": "Q30519512",
+    "target": "Q30525816",
+    "type": "P40"
+  },
+  {
+    "source": "Q30525816",
+    "target": "Q153284",
+    "type": "P22"
+  },
+  {
+    "source": "Q30525816",
+    "target": "Q30519512",
+    "type": "P25"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q57352",
+    "type": "P22"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q3737725",
+    "type": "P25"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q58140",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q328211",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q4666100",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q6967647",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q16157209",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352367",
+    "target": "Q118352392",
+    "type": "P3373"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q57352",
+    "type": "P22"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q118352684",
+    "type": "P25"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q58140",
+    "type": "P3373"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q4666100",
+    "type": "P3373"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q6967647",
+    "type": "P3373"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q16157209",
+    "type": "P3373"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q118352367",
+    "type": "P3373"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q118352392",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q57352",
+    "type": "P22"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q3737725",
+    "type": "P25"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q58140",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q328211",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q6967647",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q16157209",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q118352367",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q118352392",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4725349",
+    "target": "Q215477",
+    "type": "P26"
+  },
+  {
+    "source": "Q4725349",
+    "target": "Q7398257",
+    "type": "P40"
+  },
+  {
+    "source": "Q15614152",
+    "target": "Q7398257",
+    "type": "P26"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q57352",
+    "type": "P22"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q118352516",
+    "type": "P25"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q58140",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q328211",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q4666100",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q6967647",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q118352367",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q118352392",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q57352",
+    "type": "P22"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q3737725",
+    "type": "P25"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q58140",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q328211",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q4666100",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q6967647",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q16157209",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q118352367",
+    "type": "P3373"
+  },
+  {
+    "source": "Q118352516",
+    "target": "Q57352",
+    "type": "P26"
+  },
+  {
+    "source": "Q118352516",
+    "target": "Q6967647",
+    "type": "P40"
+  },
+  {
+    "source": "Q118352516",
+    "target": "Q16157209",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q309650",
+    "type": "P22"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q5746145",
+    "type": "P25"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q3737725",
+    "type": "P26"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q118352516",
+    "type": "P26"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q118352684",
+    "type": "P26"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q58140",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q328211",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q4666100",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q6967647",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q16157209",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q118352367",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q118352392",
+    "type": "P40"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q124412894",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q57352",
+    "type": "P22"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q3737725",
+    "type": "P25"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q5640980",
+    "type": "P26"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q109256396",
+    "type": "P40"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q117068082",
+    "type": "P40"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q124354682",
+    "type": "P40"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q124354768",
+    "type": "P40"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q328211",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q4666100",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q6967647",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q16157209",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q118352367",
+    "type": "P3373"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q118352392",
+    "type": "P3373"
+  },
+  {
+    "source": "Q328211",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q868940",
+    "target": "Q284199",
+    "type": "P463"
+  },
+  {
+    "source": "Q868940",
+    "target": "Q1377863",
+    "type": "P463"
+  },
+  {
+    "source": "Q868940",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q868940",
+    "target": "Q106618957",
+    "type": "P463"
+  },
+  {
+    "source": "Q868940",
+    "target": "Q112828800",
+    "type": "P463"
+  },
+  {
+    "source": "Q868940",
+    "target": "Q115682002",
+    "type": "P463"
+  },
+  {
+    "source": "Q1056123",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q4666100",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q4725349",
+    "target": "Q2422081",
+    "type": "P53"
+  },
+  {
+    "source": "Q5275956",
+    "target": "Q60607639",
+    "type": "P463"
+  },
+  {
+    "source": "Q7894986",
+    "target": "Q861467",
+    "type": "P463"
+  },
+  {
+    "source": "Q16157209",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q19861084",
+    "target": "Q821542",
+    "type": "P463"
+  },
+  {
+    "source": "Q19861084",
+    "target": "Q1508447",
+    "type": "P463"
+  },
+  {
+    "source": "Q19861084",
+    "target": "Q25338539",
+    "type": "P463"
+  },
+  {
+    "source": "Q19861084",
+    "target": "Q53729922",
+    "type": "P463"
+  },
+  {
+    "source": "Q84314566",
+    "target": "Q108040139",
+    "type": "P463"
+  },
+  {
+    "source": "Q118352392",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q590631",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q1140056",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q1152269",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q5153090",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q6269240",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q7894986",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q35677307",
+    "type": "P463"
+  },
+  {
+    "source": "Q35794",
+    "target": "Q109496493",
+    "type": "P463"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q726872",
+    "type": "P39"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q42719346",
+    "type": "P39"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q125693554",
+    "type": "P39"
+  },
+  {
+    "source": "Q57352",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q58150",
+    "type": "P39"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q108884418",
+    "type": "P39"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q125693554",
+    "type": "P39"
+  },
+  {
+    "source": "Q58140",
+    "target": "Q1158126",
+    "type": "P53"
+  },
+  {
+    "source": "Q2073929",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q2661904",
+    "target": "Q28471402",
+    "type": "P39"
+  },
+  {
+    "source": "Q2661904",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q4118852",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q5644454",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q5644454",
+    "target": "Q115725302",
+    "type": "P463"
+  },
+  {
+    "source": "Q5679463",
+    "target": "Q95373175",
+    "type": "P39"
+  },
+  {
+    "source": "Q5679463",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q6409495",
+    "target": "Q28471402",
+    "type": "P39"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q106181156",
+    "type": "P39"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q110964305",
+    "type": "P39"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q7636761",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q12249936",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q16018226",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q16196176",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q16730773",
+    "target": "Q95373175",
+    "type": "P39"
+  },
+  {
+    "source": "Q16730773",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q54875089",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q743812",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q49120",
+    "target": "Q124358776",
+    "type": "P463"
+  },
+  {
+    "source": "Q2073929",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q2073929",
+    "target": "Q16730773",
+    "type": "P25"
+  },
+  {
+    "source": "Q2073929",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2073929",
+    "target": "Q5644454",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2073929",
+    "target": "Q7400024",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2661904",
+    "target": "Q6409495",
+    "type": "P22"
+  },
+  {
+    "source": "Q2661904",
+    "target": "Q167846",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2661904",
+    "target": "Q12249936",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4118852",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q4118852",
+    "target": "Q16018226",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5431619",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q5644454",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q5644454",
+    "target": "Q16730773",
+    "type": "P25"
+  },
+  {
+    "source": "Q5644454",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5644454",
+    "target": "Q2073929",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5644454",
+    "target": "Q7400024",
+    "type": "P3373"
+  },
+  {
+    "source": "Q5679463",
+    "target": "Q167846",
+    "type": "P26"
+  },
+  {
+    "source": "Q5679463",
+    "target": "Q1059948",
+    "type": "P40"
+  },
+  {
+    "source": "Q5679463",
+    "target": "Q7675603",
+    "type": "P3373"
+  },
+  {
+    "source": "Q6409495",
+    "target": "Q4119330",
+    "type": "P22"
+  },
+  {
+    "source": "Q6409495",
+    "target": "Q20383754",
+    "type": "P26"
+  },
+  {
+    "source": "Q6409495",
+    "target": "Q167846",
+    "type": "P40"
+  },
+  {
+    "source": "Q6409495",
+    "target": "Q2661904",
+    "type": "P40"
+  },
+  {
+    "source": "Q6409495",
+    "target": "Q12249936",
+    "type": "P40"
+  },
+  {
+    "source": "Q6751816",
+    "target": "Q7675603",
+    "type": "P22"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q16730773",
+    "type": "P25"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q2073929",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7400024",
+    "target": "Q5644454",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7636761",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q7636761",
+    "target": "Q54862306",
+    "type": "P40"
+  },
+  {
+    "source": "Q7636761",
+    "target": "Q75614888",
+    "type": "P40"
+  },
+  {
+    "source": "Q7636761",
+    "target": "Q1059948",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12249936",
+    "target": "Q6409495",
+    "type": "P22"
+  },
+  {
+    "source": "Q12249936",
+    "target": "Q20383754",
+    "type": "P25"
+  },
+  {
+    "source": "Q12249936",
+    "target": "Q167846",
+    "type": "P3373"
+  },
+  {
+    "source": "Q12249936",
+    "target": "Q2661904",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16018226",
+    "target": "Q167846",
+    "type": "P22"
+  },
+  {
+    "source": "Q16018226",
+    "target": "Q4118852",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16196176",
+    "target": "Q1059948",
+    "type": "P22"
+  },
+  {
+    "source": "Q16196176",
+    "target": "Q10781516",
+    "type": "P25"
+  },
+  {
+    "source": "Q16196176",
+    "target": "Q16733119",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16730773",
+    "target": "Q167846",
+    "type": "P26"
+  },
+  {
+    "source": "Q16730773",
+    "target": "Q2073929",
+    "type": "P40"
+  },
+  {
+    "source": "Q16730773",
+    "target": "Q5644454",
+    "type": "P40"
+  },
+  {
+    "source": "Q16730773",
+    "target": "Q7400024",
+    "type": "P40"
+  },
+  {
+    "source": "Q20383754",
+    "target": "Q6409495",
+    "type": "P26"
+  },
+  {
+    "source": "Q20383754",
+    "target": "Q167846",
+    "type": "P40"
+  },
+  {
+    "source": "Q20383754",
+    "target": "Q12249936",
+    "type": "P40"
+  },
+  {
+    "source": "Q54875089",
+    "target": "Q7675603",
+    "type": "P40"
+  },
+  {
+    "source": "Q149724",
+    "target": "Q3254084",
+    "type": "P39"
+  },
+  {
+    "source": "Q149724",
+    "target": "Q12194605",
+    "type": "P53"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q14625123",
+    "type": "P39"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q115345222",
+    "type": "P39"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q477406",
+    "type": "P39"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q107569",
+    "type": "P463"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q337543",
+    "type": "P463"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q115898215",
+    "type": "P463"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q123363391",
+    "type": "P463"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q2914726",
+    "target": "Q115345222",
+    "type": "P39"
+  },
+  {
+    "source": "Q2914726",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q115345222",
+    "type": "P39"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q28471402",
+    "type": "P39"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q4809602",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q4867793",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q10781516",
+    "target": "Q95373175",
+    "type": "P39"
+  },
+  {
+    "source": "Q10781516",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q12479977",
+    "target": "Q477406",
+    "type": "P39"
+  },
+  {
+    "source": "Q12479977",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q16733119",
+    "target": "Q2615540",
+    "type": "P53"
+  },
+  {
+    "source": "Q115725499",
+    "target": "Q115725302",
+    "type": "P463"
+  },
+  {
+    "source": "Q149724",
+    "target": "Q314784",
+    "type": "P22"
+  },
+  {
+    "source": "Q149724",
+    "target": "Q2914533",
+    "type": "P25"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q128906",
+    "type": "P22"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q98276725",
+    "type": "P25"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q6940198",
+    "type": "P26"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q294365",
+    "type": "P40"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q12479977",
+    "type": "P40"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q212486",
+    "type": "P3373"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q2304055",
+    "type": "P3373"
+  },
+  {
+    "source": "Q192780",
+    "target": "Q7244305",
+    "type": "P3373"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q2465271",
+    "type": "P22"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q106365698",
+    "type": "P25"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q146906",
+    "type": "P26"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q1532902",
+    "type": "P40"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q2817328",
+    "type": "P40"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q3307706",
+    "type": "P40"
+  },
+  {
+    "source": "Q240575",
+    "target": "Q7244790",
+    "type": "P40"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q294365",
+    "type": "P22"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q4116074",
+    "type": "P25"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q2817259",
+    "type": "P26"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q4840967",
+    "type": "P40"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q7283473",
+    "type": "P40"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q7294930",
+    "type": "P40"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q7637027",
+    "type": "P40"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q146906",
+    "type": "P3373"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q2817261",
+    "type": "P3373"
+  },
+  {
+    "source": "Q689964",
+    "target": "Q4867793",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q294365",
+    "type": "P22"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q4116074",
+    "type": "P25"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q7244619",
+    "type": "P26"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q3366354",
+    "type": "P40"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q7244259",
+    "type": "P40"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q146906",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q689964",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2817261",
+    "target": "Q4867793",
+    "type": "P3373"
+  },
+  {
+    "source": "Q2914726",
+    "target": "Q22688643",
+    "type": "P22"
+  },
+  {
+    "source": "Q2914726",
+    "target": "Q146906",
+    "type": "P26"
+  },
+  {
+    "source": "Q2914726",
+    "target": "Q89488504",
+    "type": "P26"
+  },
+  {
+    "source": "Q2914726",
+    "target": "Q7244527",
+    "type": "P40"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q28936272",
+    "type": "P22"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q98276730",
+    "type": "P25"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q294365",
+    "type": "P26"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q146906",
+    "type": "P40"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q689964",
+    "type": "P40"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q2817261",
+    "type": "P40"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q4867793",
+    "type": "P40"
+  },
+  {
+    "source": "Q4116074",
+    "target": "Q12247730",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q6413077",
+    "type": "P22"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q6406856",
+    "type": "P40"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q6407087",
+    "type": "P40"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q6409495",
+    "type": "P40"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q6413824",
+    "type": "P40"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q19660945",
+    "type": "P40"
+  },
+  {
+    "source": "Q4119330",
+    "target": "Q60786126",
+    "type": "P40"
+  },
+  {
+    "source": "Q4867793",
+    "target": "Q294365",
+    "type": "P22"
+  },
+  {
+    "source": "Q4867793",
+    "target": "Q4116074",
+    "type": "P25"
+  },
+  {
+    "source": "Q4867793",
+    "target": "Q7806937",
+    "type": "P26"
+  },
+  {
+    "source": "Q4867793",
+    "target": "Q146906",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4867793",
+    "target": "Q689964",
+    "type": "P3373"
+  },
+  {
+    "source": "Q4867793",
+    "target": "Q2817261",
+    "type": "P3373"
+  },
+  {
+    "source": "Q10781516",
+    "target": "Q1059948",
+    "type": "P26"
+  },
+  {
+    "source": "Q10781516",
+    "target": "Q16196176",
+    "type": "P40"
+  },
+  {
+    "source": "Q10781516",
+    "target": "Q16733119",
+    "type": "P40"
+  },
+  {
+    "source": "Q12479977",
+    "target": "Q192780",
+    "type": "P22"
+  },
+  {
+    "source": "Q12479977",
+    "target": "Q97156204",
+    "type": "P26"
+  },
+  {
+    "source": "Q12479977",
+    "target": "Q7243823",
+    "type": "P40"
+  },
+  {
+    "source": "Q12479977",
+    "target": "Q294365",
+    "type": "P3373"
+  },
+  {
+    "source": "Q16733119",
+    "target": "Q1059948",
+    "type": "P22"
+  },
+  {
+    "source": "Q16733119",
+    "target": "Q10781516",
+    "type": "P25"
+  },
+  {
+    "source": "Q16733119",
+    "target": "Q16196176",
+    "type": "P3373"
+  },
+  {
+    "source": "Q115725499",
+    "target": "Q85804913",
+    "type": "P26"
+  },
+  {
+    "source": "Q177715",
+    "target": "Q466995",
+    "type": "P22"
+  },
+  {
+    "source": "Q177715",
+    "target": "Q524703",
+    "type": "P26"
+  },
+  {
+    "source": "Q177715",
+    "target": "Q16297680",
+    "type": "P40"
+  },
+  {
+    "source": "Q177715",
+    "target": "Q55381977",
+    "type": "P40"
+  },
+  {
+    "source": "Q274009",
+    "target": "Q111328523",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244189",
+    "target": "Q461192",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244189",
+    "target": "Q7244526",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244189",
+    "target": "Q7244514",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244189",
+    "target": "Q7244555",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244189",
+    "target": "Q7244812",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244514",
+    "target": "Q461192",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244514",
+    "target": "Q7244526",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244514",
+    "target": "Q7244189",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244514",
+    "target": "Q7244555",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244514",
+    "target": "Q7244812",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244526",
+    "target": "Q461192",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244526",
+    "target": "Q7244189",
+    "type": "P40"
+  },
+  {
+    "source": "Q7244526",
+    "target": "Q7244514",
+    "type": "P40"
+  },
+  {
+    "source": "Q7244526",
+    "target": "Q7244555",
+    "type": "P40"
+  },
+  {
+    "source": "Q7244526",
+    "target": "Q7244812",
+    "type": "P40"
+  },
+  {
+    "source": "Q7244555",
+    "target": "Q461192",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244555",
+    "target": "Q7244526",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244555",
+    "target": "Q7244189",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244555",
+    "target": "Q7244514",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244555",
+    "target": "Q7244812",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244812",
+    "target": "Q461192",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244812",
+    "target": "Q7244526",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244812",
+    "target": "Q7244189",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244812",
+    "target": "Q7244514",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244812",
+    "target": "Q7244555",
+    "type": "P3373"
+  },
+  {
+    "source": "Q28115156",
+    "target": "Q269437",
+    "type": "P40"
+  },
+  {
+    "source": "Q131382183",
+    "target": "Q461192",
+    "type": "P26"
+  },
+  {
+    "source": "Q177715",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q274009",
+    "target": "Q7241513",
+    "type": "P39"
+  },
+  {
+    "source": "Q274009",
+    "target": "Q110197740",
+    "type": "P39"
+  },
+  {
+    "source": "Q274009",
+    "target": "Q128212331",
+    "type": "P39"
+  },
+  {
+    "source": "Q274009",
+    "target": "Q40970",
+    "type": "P463"
+  },
+  {
+    "source": "Q475646",
+    "target": "Q1067053",
+    "type": "P463"
+  },
+  {
+    "source": "Q475646",
+    "target": "Q7727324",
+    "type": "P463"
+  },
+  {
+    "source": "Q1481050",
+    "target": "Q821542",
+    "type": "P463"
+  },
+  {
+    "source": "Q1481050",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q7244514",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244555",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244812",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q125891646",
+    "target": "Q1067053",
+    "type": "P1365"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q49113",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q743812",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q821542",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q5059850",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q64005076",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q101483295",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q117746046",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q123580844",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q123938901",
+    "type": "P463"
+  },
+  {
+    "source": "Q21578",
+    "target": "Q124358776",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q49113",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q743812",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q4810036",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q5137991",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q101483295",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q117746046",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q123938901",
+    "type": "P463"
+  },
+  {
+    "source": "Q49114",
+    "target": "Q124358776",
+    "type": "P463"
+  },
+  {
+    "source": "Q9062823",
+    "target": "Q2817328",
+    "type": "P22"
+  },
+  {
+    "source": "Q12250694",
+    "target": "Q96316877",
+    "type": "P22"
+  },
+  {
+    "source": "Q12250694",
+    "target": "Q96316887",
+    "type": "P25"
+  },
+  {
+    "source": "Q12250694",
+    "target": "Q269898",
+    "type": "P40"
+  },
+  {
+    "source": "Q16297680",
+    "target": "Q524703",
+    "type": "P22"
+  },
+  {
+    "source": "Q16297680",
+    "target": "Q177715",
+    "type": "P25"
+  },
+  {
+    "source": "Q16297680",
+    "target": "Q55381977",
+    "type": "P3373"
+  },
+  {
+    "source": "Q29588937",
+    "target": "Q7244519",
+    "type": "P26"
+  },
+  {
+    "source": "Q55381977",
+    "target": "Q524703",
+    "type": "P22"
+  },
+  {
+    "source": "Q55381977",
+    "target": "Q177715",
+    "type": "P25"
+  },
+  {
+    "source": "Q55381977",
+    "target": "Q16297680",
+    "type": "P3373"
+  },
+  {
+    "source": "Q96316895",
+    "target": "Q96316896",
+    "type": "P22"
+  },
+  {
+    "source": "Q96316895",
+    "target": "Q96316903",
+    "type": "P25"
+  },
+  {
+    "source": "Q96316895",
+    "target": "Q269898",
+    "type": "P40"
+  },
+  {
+    "source": "Q117470780",
+    "target": "Q7244519",
+    "type": "P26"
+  },
+  {
+    "source": "Q168000",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q168000",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q168000",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q168000",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q168000",
+    "target": "Q5137991",
+    "type": "P463"
+  },
+  {
+    "source": "Q168000",
+    "target": "Q6458663",
+    "type": "P463"
+  },
+  {
+    "source": "Q168000",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q743812",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q756355",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q5059850",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q5583848",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q78511203",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q101483295",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q123938901",
+    "type": "P463"
+  },
+  {
+    "source": "Q168751",
+    "target": "Q124358776",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q743945",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q4640709",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q4809686",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q5137991",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q5163392",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q5583848",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q6970684",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q7820700",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q101483295",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q333886",
+    "target": "Q124358776",
+    "type": "P463"
+  },
+  {
+    "source": "Q503473",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q503473",
+    "target": "Q211620",
+    "type": "P463"
+  },
+  {
+    "source": "Q503473",
+    "target": "Q284199",
+    "type": "P463"
+  },
+  {
+    "source": "Q503473",
+    "target": "Q868940",
+    "type": "P463"
+  },
+  {
+    "source": "Q503473",
+    "target": "Q1152269",
+    "type": "P463"
+  },
+  {
+    "source": "Q503473",
+    "target": "Q2826718",
+    "type": "P463"
+  },
+  {
+    "source": "Q503473",
+    "target": "Q23783835",
+    "type": "P463"
+  },
+  {
+    "source": "Q610253",
+    "target": "Q284199",
+    "type": "P463"
+  },
+  {
+    "source": "Q610253",
+    "target": "Q2826718",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q4810015",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q5059850",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q5137991",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q59974849",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q108040139",
+    "type": "P463"
+  },
+  {
+    "source": "Q2303536",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q7589975",
+    "target": "Q1564565",
+    "type": "P463"
+  },
+  {
+    "source": "Q7989536",
+    "target": "Q108864925",
+    "type": "P463"
+  },
+  {
+    "source": "Q469476",
+    "target": "Q743769",
+    "type": "P463"
+  },
+  {
+    "source": "Q469476",
+    "target": "Q5275956",
+    "type": "P463"
+  },
+  {
+    "source": "Q1152190",
+    "target": "Q11375623",
+    "type": "P1365"
+  },
+  {
+    "source": "Q6940198",
+    "target": "Q719039",
+    "type": "P39"
+  },
+  {
+    "source": "Q7244558",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q17020147",
+    "target": "Q575618",
+    "type": "P1366"
+  },
+  {
+    "source": "Q112148518",
+    "target": "Q35586456",
+    "type": "P463"
+  },
+  {
+    "source": "Q113553273",
+    "target": "Q1774915",
+    "type": "P53"
+  },
+  {
+    "source": "Q312",
+    "target": "Q190835",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q463681",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q756504",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q1008895",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q1663561",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q3685364",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q85620700",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q111164948",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q131845607",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q131883651",
+    "type": "P463"
+  },
+  {
+    "source": "Q312",
+    "target": "Q131884160",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q49113",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q743812",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q4810036",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q5059850",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q35677307",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q49093087",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q64005076",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q101483295",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q117746046",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q123580836",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q123938901",
+    "type": "P463"
+  },
+  {
+    "source": "Q13371",
+    "target": "Q124358776",
+    "type": "P463"
+  },
+  {
+    "source": "Q6940198",
+    "target": "Q98276727",
+    "type": "P22"
+  },
+  {
+    "source": "Q6940198",
+    "target": "Q98276728",
+    "type": "P25"
+  },
+  {
+    "source": "Q6940198",
+    "target": "Q192780",
+    "type": "P26"
+  },
+  {
+    "source": "Q6940198",
+    "target": "Q294365",
+    "type": "P40"
+  },
+  {
+    "source": "Q6940198",
+    "target": "Q5951540",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244558",
+    "target": "Q1532902",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q7243823",
+    "type": "P22"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q4485038",
+    "type": "P25"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q1532902",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q29107578",
+    "type": "P26"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q7244763",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q7244810",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q7244868",
+    "type": "P3373"
+  },
+  {
+    "source": "Q7244768",
+    "target": "Q7422932",
+    "type": "P3373"
+  },
+  {
+    "source": "Q65930512",
+    "target": "Q291806",
+    "type": "P25"
+  },
+  {
+    "source": "Q65930512",
+    "target": "Q7244790",
+    "type": "P26"
+  },
+  {
+    "source": "Q65930512",
+    "target": "Q293114",
+    "type": "P3373"
+  },
+  {
+    "source": "Q112148518",
+    "target": "Q200678",
+    "type": "P40"
+  },
+  {
+    "source": "Q113553273",
+    "target": "Q122182279",
+    "type": "P22"
+  },
+  {
+    "source": "Q113553273",
+    "target": "Q981927",
+    "type": "P26"
+  },
+  {
+    "source": "Q113553273",
+    "target": "Q128405486",
+    "type": "P40"
+  },
+  {
+    "source": "Q117151107",
+    "target": "Q13574439",
+    "type": "P26"
+  },
+  {
+    "source": "Q128405486",
+    "target": "Q981927",
+    "type": "P22"
+  },
+  {
+    "source": "Q128405486",
+    "target": "Q113553273",
+    "type": "P25"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q37033",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q211620",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q590631",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q868940",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q1152269",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q1883765",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q4809891",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q7894986",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q35677307",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q48789578",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q59696014",
+    "type": "P463"
+  },
+  {
+    "source": "Q160302",
+    "target": "Q72936141",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q128471",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q743812",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q1074688",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q4810015",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q4810036",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q5059850",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q19861084",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q35677307",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q48789578",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q60607639",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q101483295",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q108040139",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q108872504",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q123938901",
+    "type": "P463"
+  },
+  {
+    "source": "Q174710",
+    "target": "Q124358776",
+    "type": "P463"
+  },
+  {
+    "source": "Q647039",
+    "target": "Q25338539",
+    "type": "P463"
+  },
+  {
+    "source": "Q647039",
+    "target": "Q53729922",
+    "type": "P463"
+  },
+  {
+    "source": "Q647039",
+    "target": "Q112828800",
+    "type": "P463"
+  },
+  {
+    "source": "Q647039",
+    "target": "Q133163787",
+    "type": "P463"
+  },
+  {
+    "source": "Q2842325",
+    "target": "Q284199",
+    "type": "P463"
+  },
+  {
+    "source": "Q5059850",
+    "target": "Q4810036",
+    "type": "P463"
+  },
+  {
+    "source": "Q5059850",
+    "target": "Q6049327",
+    "type": "P463"
+  },
+  {
+    "source": "Q5059850",
+    "target": "Q60607639",
+    "type": "P463"
+  },
+  {
+    "source": "Q5059850",
+    "target": "Q108403943",
+    "type": "P463"
+  },
+  {
+    "source": "Q5059850",
+    "target": "Q108404091",
+    "type": "P463"
+  },
+  {
+    "source": "Q5059850",
+    "target": "Q130457292",
+    "type": "P463"
+  },
+  {
+    "source": "Q5137944",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q5137944",
+    "target": "Q48789578",
+    "type": "P463"
+  },
+  {
+    "source": "Q5137944",
+    "target": "Q53729922",
+    "type": "P463"
+  },
+  {
+    "source": "Q5137944",
+    "target": "Q59974849",
+    "type": "P463"
+  },
+  {
+    "source": "Q5137944",
+    "target": "Q60607639",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q49113",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q118398",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q647039",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q743812",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q2842325",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q4809602",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q5059850",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q5137944",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q5275906",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q6458663",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q28136204",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q48789578",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q64005076",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q99600029",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q101483295",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q108872504",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q116153205",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q123938901",
+    "type": "P463"
+  },
+  {
+    "source": "Q49088",
+    "target": "Q124358776",
+    "type": "P463"
+  }
+]

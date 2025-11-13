@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Interactive Royal Network — D3 (v2 High-Contrast)</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#0f1530;
+      --ink:#e6ecff;
+      --muted:#9fb0ff;
+      --accent:#7aa2ff;
+      --accent2:#ffca7a;
+      --link:#5b74ff;
+      --link-hi:#ffd166;
+      --danger:#ff7a7a;
+      --ok:#7affc5;
+      --label-bg:#101735;
+      --label-pill:#141d42;
+    }
+    html,body{
+      margin:0; height:100%; background:radial-gradient(1200px 800px at 10% -10%, #1c2448 0%, var(--bg) 60%);
+      color:var(--ink); font:14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      overflow:hidden;
+    }
+    #app{ display:grid; grid-template-columns: 340px 1fr; grid-template-rows:auto 1fr auto; height:100%; }
+    header{ grid-column:1 / -1; padding:10px 14px; display:flex; align-items:center; gap:10px; background:transparent; border-bottom:1px solid rgba(255,255,255,.08); }
+    header h1{ font-size:16px; letter-spacing:.4px; margin:0 6px 0 0; color:#fff; }
+    header .pill{ background:#0e1838; border:1px solid rgba(255,255,255,.08); padding:6px 10px; border-radius:999px; color:var(--muted); }
+    .left{ grid-row:2 / span 1; grid-column:1; overflow:auto; padding:12px; backdrop-filter: blur(4px); background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0)); border-right:1px solid rgba(255,255,255,.08); }
+    .panel{ background:var(--card); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:12px; margin-bottom:12px; box-shadow: 0 10px 40px rgba(0,0,0,.25), inset 0 1px 1px rgba(255,255,255,.06); }
+    .panel h3{ margin:0 0 8px; font-size:13px; color:#c9d4ff; letter-spacing:.3px; text-transform:uppercase; }
+    .controls label{ display:block; margin:6px 0 6px; font-size:13px; color:#b7c4ff;}
+    .controls input[type="range"]{ width:100%; }
+    .controls input[type="text"], .controls select{
+      width:100%; padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:#0b1330; color:#e7ecff; outline:none;
+    }
+    .controls .check{ display:flex; align-items:center; gap:10px; margin:8px 0; font-size:13px; color:#b7c4ff; }
+    .controls .check input{ width:auto; accent-color:var(--accent2); }
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:#0e1838; color:#dfe6ff; border:1px solid rgba(255,255,255,.1); cursor:pointer; }
+    .btn:hover{ border-color: rgba(255,255,255,.25); }
+    .btn.primary{ background:linear-gradient(180deg,#1d2b6b,#0e1838); border-color:#3342a3; }
+    .btn-row{ display:flex; gap:8px; flex-wrap:wrap; }
+    .legend{ display:flex; flex-wrap:wrap; gap:8px; }
+    .legend .item{ display:flex; align-items:center; gap:8px; background:#0e1838; border:1px solid rgba(255,255,255,.1); padding:6px 10px; border-radius:999px; }
+    .legend .sw{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+    .footer{ grid-column:1 / -1; padding:8px 12px; color:#b6c3ff; border-top:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02); display:flex; justify-content:space-between; align-items:center; gap:10px;}
+    #canvasWrap{ position:relative; grid-column:2; grid-row:2; }
+    svg{ width:100%; height:100%; display:block; }
+    .halo{ filter:url(#glow); }
+    .link{ stroke:var(--link); stroke-opacity:.25; }
+    .link--hi{ stroke:var(--link-hi) !important; stroke-opacity:.9 !important; }
+    .node{ cursor:pointer; }
+    .node circle{ stroke:#fff; stroke-width:.6; }
+    .node.fixed circle{ stroke:var(--ok); stroke-width:1.6; }
+    .label{ pointer-events:none; }
+    .label text{ font-size:12px; font-weight:600; }
+    .label .shadow{ paint-order: stroke; stroke:#000; stroke-opacity:.75; stroke-width:3.5; }
+    .label .pill{ fill:var(--label-pill); fill-opacity:.9; stroke:rgba(255,255,255,.2); stroke-width:.6; rx:6; ry:6; }
+    .tooltip{
+      position:absolute; pointer-events:none; transform:translate(-50%, calc(-100% - 14px));
+      background:#0b1330; color:#e7ecff; border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:8px 10px; white-space:nowrap; box-shadow: 0 10px 35px rgba(0,0,0,.4);
+    }
+    .tooltip::after{
+      content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
+      border:7px solid transparent; border-top-color:rgba(255,255,255,.15);
+    }
+    .minimap{ position:absolute; right:14px; bottom:14px; width:180px; height:120px; background:#0b1330; border:1px solid rgba(255,255,255,.12); border-radius:8px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+    .badge{ background:#0e1838; border:1px solid rgba(255,255,255,.1); padding:2px 6px; border-radius:6px; font-size:11px; color:#c9d4ff; }
+    .muted{ color:#9bb2ff; }
+    a{ color:#c3d2ff; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,.2) }
+    a:hover{ color:#fff; border-bottom-color:#fff }
+    .dropzone{ border:1px dashed rgba(255,255,255,.3); border-radius:10px; padding:10px; text-align:center; background:rgba(255,255,255,.03); }
+    .dropzone.drag{ border-color:#ffd166; background:rgba(255,209,102,.08); }
+  </style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Interactive Royal Network</h1>
+    <span class="pill">D3 v7</span>
+    <span id="stats" class="pill">—</span>
+    <div style="margin-left:auto" class="btn-row">
+      <button class="btn" id="btnFit" title="Zoom to fit">Fit</button>
+      <button class="btn" id="btnFreeze" title="Freeze/unfreeze nodes">Freeze</button>
+      <button class="btn" id="btnReset" title="Reset positions">Reset</button>
+      <label class="btn">
+        Load files… <input id="fileInput" type="file" accept=".json,.graphml,.xml" multiple style="display:none">
+      </label>
+    </div>
+  </header>
+  <div class="left">
+    <div class="panel">
+      <h3>Labels</h3>
+      <div class="controls">
+        <label>Mode</label>
+        <select id="labelMode">
+          <option value="auto">Auto (important only)</option>
+          <option value="all">All</option>
+          <option value="none">None</option>
+        </select>
+        <label>Size</label>
+        <input id="labelSize" type="range" min="10" max="22" step="1" value="12">
+        <label class="check"><input id="togglePills" type="checkbox" checked> Label pills (high contrast)</label>
+        <label class="check"><input id="toggleHighContrast" type="checkbox" checked> Force high-contrast text</label>
+        <label class="check"><input id="toggleZoomAware" type="checkbox" checked> Zoom-aware label scaling</label>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Search &amp; Filter</h3>
+      <div class="controls">
+        <label>Find a node</label>
+        <input id="q" type="text" placeholder="Type a name… (Enter to select)" list="nodeList">
+        <datalist id="nodeList"></datalist>
+        <label>Minimum degree <span id="mindegDisplay" class="badge">0</span></label>
+        <input id="minDegree" type="range" min="0" max="20" step="1" value="0">
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Layout</h3>
+      <div class="controls">
+        <label>Link distance <span id="ldisplay" class="badge">90</span></label>
+        <input id="linkDist" type="range" min="30" max="250" step="5" value="90">
+        <label>Charge strength <span id="cdisplay" class="badge">-700</span></label>
+        <input id="charge" type="range" min="-2000" max="-50" step="10" value="-700">
+        <label>Node size by</label>
+        <select id="sizeBy">
+          <option value="degree">Degree</option>
+          <option value="fixed">Fixed</option>
+        </select>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Legend</h3>
+      <div id="legend" class="legend"></div>
+    </div>
+    <div class="panel">
+      <h3>Export</h3>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" id="btnExportPNG">Export PNG</button>
+        <button class="btn" id="btnExportJSON">Export JSON</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Data</h3>
+      <div class="dropzone" id="drop">Drop <b>nodes.json</b> and <b>graph.graphml</b> (and optional <b>legend.json</b>) here.</div>
+      <div class="muted" style="margin-top:8px">Or place the files next to this HTML and use the button above.</div>
+    </div>
+  </div>
+  <div id="canvasWrap">
+    <svg id="svg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <g id="zoomLayer">
+        <g class="links"></g>
+        <g class="nodes"></g>
+        <g class="labelPills"></g>
+        <g class="labels"></g>
+      </g>
+    </svg>
+    <canvas class="minimap" id="minimap"></canvas>
+    <div class="tooltip" id="tip" style="display:none"></div>
+  </div>
+  <div class="footer">
+    <div>Tip: Hover to highlight ego-network • Ctrl/Cmd+Click to pin • Double-click to unpin</div>
+    <div id="sel" class="muted">—</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+const state = {
+  raw: { nodes: [], links: [], nodeIndex: new Map() },
+  data: { nodes: [], links: [] },
+  sizeBy: 'degree',
+  labelMode: 'auto',
+  settings: { pills:true, highContrast:true, zoomAware:true, labelSize:12 },
+  fixed: false,
+  legend: null,
+  filters: { minDegree: 0 },
+};
+
+const svg = d3.select('#svg');
+const gZoom = d3.select('#zoomLayer');
+const gLinks = svg.select('.links');
+const gNodes = svg.select('.nodes');
+const gLabels = svg.select('.labels');
+const gLabelPills = svg.select('.labelPills');
+const tip = d3.select('#tip');
+const stats = d3.select('#stats');
+const sel = d3.select('#sel');
+const minimap = document.getElementById('minimap');
+const mctx = minimap.getContext('2d');
+const datalist = document.getElementById('nodeList');
+
+const minDegSlider = document.getElementById('minDegree');
+const minDegDisplay = document.getElementById('mindegDisplay');
+
+let width = svg.node().clientWidth, height = svg.node().clientHeight;
+let simulation, zoom;
+
+window.addEventListener('resize', () => {
+  width = svg.node().clientWidth; height = svg.node().clientHeight;
+  svg.attr('viewBox', [0,0,width,height]);
+  drawMinimap();
+});
+svg.attr('viewBox', [0,0,width,height]);
+
+function colorScale(keys){
+  const palette = d3.schemeTableau10.concat(d3.schemeSet3);
+  return d3.scaleOrdinal().domain(keys).range(keys.map((k,i)=> palette[i % palette.length]));
+}
+
+function deriveUrl(n){
+  if(n.url) return n.url;
+  if(/^Q\d+/.test(n.id)) return `https://www.wikidata.org/wiki/${n.id}`;
+  if(n.label){
+    const slug = n.label.replace(/\s+/g,'_');
+    return `https://en.wikipedia.org/wiki/${encodeURIComponent(slug)}`;
+  }
+  return '';
+}
+
+function computeDegrees(nodes, links, prop='degree'){
+  const deg = new Map();
+  links.forEach(e=>{
+    if(!e.sourceId||!e.targetId) return;
+    deg.set(e.sourceId, (deg.get(e.sourceId)||0)+1);
+    deg.set(e.targetId, (deg.get(e.targetId)||0)+1);
+  });
+  nodes.forEach(n=> n[prop] = deg.get(n.id)||0 );
+}
+
+function prepareRawData(nodes, links){
+  const preparedNodes = nodes.map(n=>{
+    const node = Object.assign({}, n);
+    node.label = node.label || node.id;
+    node.description = node.description || '';
+    node.url = deriveUrl(node);
+    return node;
+  });
+  const preparedLinks = links.map((l,i)=>({
+    id: l.id || `e${i}`,
+    sourceId: l.source || l.sourceId,
+    targetId: l.target || l.targetId,
+    weight: l.weight || 1
+  }));
+  const nodeIndex = new Map(preparedNodes.map(n=>[n.id, n]));
+  state.raw = { nodes: preparedNodes, links: preparedLinks, nodeIndex };
+  computeDegrees(preparedNodes, preparedLinks, 'degreeRaw');
+  applyFilters();
+}
+
+function applyFilters(){
+  const minDeg = state.filters.minDegree || 0;
+  const nodes = state.raw.nodes.filter(n=> (n.degreeRaw||0) >= minDeg);
+  const nodeSet = new Set(nodes.map(n=>n.id));
+  const links = state.raw.links
+    .filter(l=> nodeSet.has(l.sourceId) && nodeSet.has(l.targetId))
+    .map(l=>({
+      id:l.id,
+      weight:l.weight,
+      source: state.raw.nodeIndex.get(l.sourceId),
+      target: state.raw.nodeIndex.get(l.targetId),
+      sourceId:l.sourceId,
+      targetId:l.targetId
+    }));
+  state.data = { nodes, links };
+  computeDegrees(nodes, links, 'degree');
+  updateSearchList();
+}
+
+function updateSearchList(){
+  datalist.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  state.data.nodes.slice().sort((a,b)=>(a.label||a.id).localeCompare(b.label||b.id)).forEach(n=>{
+    const opt = document.createElement('option'); opt.value = n.label || n.id; frag.appendChild(opt);
+  });
+  datalist.appendChild(frag);
+}
+
+function nodeSize(n){
+  if(state.sizeBy==='fixed') return 8;
+  return 4 + Math.pow(n.degree||1, 0.6) * 2.2;
+}
+
+// Contrast helpers
+function luminance(r,g,b){
+  const a=[r,g,b].map(v=>{
+    v/=255;
+    return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+  });
+  return a[0]*0.2126 + a[1]*0.7152 + a[2]*0.0722;
+}
+function contrast(rgb1, rgb2){
+  const L1=luminance(rgb1[0],rgb1[1],rgb1[2]);
+  const L2=luminance(rgb2[0],rgb2[1],rgb2[2]);
+  const L=Math.max(L1,L2), s=Math.min(L1,L2);
+  return (L+0.05)/(s+0.05);
+}
+function hexToRgb(hex){
+  hex=hex.replace('#','');
+  if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+  const num=parseInt(hex,16);
+  return [(num>>16)&255,(num>>8)&255,num&255];
+}
+function ensureHighContrast(textHex, bgHex){
+  const t = hexToRgb(textHex), b = hexToRgb(bgHex);
+  const c = contrast(t,b);
+  if(c >= 4.5) return textHex;
+  const white = [255,255,255], black=[0,0,0];
+  const whiteC = contrast(white,b), blackC = contrast(black,b);
+  return whiteC >= blackC ? '#ffffff' : '#000000';
+}
+
+function updateStats(){
+  const n = state.data.nodes.length, m = state.data.links.length;
+  stats.textContent = `${n} nodes • ${m} links`;
+}
+
+// NEW: startSim implementation
+function startSim(onTick){
+  if (simulation) simulation.stop();
+
+  const linkDist = +document.getElementById('linkDist').value || 90;
+  const charge   = +document.getElementById('charge').value   || -700;
+
+  simulation = d3.forceSimulation(state.data.nodes)
+    .force('link',
+      d3.forceLink(state.data.links)
+        .id(d => d.id)
+        .distance(linkDist)
+        .strength(0.6)
+    )
+    .force('charge', d3.forceManyBody().strength(charge))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collide', d3.forceCollide().radius(d => nodeSize(d) + 2).iterations(2))
+    .on('tick', onTick);
+}
+
+// Minimap renderer
+function drawMinimap(){
+  const nodes = state.data.nodes;
+  const links = state.data.links;
+  const w = minimap.width, h = minimap.height;
+  mctx.clearRect(0,0,w,h);
+  if(!nodes.length) return;
+
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  nodes.forEach(n=>{
+    if(n.x == null || n.y == null) return;
+    if(n.x < minX) minX = n.x;
+    if(n.x > maxX) maxX = n.x;
+    if(n.y < minY) minY = n.y;
+    if(n.y > maxY) maxY = n.y;
+  });
+  if(!isFinite(minX) || !isFinite(minY)) return;
+  const dx = maxX - minX || 1;
+  const dy = maxY - minY || 1;
+  const pad = 6;
+  const sx = (w - 2*pad) / dx;
+  const sy = (h - 2*pad) / dy;
+  const s = Math.min(sx, sy);
+
+  mctx.save();
+  mctx.fillStyle = '#050816';
+  mctx.fillRect(0,0,w,h);
+  mctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  mctx.strokeRect(0.5,0.5,w-1,h-1);
+
+  mctx.translate(
+    (w - s*dx)/2 - minX*s,
+    (h - s*dy)/2 - minY*s
+  );
+  mctx.scale(s,s);
+
+  // edges
+  mctx.strokeStyle = 'rgba(120,140,255,0.4)';
+  mctx.lineWidth = 0.5 / s;
+  mctx.beginPath();
+  links.forEach(l=>{
+    if(!l.source || !l.target) return;
+    mctx.moveTo(l.source.x, l.source.y);
+    mctx.lineTo(l.target.x, l.target.y);
+  });
+  mctx.stroke();
+
+  // nodes
+  mctx.fillStyle = 'rgba(255,255,255,0.9)';
+  nodes.forEach(n=>{
+    if(n.x == null || n.y == null) return;
+    mctx.beginPath();
+    mctx.arc(n.x, n.y, 2/s, 0, Math.PI*2);
+    mctx.fill();
+  });
+
+  mctx.restore();
+}
+
+function render(){
+  const groups = Array.from(new Set(state.data.nodes.map(n=> n.group || 'Other')));
+  const col = colorScale(groups);
+
+  const linkSel = gLinks.selectAll('path').data(state.data.links, d=>d.id);
+  linkSel.exit().remove();
+  linkSel.enter().append('path').attr('class','link')
+    .attr('stroke-width', d=> 0.7 + Math.min(4, (d.weight||1)));
+
+  const nodeSel = gNodes.selectAll('.node').data(state.data.nodes, d=>d.id);
+  nodeSel.exit().remove();
+  const nodeEnter = nodeSel.enter().append('g').attr('class','node')
+    .call(d3.drag()
+      .on('start', (event,d)=>{ if(!event.active) simulation.alphaTarget(0.2).restart(); d.fx = d.x; d.fy = d.y; })
+      .on('drag', (event,d)=>{ d.fx = event.x; d.fy = event.y; })
+      .on('end', (event,d)=>{ if(!state.fixed){ d.fx = null; d.fy = null; } }))
+    .on('mouseenter', (event,d)=>{
+      tip.style('display','block').html(
+        `<b>${d.label||d.id}</b>` +
+        (d.description? `<div class="muted">${d.description}</div>`:'' ) +
+        (d.url? `<div><a target="_blank" rel="noopener" href="${d.url}">Open ↗</a></div>`:'' )
+      );
+    })
+    .on('mousemove', (event)=> tip.style('left', (event.pageX)+'px').style('top', (event.pageY)+'px'))
+    .on('mouseleave', ()=> tip.style('display','none'))
+    .on('dblclick', (event,d)=>{ d.fx=null; d.fy=null; });
+
+  nodeEnter.append('circle')
+    .attr('r', d=> nodeSize(d))
+    .attr('fill', d=> col(d.group||'Other'))
+    .attr('class','halo');
+
+  nodeEnter.merge(nodeSel).select('circle')
+    .attr('r', d=> nodeSize(d))
+    .attr('fill', d=> col(d.group||'Other'));
+
+  const labelSel = gLabels.selectAll('g.label').data(state.data.nodes, d=>d.id);
+  labelSel.exit().remove();
+  const labelEnter = labelSel.enter().append('g').attr('class','label');
+  labelEnter.append('text').attr('class','shadow').text(d=>d.label||d.id);
+  labelEnter.append('text').attr('class','fg').text(d=>d.label||d.id);
+  const merged = labelEnter.merge(labelSel);
+
+  const pillSel = gLabelPills.selectAll('rect').data(state.data.nodes, d=>d.id);
+  pillSel.exit().remove();
+  pillSel.enter().append('rect').attr('class','pill').attr('rx',6).attr('ry',6);
+
+  function applyLabelStyles(){
+    const base = +document.getElementById('labelSize').value;
+    const k = d3.zoomTransform(svg.node()).k;
+    const size = state.settings.zoomAware ? Math.max(10, Math.min(26, base * (1 + (k-1)*0.35))) : base;
+    merged.selectAll('text').style('font-size', size+'px').style('font-weight','700');
+
+    const pillColor = getComputedStyle(document.documentElement).getPropertyValue('--label-pill').trim() || '#141d42';
+    const txt = state.settings.highContrast ? ensureHighContrast('#e6ecff', pillColor) : '#e6ecff';
+    merged.selectAll('text.fg').attr('fill', txt);
+    gLabelPills.style('display', state.settings.pills ? null : 'none');
+  }
+  applyLabelStyles();
+
+  function ticked(){
+    gLinks.selectAll('path')
+      .attr('d', d=>{
+        const dx = d.target.x - d.source.x;
+        const dy = d.target.y - d.source.y;
+        const dr = Math.sqrt(dx*dx + dy*dy)*0.9;
+        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+      });
+    gNodes.selectAll('.node').attr('transform', d=>`translate(${d.x},${d.y})`);
+    merged.attr('transform', d=>`translate(${d.x+10},${d.y-10})`);
+
+    // Compute pill sizes around text
+    merged.each(function(d){
+      const t = d3.select(this).select('text.fg').node();
+      if(!t) return;
+      const bb = t.getBBox();
+      d._lb = { x: d.x+10-6, y: d.y-10-3, w: bb.width+10, h: bb.height+6 };
+    });
+    gLabelPills.selectAll('rect')
+      .attr('x', d=> d._lb ? d._lb.x : d.x)
+      .attr('y', d=> d._lb ? d._lb.y : d.y)
+      .attr('width', d=> d._lb ? d._lb.w : 0)
+      .attr('height', d=> d._lb ? d._lb.h : 0);
+
+    drawMinimap();
+  }
+  startSim(ticked);
+  updateStats();
+  svg.on('zoom.applyLabels', ()=> applyLabelStyles());
+}
+
+// Zoom
+zoom = d3.zoom().scaleExtent([0.1,4]).on('zoom', (e)=> gZoom.attr('transform', e.transform) );
+svg.call(zoom).on("dblclick.zoom", null);
+
+// Controls
+document.getElementById('labelMode').addEventListener('change', e=>{ state.labelMode = e.target.value; render(); });
+document.getElementById('labelSize').addEventListener('input', e=>{ state.settings.labelSize = +e.target.value; render(); });
+document.getElementById('togglePills').addEventListener('change', e=>{ state.settings.pills = e.target.checked; render(); });
+document.getElementById('toggleHighContrast').addEventListener('change', e=>{ state.settings.highContrast = e.target.checked; render(); });
+document.getElementById('toggleZoomAware').addEventListener('change', e=>{ state.settings.zoomAware = e.target.checked; render(); });
+
+document.getElementById('linkDist').addEventListener('input', e=>{
+  document.getElementById('ldisplay').textContent = e.target.value;
+  if(simulation){ simulation.force('link').distance(+e.target.value); simulation.alpha(0.6).restart(); }
+});
+document.getElementById('charge').addEventListener('input', e=>{
+  document.getElementById('cdisplay').textContent = e.target.value;
+  if(simulation){ simulation.force('charge').strength(+e.target.value); simulation.alpha(0.6).restart(); }
+});
+document.getElementById('sizeBy').addEventListener('change', e=>{
+  state.sizeBy = e.target.value; render();
+});
+
+document.getElementById('btnFit').addEventListener('click', ()=>{
+  const bounds = gZoom.node().getBBox();
+  const pad = 40;
+  const fullWidth = width, fullHeight = height;
+  if(!bounds.width || !bounds.height){ return; }
+  const widthScale = (fullWidth - pad) / bounds.width;
+  const heightScale = (fullHeight - pad) / bounds.height;
+  const scale = Math.min(widthScale, heightScale);
+  const tx = -bounds.x * scale + (fullWidth - bounds.width * scale) / 2;
+  const ty = -bounds.y * scale + (fullHeight - bounds.height * scale) / 2;
+  svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity.translate(tx,ty).scale(scale));
+});
+document.getElementById('btnFreeze').addEventListener('click', ()=>{
+  state.fixed = !state.fixed;
+  document.getElementById('btnFreeze').textContent = state.fixed ? 'Unfreeze' : 'Freeze';
+  if(!state.fixed){ state.data.nodes.forEach(n=>{ n.fx=null; n.fy=null; }); }
+});
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  state.data.nodes.forEach(n=>{ n.fx=null; n.fy=null; n.x = (Math.random()*width); n.y=(Math.random()*height); });
+  if(simulation){ simulation.alpha(1).restart(); }
+});
+
+// Search
+document.getElementById('q').addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const q = e.target.value.trim().toLowerCase();
+    const hit = state.data.nodes.find(n => (n.label||n.id).toLowerCase().includes(q));
+    if(hit){
+      const t = d3.zoomTransform(svg.node());
+      svg.transition().duration(600).call(zoom.transform, t.translate(width/2 - hit.x*t.k, height/2 - hit.y*t.k));
+      sel.textContent = hit.label||hit.id;
+    }
+  }
+});
+
+minDegSlider.addEventListener('input', e=>{
+  state.filters.minDegree = +e.target.value;
+  minDegDisplay.textContent = e.target.value;
+  applyFilters();
+  render();
+});
+
+// File loading
+document.getElementById('fileInput').addEventListener('change', (e)=> handleFiles(e.target.files));
+const drop = document.getElementById('drop');
+['dragenter','dragover'].forEach(evt=> drop.addEventListener(evt, (e)=>{e.preventDefault(); drop.classList.add('drag'); }));
+['dragleave','drop'].forEach(evt=> drop.addEventListener(evt, (e)=>{e.preventDefault(); drop.classList.remove('drag'); }));
+drop.addEventListener('drop', (e)=> handleFiles(e.dataTransfer.files));
+
+async function handleFiles(fileList){
+  const files = Array.from(fileList);
+
+  const legendFile   = files.find(f => /legend\.json$/i.test(f.name));
+  const enrichedNodesFile = files.find(f => /enriched_nodes\.json$/i.test(f.name));
+  const enrichedEdgesFile = files.find(f => /enriched_edges\.json$/i.test(f.name));
+  const nodesFile    = files.find(f => /nodes\.json$/i.test(f.name));
+  const graphmlFile  = files.find(f => /\.graphml$|\.xml$/i.test(f.name));
+
+  // 1) Prefer enriched JSON if both are present
+  if (enrichedNodesFile && enrichedEdgesFile) {
+    const nodes = JSON.parse(await enrichedNodesFile.text());
+    const edges = JSON.parse(await enrichedEdgesFile.text());
+
+    const preparedNodes = nodes.map(n => ({
+      id: n.id,
+      label: n.label || n.id,
+      description: n.description || '',
+      image: n.image || null,
+      group: n.group || n.type || 'Other',
+      url: n.url || deriveUrl(n)
+    }));
+
+    const links = edges.map((e, i) => ({
+      id: e.id || `e${i}`,
+      sourceId: e.source,
+      targetId: e.target,
+      weight: 1,
+      type: e.type || null
+    }));
+
+    state.legend = legendFile ? JSON.parse(await legendFile.text()) : null;
+    prepareRawData(preparedNodes, links);
+    render();
+    document.getElementById('btnFit').click();
+    return;
+  }
+
+  // 2) Fallback: original nodes.json + graph.graphml
+  if (!nodesFile || !graphmlFile) {
+    alert('Please include either (enriched_nodes.json + enriched_edges.json) OR (nodes.json + graph.graphml).');
+    return;
+  }
+
+  const nodes = JSON.parse(await nodesFile.text());
+  const xml = new DOMParser().parseFromString(await graphmlFile.text(), 'application/xml');
+  const nodeElems = Array.from(xml.getElementsByTagName('node'));
+  const edgeElems = Array.from(xml.getElementsByTagName('edge'));
+
+  const nodeMap = new Map(
+    nodes.map(n => [
+      n.id,
+      {
+        id: n.id,
+        label: n.label || n.id,
+        description: n.description || '',
+        group: n.group,
+        url: n.url || deriveUrl(n)
+      }
+    ])
+  );
+  nodeElems.forEach(ne => {
+    const id = ne.getAttribute('id');
+    if (!nodeMap.has(id)) nodeMap.set(id, { id, label: id });
+  });
+
+  const links = edgeElems.map((ee, i) => ({
+    id: `e${i}`,
+    sourceId: ee.getAttribute('source'),
+    targetId: ee.getAttribute('target'),
+    weight: 1
+  }));
+
+  state.legend = legendFile ? JSON.parse(await legendFile.text()) : null;
+  prepareRawData(Array.from(nodeMap.values()), links);
+  render();
+  document.getElementById('btnFit').click();
+}
+
+
+// Autoload — prefer enriched_* if present, otherwise fall back
+(async function autoload(){
+  try{
+    // 1) Try enriched JSON (what enrich_wikidata.py generated)
+    const enrichedNodes = await fetch('enriched_nodes.json').then(r => r.ok ? r.json() : null);
+    const enrichedEdges = await fetch('enriched_edges.json').then(r => r.ok ? r.json() : null);
+    const legend = await fetch('legend.json').then(r => r.ok ? r.json() : null).catch(() => null);
+
+    if (enrichedNodes && enrichedEdges) {
+      const nodes = enrichedNodes.map(n => ({
+        id: n.id,
+        label: n.label || n.id,
+        description: n.description || '',
+        image: n.image || null,
+        group: n.group || n.type || 'Other',
+        url: n.url || deriveUrl(n)
+      }));
+
+      const links = enrichedEdges.map((e, i) => ({
+        id: e.id || `e${i}`,
+        sourceId: e.source,
+        targetId: e.target,
+        weight: 1,
+        type: e.type || null
+      }));
+
+      state.legend = legend || null;
+      prepareRawData(nodes, links);
+      render();
+      document.getElementById('btnFit').click();
+      return; // stop here if enriched data worked
+    }
+
+    // 2) Fallback: original nodes.json + graph.graphml path
+    const nodes = await fetch('nodes.json').then(r => r.ok ? r.json() : null);
+    const graphml = await fetch('graph.graphml').then(r => r.ok ? r.text() : null);
+
+    if (nodes && graphml) {
+      const nodeMap = new Map(
+        nodes.map(n => [
+          n.id,
+          {
+            id: n.id,
+            label: n.label || n.id,
+            description: n.description || '',
+            group: n.group,
+            url: n.url || deriveUrl(n)
+          }
+        ])
+      );
+
+      const xml = new DOMParser().parseFromString(graphml, 'application/xml');
+      const nodeElems = Array.from(xml.getElementsByTagName('node'));
+      const edgeElems = Array.from(xml.getElementsByTagName('edge'));
+
+      nodeElems.forEach(ne => {
+        const id = ne.getAttribute('id');
+        if (!nodeMap.has(id)) nodeMap.set(id, { id, label: id });
+      });
+
+      const links = edgeElems.map((ee, i) => ({
+        id: `e${i}`,
+        sourceId: ee.getAttribute('source'),
+        targetId: ee.getAttribute('target'),
+        weight: 1
+      }));
+
+      state.legend = legend || null;
+      prepareRawData(Array.from(nodeMap.values()), links);
+      render();
+      document.getElementById('btnFit').click();
+    }
+  } catch (e) {
+    console.error('Autoload error:', e);
+  }
+})();
+
+</script>
+</body>
+</html>
