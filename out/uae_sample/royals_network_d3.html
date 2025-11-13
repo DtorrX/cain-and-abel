@@ -34,6 +34,8 @@
     .controls input[type="text"], .controls select{
       width:100%; padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:#0b1330; color:#e7ecff; outline:none;
     }
+    .controls .check{ display:flex; align-items:center; gap:10px; margin:8px 0; font-size:13px; color:#b7c4ff; }
+    .controls .check input{ width:auto; accent-color:var(--accent2); }
     .btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:#0e1838; color:#dfe6ff; border:1px solid rgba(255,255,255,.1); cursor:pointer; }
     .btn:hover{ border-color: rgba(255,255,255,.25); }
     .btn.primary{ background:linear-gradient(180deg,#1d2b6b,#0e1838); border-color:#3342a3; }
@@ -93,10 +95,22 @@
       <h3>Search & Filter</h3>
       <div class="controls">
         <label>Find a node</label>
-        <input id="q" type="text" placeholder="Type a name… (Enter to select)">
+        <input id="q" type="text" placeholder="Type a name… (Enter to select)" list="nodeList">
+        <datalist id="nodeList"></datalist>
         <div class="btn-row" style="margin-top:6px">
           <button class="btn" id="btnClear">Clear</button>
           <span class="badge">Ctrl/Cmd + Click pins a node</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Query &amp; Highlight</h3>
+      <div class="controls">
+        <label>Minimum degree <span id="mindegDisplay" class="badge">0</span></label>
+        <input id="minDegree" type="range" min="0" max="20" step="1" value="0">
+        <label class="check"><input id="toggleRoyals" type="checkbox"> Show royals only</label>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn" id="btnHighlightRoyals">Highlight royals</button>
         </div>
       </div>
     </div>
@@ -123,6 +137,14 @@
     <div class="panel">
       <h3>Legend</h3>
       <div id="legend" class="legend"></div>
+    </div>
+    <div class="panel">
+      <h3>Export</h3>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" id="btnExportPNG">Export PNG</button>
+        <button class="btn" id="btnExportJSON">Export JSON</button>
+      </div>
+      <div class="muted" style="margin-top:6px">Exports respect current filters and layout.</div>
     </div>
   </div>
   <div id="canvasWrap">
@@ -158,13 +180,16 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script>
 const state = {
+  raw: { nodes: [], links: [], nodeIndex: new Map() },
   data: { nodes: [], links: [] },
   colorBy: 'group',
   sizeBy: 'degree',
   labelMode: 'auto',
   fixed: false,
   fileBase: '',
-  legend: null
+  legend: null,
+  filters: { minDegree: 0, royalsOnly: false },
+  maxDegree: 0
 };
 
 const svg = d3.select('#svg');
@@ -176,8 +201,14 @@ const gHalos = svg.select('.halos');
 const tip = d3.select('#tip');
 const stats = d3.select('#stats');
 const sel = d3.select('#sel');
+sel.html('—');
 const minimap = document.getElementById('minimap');
 const mctx = minimap.getContext('2d');
+const datalist = document.getElementById('nodeList');
+
+const minDegSlider = document.getElementById('minDegree');
+const minDegDisplay = document.getElementById('mindegDisplay');
+const toggleRoyals = document.getElementById('toggleRoyals');
 
 let width = svg.node().clientWidth, height = svg.node().clientHeight;
 let simulation, zoom;
@@ -191,11 +222,233 @@ window.addEventListener('resize', () => {
 svg.attr('viewBox', [0,0,width,height]);
 
 function colorScale(keys){
-  return d3.scaleOrdinal().domain(keys).range(d3.schemeTableau10.concat(d3.schemeSet3));
+  const palette = d3.schemeTableau10.concat(d3.schemeSet3);
+  const overrides = new Map([
+    ['Royal', '#ff7a7a']
+  ]);
+  const colors = keys.map((k,i)=> overrides.get(k) || palette[i % palette.length]);
+  return d3.scaleOrdinal().domain(keys).range(colors);
+}
+
+function deriveUrl(n){
+  if(n.url) return n.url;
+  if(n.site) return n.site;
+  if(/^Q\d+/.test(n.id)) return `https://www.wikidata.org/wiki/${n.id}`;
+  if(n.label){
+    const slug = n.label.replace(/\s+/g,'_');
+    return `https://en.wikipedia.org/wiki/${encodeURIComponent(slug)}`;
+  }
+  return '';
+}
+
+function escapeHtml(str=''){
+  return str.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch]));
+}
+
+function computeDegrees(nodes, links, prop='degree'){
+  const deg = new Map();
+  links.forEach(e=>{
+    const s = typeof e.source === 'object' ? e.source.id : e.source || e.sourceId;
+    const t = typeof e.target === 'object' ? e.target.id : e.target || e.targetId;
+    if(!s || !t) return;
+    deg.set(s, (deg.get(s)||0)+1);
+    deg.set(t, (deg.get(t)||0)+1);
+  });
+  nodes.forEach(n=> n[prop] = deg.get(n.id)||0 );
+}
+
+function prepareRawData(nodes, links){
+  const preparedNodes = nodes.map(n=>{
+    const node = Object.assign({}, n);
+    node.label = node.label || node.id;
+    node.description = node.description || '';
+    node.url = deriveUrl(node);
+    const royalTest = /\broyal\b/i.test(`${node.label} ${node.description}`);
+    node.isRoyal = royalTest || node.tags?.includes?.('royal') || false;
+    return node;
+  });
+  const preparedLinks = links.map((l,i)=>({
+    id: l.id || `e${i}`,
+    sourceId: typeof l.source === 'object' ? l.source.id : l.source,
+    targetId: typeof l.target === 'object' ? l.target.id : l.target,
+    weight: l.weight || 1
+  }));
+  const nodeIndex = new Map(preparedNodes.map(n=>[n.id, n]));
+  state.raw = { nodes: preparedNodes, links: preparedLinks, nodeIndex };
+  state.filters.minDegree = 0;
+  state.filters.royalsOnly = false;
+  toggleRoyals.checked = false;
+  const hasRoyals = preparedNodes.some(n=>n.isRoyal);
+  toggleRoyals.disabled = !hasRoyals;
+  toggleRoyals.parentElement.classList.toggle('muted', !hasRoyals);
+  computeDegrees(preparedNodes, preparedLinks, 'degreeRaw');
+  state.maxDegree = preparedNodes.reduce((acc,n)=> Math.max(acc, n.degreeRaw||0), 0);
+  updateDegreeSlider();
+  applyFilters();
+  clearHighlight();
+  sel.html('—');
+}
+
+function updateDegreeSlider(){
+  const max = Math.max(20, state.maxDegree);
+  minDegSlider.max = max;
+  if(state.filters.minDegree > max){
+    state.filters.minDegree = max;
+    minDegSlider.value = max;
+  }
+  minDegSlider.value = state.filters.minDegree;
+  minDegDisplay.textContent = state.filters.minDegree;
+}
+
+function applyFilters(){
+  if(!state.raw.nodes.length){
+    state.data = { nodes: [], links: [] };
+    updateSearchList();
+    activeGroupHighlight = null;
+    return;
+  }
+  const minDeg = state.filters.minDegree || 0;
+  const nodes = state.raw.nodes.filter(n=>{
+    if(state.filters.royalsOnly && !n.isRoyal) return false;
+    return (n.degreeRaw||0) >= minDeg;
+  });
+  const nodeSet = new Set(nodes.map(n=>n.id));
+  const links = state.raw.links
+    .filter(l=> nodeSet.has(l.sourceId) && nodeSet.has(l.targetId))
+    .map(l=>({
+      id: l.id,
+      weight: l.weight,
+      sourceId: l.sourceId,
+      targetId: l.targetId,
+      source: state.raw.nodeIndex.get(l.sourceId),
+      target: state.raw.nodeIndex.get(l.targetId)
+    }));
+  state.data = { nodes, links };
+  computeDegrees(nodes, links, 'degree');
+  updateSearchList();
+  activeGroupHighlight = null;
+}
+
+function updateSearchList(){
+  if(!datalist) return;
+  datalist.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  state.data.nodes
+    .slice()
+    .sort((a,b)=> (a.label||a.id).localeCompare(b.label||b.id))
+    .forEach(n=>{
+      const opt = document.createElement('option');
+      opt.value = n.label || n.id;
+      frag.appendChild(opt);
+    });
+  datalist.appendChild(frag);
+}
+
+function selectionMarkup(d){
+  if(!d) return '—';
+  const rows = [];
+  rows.push(`<div><strong>${escapeHtml(d.label||d.id)}</strong> <span class="badge">deg ${d.degree??d.degreeRaw??0}</span></div>`);
+  if(d.description) rows.push(`<div class="muted">${escapeHtml(d.description)}</div>`);
+  if(d.url) rows.push(`<div><a href="${d.url}" target="_blank" rel="noopener">Open Wikipedia ↗</a></div>`);
+  return rows.join('');
+}
+
+function exportFileBase(){
+  const base = state.fileBase || 'royals_network';
+  return base.replace(/[^\w.-]+/g,'_');
+}
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function downloadDataUrl(dataUrl, filename){
+  const a = document.createElement('a');
+  a.href = dataUrl; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function exportJSON(){
+  if(!state.data.nodes.length){
+    alert('Load network data before exporting.');
+    return;
+  }
+  const payload = {
+    generated: new Date().toISOString(),
+    filters: Object.assign({}, state.filters),
+    sizeBy: state.sizeBy,
+    labelMode: state.labelMode,
+    nodes: state.data.nodes.map(n=>({
+      id: n.id,
+      label: n.label,
+      description: n.description,
+      group: n.group,
+      isRoyal: n.isRoyal,
+      degree: n.degree,
+      degreeRaw: n.degreeRaw,
+      url: n.url,
+      x: n.x,
+      y: n.y,
+      fx: n.fx,
+      fy: n.fy
+    })),
+    links: state.data.links.map(l=>({
+      id: l.id,
+      source: l.sourceId || l.source.id,
+      target: l.targetId || l.target.id,
+      weight: l.weight
+    }))
+  };
+  downloadBlob(new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'}), `${exportFileBase()}_view.json`);
+}
+
+function exportPNG(){
+  if(!state.data.nodes.length){
+    alert('Load network data before exporting.');
+    return;
+  }
+  const serializer = new XMLSerializer();
+  const clone = svg.node().cloneNode(true);
+  clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  clone.setAttribute('width', width);
+  clone.setAttribute('height', height);
+  const defs = clone.querySelector('defs') || clone.insertBefore(document.createElementNS('http://www.w3.org/2000/svg','defs'), clone.firstChild);
+  const styleEl = document.createElementNS('http://www.w3.org/2000/svg','style');
+  styleEl.textContent = Array.from(document.querySelectorAll('style')).map(s=>s.textContent).join('\n');
+  defs.appendChild(styleEl);
+  const svgString = serializer.serializeToString(clone);
+  const blob = new Blob([svgString], {type:'image/svg+xml;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const canvas = document.createElement('canvas');
+  canvas.width = width * 2;
+  canvas.height = height * 2;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.onload = ()=>{
+    ctx.fillStyle = '#0b1020';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    downloadDataUrl(canvas.toDataURL('image/png'), `${exportFileBase()}_view.png`);
+    URL.revokeObjectURL(url);
+  };
+  img.onerror = ()=>{
+    URL.revokeObjectURL(url);
+    alert('Export failed — try again.');
+  };
+  img.src = url;
 }
 
 function autoGroup(n){
   // try to infer a group from id namespace (e.g., Q* ids -> 'Wikidata'), or description keywords
+  if(n.isRoyal) return 'Royal';
   if(n.group) return n.group;
   if(/^Q\d+/.test(n.id)) return 'Wikidata';
   if(n.description){
@@ -219,23 +472,27 @@ function labelVisible(n){
 
 function setLegend(legendMap){
   const L = d3.select('#legend').html('');
-  const entries = legendMap ? Object.entries(legendMap) : d3.rollup(state.data.nodes, v=>v.length, d=>d.group);
-  const keys = Array.from(entries.keys ? entries.keys() : entries.map(d=>d[0]));
+  const counts = d3.rollup(state.data.nodes, v=>v.length, d=>d.group);
+  const keys = Array.from(counts.keys());
   const col = colorScale(keys);
-  (entries instanceof Map ? Array.from(entries) : entries).forEach(([k,v])=>{
+  keys.forEach(k=>{
     const item = L.append('div').attr('class','item');
-    item.append('span').attr('class','sw').style('background', col(k));
+    const override = legendMap && legendMap[k] && legendMap[k].color;
+    item.append('span').attr('class','sw').style('background', override || col(k));
     item.append('span').text(`${k}`);
-    item.append('span').attr('class','badge').text(v instanceof Array ? v.length : v);
+    item.append('span').attr('class','badge').text(counts.get(k));
   });
 }
 
 function updateStats(){
   const n = state.data.nodes.length, m = state.data.links.length;
-  stats.text(`${n} nodes • ${m} links`);
+  const totalN = state.raw.nodes.length, totalM = state.raw.links.length;
+  const filtered = (n!==totalN || m!==totalM) ? ` (of ${totalN} nodes / ${totalM} links)` : '';
+  stats.text(`${n} nodes • ${m} links${filtered}`);
 }
 
 function highlightNeighbors(focus){
+  activeGroupHighlight = null;
   const nbr = new Set([focus.id]);
   state.data.links.forEach(e=>{ if(e.source.id===focus.id) nbr.add(e.target.id); if(e.target.id===focus.id) nbr.add(e.source.id); });
   gNodes.selectAll('.node').classed('dim', d=>!nbr.has(d.id)).style('opacity', d=>nbr.has(d.id)?1:0.2);
@@ -244,9 +501,24 @@ function highlightNeighbors(focus){
 }
 
 function clearHighlight(){
+  activeGroupHighlight = null;
   gNodes.selectAll('.node').classed('dim', false).style('opacity',1);
   gLabels.selectAll('text').style('opacity', d=> labelVisible(d) ? 1 : 0);
-  gLinks.selectAll('path').attr('class','link');
+  gLinks.selectAll('path').attr('class','link').style('opacity', null);
+}
+
+let activeGroupHighlight = null;
+function highlightGroup(groupName){
+  clearHighlight();
+  const hits = state.data.nodes.filter(n=> n.group === groupName);
+  if(!hits.length) return;
+  activeGroupHighlight = groupName;
+  const ids = new Set(hits.map(n=>n.id));
+  gNodes.selectAll('.node').classed('dim', d=>!ids.has(d.id)).style('opacity', d=> ids.has(d.id)?1:0.18);
+  gLabels.selectAll('text').style('opacity', d=> ids.has(d.id) ? 1 : 0.08);
+  gLinks.selectAll('path')
+    .attr('class', d=> (ids.has(d.source.id) && ids.has(d.target.id)) ? 'link link--hi' : 'link')
+    .style('opacity', d=> (ids.has(d.source.id) && ids.has(d.target.id)) ? 0.9 : 0.05);
 }
 
 function drawMinimap(){
@@ -265,6 +537,7 @@ function drawMinimap(){
   // links
   mctx.strokeStyle = '#8899ff'; mctx.globalAlpha=.25;
   state.data.links.forEach(e=>{
+    if(e.source.x==null || e.target.x==null) return;
     mctx.beginPath();
     mctx.moveTo(ox + e.source.x*s, oy + e.source.y*s);
     mctx.lineTo(ox + e.target.x*s, oy + e.target.y*s);
@@ -273,27 +546,25 @@ function drawMinimap(){
   // nodes
   mctx.globalAlpha=1; mctx.fillStyle='#cfe3ff';
   state.data.nodes.forEach(n=>{
+    if(n.x==null || n.y==null) return;
     mctx.beginPath(); mctx.arc(ox + n.x*s, oy + n.y*s, 1.5, 0, Math.PI*2); mctx.fill();
   });
 }
 
-function computeDegrees(){
-  const deg = new Map();
-  state.data.links.forEach(e=>{
-    deg.set(e.source.id, (deg.get(e.source.id)||0)+1);
-    deg.set(e.target.id, (deg.get(e.target.id)||0)+1);
-  });
-  state.data.nodes.forEach(n=> n.degree = deg.get(n.id)||0 );
-}
-
 function startSim(){
   if(simulation) simulation.stop();
+  if(!state.data.nodes.length){
+    drawMinimap();
+    return;
+  }
   const linkDist = +document.getElementById('linkDist').value;
   const charge = +document.getElementById('charge').value;
   simulation = d3.forceSimulation(state.data.nodes)
     .force('link', d3.forceLink(state.data.links).id(d=>d.id).distance(linkDist).strength(0.6))
     .force('charge', d3.forceManyBody().strength(charge))
     .force('center', d3.forceCenter(width/2, height/2))
+    .force('royalX', d3.forceX(d=> d.isRoyal ? width*0.35 : width*0.6).strength(0.035))
+    .force('royalY', d3.forceY(d=> d.isRoyal ? height*0.45 : height*0.55).strength(0.02))
     .force('collide', d3.forceCollide().radius(d=>nodeSize(d)+2).iterations(2))
     .on('tick', ticked);
 }
@@ -313,8 +584,7 @@ function ticked(){
   drawMinimap();
 }
 
-function render(){
-  computeDegrees();
+function renderGraph(){
   const groups = Array.from(new Set(state.data.nodes.map(n=> (n.group = autoGroup(n)) )));
   const col = colorScale(groups);
 
@@ -334,7 +604,10 @@ function render(){
       .on('end', (event,d)=>{ if(!state.fixed){ d.fx = null; d.fy = null; } }))
     .on('mouseenter', (event,d)=>{
       d._hi = true;
-      tip.style('display','block').html(`<b>${d.label||d.id}</b><br/><span class="muted">${d.description||''}</span>`);
+      const tooltipParts = [`<b>${escapeHtml(d.label||d.id)}</b>`];
+      if(d.description) tooltipParts.push(`<div class="muted">${escapeHtml(d.description)}</div>`);
+      if(d.url) tooltipParts.push(`<div><a href="${d.url}" target="_blank" rel="noopener">Open Wikipedia ↗</a></div>`);
+      tip.style('display','block').html(tooltipParts.join(''));
       highlightNeighbors(d);
     })
     .on('mousemove', (event,d)=>{
@@ -344,6 +617,7 @@ function render(){
       d._hi = false; tip.style('display','none'); clearHighlight();
     })
     .on('click', (event,d)=>{
+      if(event.altKey && d.url){ window.open(d.url, '_blank', 'noopener'); }
       const multi = event.ctrlKey || event.metaKey;
       if(multi){
         d.fx = d.x; d.fy = d.y;
@@ -354,7 +628,7 @@ function render(){
         state.data.nodes.forEach(n=>{ if(!state.fixed){ n.fx = null; n.fy = null; } n._sel=false; });
         d._sel = true;
       }
-      sel.text(`Selected: ${d.label||d.id} — degree ${d.degree}`);
+      sel.html(selectionMarkup(d));
     })
     .on('dblclick', (event,d)=>{
       d.fx=null; d.fy=null; d3.select(event.currentTarget).classed('fixed', false);
@@ -365,7 +639,9 @@ function render(){
     .attr('fill', d=> col(d.group))
     .attr('class','halo');
 
-  nodeEnter.merge(nodeSel).select('circle').attr('r', d=> nodeSize(d)).attr('fill', d=> col(d.group));
+  const nodeUpdate = nodeEnter.merge(nodeSel);
+  nodeUpdate.classed('fixed', d=> d.fx != null && d.fy != null);
+  nodeUpdate.select('circle').attr('r', d=> nodeSize(d)).attr('fill', d=> col(d.group));
 
   const labelSel = gLabels.selectAll('text').data(state.data.nodes, d=>d.id);
   labelSel.exit().remove();
@@ -374,14 +650,22 @@ function render(){
     .attr('dy','0.32em')
     .text(d=>d.label||d.id);
 
-  setLegend(null);
+  gLabels.selectAll('text').text(d=>d.label||d.id);
+
+  setLegend(state.legend);
   updateStats();
   startSim();
+  if(activeGroupHighlight){
+    const g = activeGroupHighlight;
+    activeGroupHighlight = null;
+    highlightGroup(g);
+  }
 }
 
 function zoomToFit(pad=40){
   const bounds = gZoom.node().getBBox();
   const fullWidth = width, fullHeight = height;
+  if(!bounds.width || !bounds.height){ return; }
   const widthScale = (fullWidth - pad) / bounds.width;
   const heightScale = (fullHeight - pad) / bounds.height;
   const scale = Math.min(widthScale, heightScale);
@@ -403,10 +687,10 @@ document.getElementById('charge').addEventListener('input', e=>{
   if(simulation){ simulation.force('charge').strength(+e.target.value); simulation.alpha(0.6).restart(); }
 });
 document.getElementById('sizeBy').addEventListener('change', e=>{
-  state.sizeBy = e.target.value; render();
+  state.sizeBy = e.target.value; renderGraph();
 });
 document.getElementById('labelMode').addEventListener('change', e=>{
-  state.labelMode = e.target.value; render();
+  state.labelMode = e.target.value; renderGraph();
 });
 document.getElementById('btnFit').addEventListener('click', ()=> zoomToFit());
 document.getElementById('btnFreeze').addEventListener('click', ()=>{
@@ -419,7 +703,7 @@ document.getElementById('btnReset').addEventListener('click', ()=>{
   simulation.alpha(1).restart();
 });
 document.getElementById('btnClear').addEventListener('click', ()=>{
-  document.getElementById('q').value=''; clearHighlight(); sel.text('—');
+  document.getElementById('q').value=''; clearHighlight(); sel.html('—');
 });
 document.getElementById('q').addEventListener('keydown', e=>{
   if(e.key==='Enter'){
@@ -429,10 +713,35 @@ document.getElementById('q').addEventListener('keydown', e=>{
       highlightNeighbors(hit);
       const t = d3.zoomTransform(svg.node());
       svg.transition().duration(600).call(zoom.transform, t.translate(width/2 - hit.x*t.k, height/2 - hit.y*t.k));
-      sel.text(`Selected: ${hit.label||hit.id} — degree ${hit.degree}`);
+      sel.html(selectionMarkup(hit));
     }
   }
 });
+document.getElementById('q').addEventListener('input', e=>{
+  if(!e.target.value){
+    clearHighlight();
+    sel.html('—');
+  }
+});
+minDegSlider.addEventListener('input', e=>{
+  state.filters.minDegree = +e.target.value;
+  minDegDisplay.textContent = e.target.value;
+  applyFilters();
+  renderGraph();
+  sel.html('—');
+});
+toggleRoyals.addEventListener('change', e=>{
+  state.filters.royalsOnly = e.target.checked;
+  applyFilters();
+  renderGraph();
+  sel.html('—');
+});
+document.getElementById('btnHighlightRoyals').addEventListener('click', ()=>{
+  highlightGroup('Royal');
+  sel.html('<div><strong>Royal households highlighted</strong></div><div class="muted">Use Clear to reset focus.</div>');
+});
+document.getElementById('btnExportPNG').addEventListener('click', exportPNG);
+document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
 
 // File loading helpers
 document.getElementById('fileInput').addEventListener('change', (e)=> handleFiles(e.target.files));
@@ -452,7 +761,13 @@ async function handleFiles(fileList){
   const nodesText = await nodesFile.text();
   const nodes = JSON.parse(nodesText);
   // normalize
-  const nodeMap = new Map(nodes.map(n=> [n.id, {id:n.id, label:n.label||n.id, description:n.description||'', group:n.group}] ));
+  const nodeMap = new Map(nodes.map(n=>{
+    const base = Object.assign({}, n);
+    base.id = n.id;
+    base.label = n.label || n.id;
+    base.description = n.description || '';
+    return [n.id, base];
+  }));
 
   // GraphML parsing
   const xml = new DOMParser().parseFromString(await graphmlFile.text(), 'application/xml');
@@ -478,14 +793,10 @@ async function handleFiles(fileList){
     return { id:`e${i}`, source:s, target:t, weight:w };
   });
 
-  state.data = { nodes: Array.from(nodeMap.values()), links };
   state.legend = legendFile ? JSON.parse(await legendFile.text()) : null;
-  if(state.legend){
-    setLegend(state.legend);
-  } else {
-    setLegend(null);
-  }
-  render();
+  state.fileBase = (nodesFile.name || '').replace(/\.[^.]+$/, '') || 'royals_network';
+  prepareRawData(Array.from(nodeMap.values()), links);
+  renderGraph();
   zoomToFit();
 }
 
@@ -502,10 +813,10 @@ async function handleFiles(fileList){
       const edgeElems = Array.from(xml.getElementsByTagName('edge'));
       nodeElems.forEach(ne=>{ const id = ne.getAttribute('id'); if(!nodeMap.has(id)) nodeMap.set(id, {id, label:id}); });
       const links = edgeElems.map((ee,i)=>({ id:'e'+i, source:ee.getAttribute('source'), target:ee.getAttribute('target'), weight:1 }));
-      state.data = { nodes: Array.from(nodeMap.values()), links };
       state.legend = legend || null;
-      if(state.legend){ setLegend(state.legend); }
-      render(); zoomToFit();
+      state.fileBase = 'royals_network';
+      prepareRawData(Array.from(nodeMap.values()), links);
+      renderGraph(); zoomToFit();
     }
   }catch(e){ /* silent */ }
 })();
