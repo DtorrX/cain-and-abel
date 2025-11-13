@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Interactive Royal Network — D3</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#0f1530;
+      --ink:#e6ecff;
+      --muted:#9fb0ff;
+      --accent:#7aa2ff;
+      --accent2:#ffca7a;
+      --link:#5b74ff;
+      --link-hi:#ffd166;
+      --danger:#ff7a7a;
+      --ok:#7affc5;
+    }
+    html,body{
+      margin:0; height:100%; background:radial-gradient(1200px 800px at 10% -10%, #1c2448 0%, #0b1020 60%);
+      color:var(--ink); font:14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      overflow:hidden;
+    }
+    #app{ display:grid; grid-template-columns: 320px 1fr; grid-template-rows:auto 1fr auto; height:100%; }
+    header{ grid-column:1 / -1; padding:10px 14px; display:flex; align-items:center; gap:10px; background:transparent; border-bottom:1px solid rgba(255,255,255,.08); }
+    header h1{ font-size:16px; letter-spacing:.4px; margin:0 6px 0 0; color:#fff; }
+    header .pill{ background:#0e1838; border:1px solid rgba(255,255,255,.08); padding:6px 10px; border-radius:999px; color:var(--muted); }
+    .left{ grid-row:2 / span 1; grid-column:1; overflow:auto; padding:12px; backdrop-filter: blur(4px); background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0)); border-right:1px solid rgba(255,255,255,.08); }
+    .panel{ background:var(--card); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:12px; margin-bottom:12px; box-shadow: 0 10px 40px rgba(0,0,0,.25), inset 0 1px 1px rgba(255,255,255,.06); }
+    .panel h3{ margin:0 0 8px; font-size:13px; color:#c9d4ff; letter-spacing:.3px; text-transform:uppercase; }
+    .controls label{ display:block; margin:6px 0 6px; font-size:13px; color:#b7c4ff;}
+    .controls input[type="range"]{ width:100%; }
+    .controls input[type="text"], .controls select{
+      width:100%; padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:#0b1330; color:#e7ecff; outline:none;
+    }
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:#0e1838; color:#dfe6ff; border:1px solid rgba(255,255,255,.1); cursor:pointer; }
+    .btn:hover{ border-color: rgba(255,255,255,.25); }
+    .btn.primary{ background:linear-gradient(180deg,#1d2b6b,#0e1838); border-color:#3342a3; }
+    .btn-row{ display:flex; gap:8px; flex-wrap:wrap; }
+    .legend{ display:flex; flex-wrap:wrap; gap:8px; }
+    .legend .item{ display:flex; align-items:center; gap:8px; background:#0e1838; border:1px solid rgba(255,255,255,.1); padding:6px 10px; border-radius:999px; }
+    .legend .sw{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+    .footer{ grid-column:1 / -1; padding:8px 12px; color:#b6c3ff; border-top:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02); display:flex; justify-content:space-between; align-items:center; gap:10px;}
+    #canvasWrap{ position:relative; grid-column:2; grid-row:2; }
+    svg{ width:100%; height:100%; display:block; }
+    .halo{ filter:url(#glow); }
+    .link{ stroke:var(--link); stroke-opacity:.25; }
+    .link--hi{ stroke:var(--link-hi) !important; stroke-opacity:.9 !important; }
+    .node{ cursor:pointer; }
+    .node circle{ stroke:#fff; stroke-width:.6; }
+    .node.fixed circle{ stroke:var(--ok); stroke-width:1.6; }
+    .node text{ font-size:11px; paint-order: stroke; stroke:#0b1020; stroke-width:2; }
+    .tooltip{
+      position:absolute; pointer-events:none; transform:translate(-50%, calc(-100% - 14px));
+      background:#0b1330; color:#e7ecff; border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:8px 10px; white-space:nowrap; box-shadow: 0 10px 35px rgba(0,0,0,.4);
+    }
+    .tooltip::after{
+      content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
+      border:7px solid transparent; border-top-color:rgba(255,255,255,.15);
+    }
+    .minimap{ position:absolute; right:14px; bottom:14px; width:180px; height:120px; background:#0b1330; border:1px solid rgba(255,255,255,.12); border-radius:8px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+    .badge{ background:#0e1838; border:1px solid rgba(255,255,255,.1); padding:2px 6px; border-radius:6px; font-size:11px; color:#c9d4ff; }
+    .muted{ color:#9bb2ff; }
+    a{ color:#c3d2ff; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,.2) }
+    a:hover{ color:#fff; border-bottom-color:#fff }
+    .dropzone{ border:1px dashed rgba(255,255,255,.3); border-radius:10px; padding:10px; text-align:center; background:rgba(255,255,255,.03); }
+    .dropzone.drag{ border-color:#ffd166; background:rgba(255,209,102,.08); }
+  </style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Interactive Royal Network</h1>
+    <span class="pill">D3 v7</span>
+    <span id="stats" class="pill">—</span>
+    <div style="margin-left:auto" class="btn-row">
+      <button class="btn" id="btnFit" title="Zoom to fit">Fit</button>
+      <button class="btn" id="btnFreeze" title="Freeze/unfreeze nodes">Freeze</button>
+      <button class="btn" id="btnReset" title="Reset positions">Reset</button>
+      <label class="btn">
+        Load files… <input id="fileInput" type="file" accept=".json,.graphml,.xml" multiple style="display:none">
+      </label>
+    </div>
+  </header>
+  <div class="left">
+    <div class="panel">
+      <h3>Data</h3>
+      <div class="dropzone" id="drop">Drop <b>nodes.json</b> and <b>graph.graphml</b> (and optional <b>legend.json</b>) here.</div>
+      <div class="muted" style="margin-top:8px">Or place the files next to this HTML and use the button above.</div>
+    </div>
+    <div class="panel">
+      <h3>Search & Filter</h3>
+      <div class="controls">
+        <label>Find a node</label>
+        <input id="q" type="text" placeholder="Type a name… (Enter to select)">
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn" id="btnClear">Clear</button>
+          <span class="badge">Ctrl/Cmd + Click pins a node</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Layout</h3>
+      <div class="controls">
+        <label>Link distance <span id="ldisplay" class="badge">60</span></label>
+        <input id="linkDist" type="range" min="30" max="250" step="5" value="90">
+        <label>Charge strength <span id="cdisplay" class="badge">-450</span></label>
+        <input id="charge" type="range" min="-2000" max="-50" step="10" value="-700">
+        <label>Node size by</label>
+        <select id="sizeBy">
+          <option value="degree">Degree</option>
+          <option value="fixed">Fixed</option>
+        </select>
+        <label>Show labels</label>
+        <select id="labelMode">
+          <option value="auto">Auto (important only)</option>
+          <option value="all">All</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Legend</h3>
+      <div id="legend" class="legend"></div>
+    </div>
+  </div>
+  <div id="canvasWrap">
+    <svg id="svg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+        <marker id="arrow" viewBox="0 -5 10 10" refX="16" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,-5L10,0L0,5" fill="currentColor"></path>
+        </marker>
+      </defs>
+      <g id="zoomLayer">
+        <g class="links"></g>
+        <g class="nodes"></g>
+        <g class="labels"></g>
+        <g class="halos"></g>
+      </g>
+    </svg>
+    <canvas class="minimap" id="minimap"></canvas>
+    <div class="tooltip" id="tip" style="display:none"></div>
+  </div>
+  <div class="footer">
+    <div>Tip: Hover to highlight ego‑network • Double‑click to unpin • Wheel to zoom • Drag background to pan</div>
+    <div id="sel" class="muted">—</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+const state = {
+  data: { nodes: [], links: [] },
+  colorBy: 'group',
+  sizeBy: 'degree',
+  labelMode: 'auto',
+  fixed: false,
+  fileBase: '',
+  legend: null
+};
+
+const svg = d3.select('#svg');
+const gZoom = d3.select('#zoomLayer');
+const gLinks = svg.select('.links');
+const gNodes = svg.select('.nodes');
+const gLabels = svg.select('.labels');
+const gHalos = svg.select('.halos');
+const tip = d3.select('#tip');
+const stats = d3.select('#stats');
+const sel = d3.select('#sel');
+const minimap = document.getElementById('minimap');
+const mctx = minimap.getContext('2d');
+
+let width = svg.node().clientWidth, height = svg.node().clientHeight;
+let simulation, zoom;
+
+window.addEventListener('resize', () => {
+  width = svg.node().clientWidth; height = svg.node().clientHeight;
+  svg.attr('viewBox', [0,0,width,height]);
+  drawMinimap();
+});
+
+svg.attr('viewBox', [0,0,width,height]);
+
+function colorScale(keys){
+  return d3.scaleOrdinal().domain(keys).range(d3.schemeTableau10.concat(d3.schemeSet3));
+}
+
+function autoGroup(n){
+  // try to infer a group from id namespace (e.g., Q* ids -> 'Wikidata'), or description keywords
+  if(n.group) return n.group;
+  if(/^Q\d+/.test(n.id)) return 'Wikidata';
+  if(n.description){
+    if(/Jordan/i.test(n.description)) return 'Jordan';
+    if(/Dubai|Emirati|UAE|Abu Dhabi|Nahyan|Maktoum/i.test(n.description)) return 'UAE';
+  }
+  return 'Other';
+}
+
+function nodeSize(n){
+  if(state.sizeBy==='fixed') return 8;
+  return 4 + Math.pow(n.degree||1, 0.6) * 2.2;
+}
+
+function labelVisible(n){
+  if(state.labelMode==='all') return true;
+  if(state.labelMode==='none') return false;
+  // auto: show if high degree or currently hovered/selected
+  return (n.degree||0) >= 6 || n._hi || n._sel;
+}
+
+function setLegend(legendMap){
+  const L = d3.select('#legend').html('');
+  const entries = legendMap ? Object.entries(legendMap) : d3.rollup(state.data.nodes, v=>v.length, d=>d.group);
+  const keys = Array.from(entries.keys ? entries.keys() : entries.map(d=>d[0]));
+  const col = colorScale(keys);
+  (entries instanceof Map ? Array.from(entries) : entries).forEach(([k,v])=>{
+    const item = L.append('div').attr('class','item');
+    item.append('span').attr('class','sw').style('background', col(k));
+    item.append('span').text(`${k}`);
+    item.append('span').attr('class','badge').text(v instanceof Array ? v.length : v);
+  });
+}
+
+function updateStats(){
+  const n = state.data.nodes.length, m = state.data.links.length;
+  stats.text(`${n} nodes • ${m} links`);
+}
+
+function highlightNeighbors(focus){
+  const nbr = new Set([focus.id]);
+  state.data.links.forEach(e=>{ if(e.source.id===focus.id) nbr.add(e.target.id); if(e.target.id===focus.id) nbr.add(e.source.id); });
+  gNodes.selectAll('.node').classed('dim', d=>!nbr.has(d.id)).style('opacity', d=>nbr.has(d.id)?1:0.2);
+  gLabels.selectAll('text').style('opacity', d=>nbr.has(d.id)?1:0.12);
+  gLinks.selectAll('path').attr('class', d=> (d.source.id===focus.id || d.target.id===focus.id) ? 'link link--hi' : 'link');
+}
+
+function clearHighlight(){
+  gNodes.selectAll('.node').classed('dim', false).style('opacity',1);
+  gLabels.selectAll('text').style('opacity', d=> labelVisible(d) ? 1 : 0);
+  gLinks.selectAll('path').attr('class','link');
+}
+
+function drawMinimap(){
+  const bbox = gZoom.node().getBBox();
+  const pad = 40;
+  const mw = minimap.width, mh = minimap.height;
+  mctx.clearRect(0,0,mw,mh);
+  if(!bbox.width || !bbox.height) return;
+  const sx = (mw - pad) / bbox.width;
+  const sy = (mh - pad) / bbox.height;
+  const s = Math.min(sx, sy);
+  const ox = (mw - bbox.width*s)/2 - bbox.x*s;
+  const oy = (mh - bbox.height*s)/2 - bbox.y*s;
+  mctx.fillStyle = '#1a2352';
+  mctx.fillRect(0,0,mw,mh);
+  // links
+  mctx.strokeStyle = '#8899ff'; mctx.globalAlpha=.25;
+  state.data.links.forEach(e=>{
+    mctx.beginPath();
+    mctx.moveTo(ox + e.source.x*s, oy + e.source.y*s);
+    mctx.lineTo(ox + e.target.x*s, oy + e.target.y*s);
+    mctx.stroke();
+  });
+  // nodes
+  mctx.globalAlpha=1; mctx.fillStyle='#cfe3ff';
+  state.data.nodes.forEach(n=>{
+    mctx.beginPath(); mctx.arc(ox + n.x*s, oy + n.y*s, 1.5, 0, Math.PI*2); mctx.fill();
+  });
+}
+
+function computeDegrees(){
+  const deg = new Map();
+  state.data.links.forEach(e=>{
+    deg.set(e.source.id, (deg.get(e.source.id)||0)+1);
+    deg.set(e.target.id, (deg.get(e.target.id)||0)+1);
+  });
+  state.data.nodes.forEach(n=> n.degree = deg.get(n.id)||0 );
+}
+
+function startSim(){
+  if(simulation) simulation.stop();
+  const linkDist = +document.getElementById('linkDist').value;
+  const charge = +document.getElementById('charge').value;
+  simulation = d3.forceSimulation(state.data.nodes)
+    .force('link', d3.forceLink(state.data.links).id(d=>d.id).distance(linkDist).strength(0.6))
+    .force('charge', d3.forceManyBody().strength(charge))
+    .force('center', d3.forceCenter(width/2, height/2))
+    .force('collide', d3.forceCollide().radius(d=>nodeSize(d)+2).iterations(2))
+    .on('tick', ticked);
+}
+
+function ticked(){
+  gLinks.selectAll('path')
+    .attr('d', d=>{
+      const dx = d.target.x - d.source.x;
+      const dy = d.target.y - d.source.y;
+      const dr = Math.sqrt(dx*dx + dy*dy)*0.9;
+      return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+    });
+
+  gNodes.selectAll('.node').attr('transform', d=>`translate(${d.x},${d.y})`);
+  gLabels.selectAll('text').attr('transform', d=>`translate(${d.x+10},${d.y-10})`).style('opacity', d=> labelVisible(d) ? 1 : 0);
+
+  drawMinimap();
+}
+
+function render(){
+  computeDegrees();
+  const groups = Array.from(new Set(state.data.nodes.map(n=> (n.group = autoGroup(n)) )));
+  const col = colorScale(groups);
+
+  const linkSel = gLinks.selectAll('path').data(state.data.links, d=>d.id || `${d.source.id}->${d.target.id}`);
+  linkSel.exit().remove();
+  linkSel.enter().append('path')
+    .attr('class','link')
+    .attr('stroke-width', d=> 0.7 + Math.min(4, (d.weight||1)))
+    .attr('marker-end', null);
+
+  const nodeSel = gNodes.selectAll('.node').data(state.data.nodes, d=>d.id);
+  nodeSel.exit().remove();
+  const nodeEnter = nodeSel.enter().append('g').attr('class','node')
+    .call(d3.drag()
+      .on('start', (event,d)=>{ if(!event.active) simulation.alphaTarget(0.2).restart(); d.fx = d.x; d.fy = d.y; })
+      .on('drag', (event,d)=>{ d.fx = event.x; d.fy = event.y; })
+      .on('end', (event,d)=>{ if(!state.fixed){ d.fx = null; d.fy = null; } }))
+    .on('mouseenter', (event,d)=>{
+      d._hi = true;
+      tip.style('display','block').html(`<b>${d.label||d.id}</b><br/><span class="muted">${d.description||''}</span>`);
+      highlightNeighbors(d);
+    })
+    .on('mousemove', (event,d)=>{
+      tip.style('left', (event.pageX)+'px').style('top', (event.pageY)+'px');
+    })
+    .on('mouseleave', (event,d)=>{
+      d._hi = false; tip.style('display','none'); clearHighlight();
+    })
+    .on('click', (event,d)=>{
+      const multi = event.ctrlKey || event.metaKey;
+      if(multi){
+        d.fx = d.x; d.fy = d.y;
+        d3.select(event.currentTarget).classed('fixed', true);
+        d._sel = true;
+      } else {
+        gNodes.selectAll('.node').classed('fixed', false);
+        state.data.nodes.forEach(n=>{ if(!state.fixed){ n.fx = null; n.fy = null; } n._sel=false; });
+        d._sel = true;
+      }
+      sel.text(`Selected: ${d.label||d.id} — degree ${d.degree}`);
+    })
+    .on('dblclick', (event,d)=>{
+      d.fx=null; d.fy=null; d3.select(event.currentTarget).classed('fixed', false);
+    });
+
+  nodeEnter.append('circle')
+    .attr('r', d=> nodeSize(d))
+    .attr('fill', d=> col(d.group))
+    .attr('class','halo');
+
+  nodeEnter.merge(nodeSel).select('circle').attr('r', d=> nodeSize(d)).attr('fill', d=> col(d.group));
+
+  const labelSel = gLabels.selectAll('text').data(state.data.nodes, d=>d.id);
+  labelSel.exit().remove();
+  labelSel.enter().append('text')
+    .attr('text-anchor','start')
+    .attr('dy','0.32em')
+    .text(d=>d.label||d.id);
+
+  setLegend(null);
+  updateStats();
+  startSim();
+}
+
+function zoomToFit(pad=40){
+  const bounds = gZoom.node().getBBox();
+  const fullWidth = width, fullHeight = height;
+  const widthScale = (fullWidth - pad) / bounds.width;
+  const heightScale = (fullHeight - pad) / bounds.height;
+  const scale = Math.min(widthScale, heightScale);
+  const tx = -bounds.x * scale + (fullWidth - bounds.width * scale) / 2;
+  const ty = -bounds.y * scale + (fullHeight - bounds.height * scale) / 2;
+  svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity.translate(tx,ty).scale(scale));
+}
+
+zoom = d3.zoom().scaleExtent([0.1,4]).on('zoom', (e)=> gZoom.attr('transform', e.transform) );
+svg.call(zoom).on("dblclick.zoom", null);
+
+// Controls
+document.getElementById('linkDist').addEventListener('input', e=>{
+  document.getElementById('ldisplay').textContent = e.target.value;
+  if(simulation){ simulation.force('link').distance(+e.target.value); simulation.alpha(0.6).restart(); }
+});
+document.getElementById('charge').addEventListener('input', e=>{
+  document.getElementById('cdisplay').textContent = e.target.value;
+  if(simulation){ simulation.force('charge').strength(+e.target.value); simulation.alpha(0.6).restart(); }
+});
+document.getElementById('sizeBy').addEventListener('change', e=>{
+  state.sizeBy = e.target.value; render();
+});
+document.getElementById('labelMode').addEventListener('change', e=>{
+  state.labelMode = e.target.value; render();
+});
+document.getElementById('btnFit').addEventListener('click', ()=> zoomToFit());
+document.getElementById('btnFreeze').addEventListener('click', ()=>{
+  state.fixed = !state.fixed;
+  document.getElementById('btnFreeze').textContent = state.fixed ? 'Unfreeze' : 'Freeze';
+  if(!state.fixed){ state.data.nodes.forEach(n=>{ if(!n._sel){ n.fx=null; n.fy=null; } }); }
+});
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  state.data.nodes.forEach(n=>{ n.fx=null; n.fy=null; n.x = (Math.random()*width); n.y=(Math.random()*height); });
+  simulation.alpha(1).restart();
+});
+document.getElementById('btnClear').addEventListener('click', ()=>{
+  document.getElementById('q').value=''; clearHighlight(); sel.text('—');
+});
+document.getElementById('q').addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const q = e.target.value.trim().toLowerCase();
+    const hit = state.data.nodes.find(n => (n.label||n.id).toLowerCase().includes(q));
+    if(hit){
+      highlightNeighbors(hit);
+      const t = d3.zoomTransform(svg.node());
+      svg.transition().duration(600).call(zoom.transform, t.translate(width/2 - hit.x*t.k, height/2 - hit.y*t.k));
+      sel.text(`Selected: ${hit.label||hit.id} — degree ${hit.degree}`);
+    }
+  }
+});
+
+// File loading helpers
+document.getElementById('fileInput').addEventListener('change', (e)=> handleFiles(e.target.files));
+const drop = document.getElementById('drop');
+['dragenter','dragover'].forEach(evt=> drop.addEventListener(evt, (e)=>{e.preventDefault(); drop.classList.add('drag'); }));
+['dragleave','drop'].forEach(evt=> drop.addEventListener(evt, (e)=>{e.preventDefault(); drop.classList.remove('drag'); }));
+drop.addEventListener('drop', (e)=> handleFiles(e.dataTransfer.files));
+
+async function handleFiles(fileList){
+  const files = Array.from(fileList);
+  const nodesFile = files.find(f=>/nodes\.json$/i.test(f.name));
+  const legendFile = files.find(f=>/legend\.json$/i.test(f.name));
+  const graphmlFile = files.find(f=>/\.graphml$|\.xml$/i.test(f.name));
+  if(!nodesFile || !graphmlFile){
+    alert('Please include both nodes.json and graph.graphml'); return;
+  }
+  const nodesText = await nodesFile.text();
+  const nodes = JSON.parse(nodesText);
+  // normalize
+  const nodeMap = new Map(nodes.map(n=> [n.id, {id:n.id, label:n.label||n.id, description:n.description||'', group:n.group}] ));
+
+  // GraphML parsing
+  const xml = new DOMParser().parseFromString(await graphmlFile.text(), 'application/xml');
+  const nodeElems = Array.from(xml.getElementsByTagName('node'));
+  const edgeElems = Array.from(xml.getElementsByTagName('edge'));
+  // Build nodes (prefer nodes.json, but add any missing from graphml)
+  nodeElems.forEach(ne=>{
+    const id = ne.getAttribute('id');
+    if(!nodeMap.has(id)){
+      nodeMap.set(id, {id, label:id, description:''});
+    }
+  });
+
+  // Links
+  const links = edgeElems.map((ee,i)=>{
+    const s = ee.getAttribute('source');
+    const t = ee.getAttribute('target');
+    // weight if present
+    let w = 1;
+    const dElems = Array.from(ee.getElementsByTagName('data'));
+    const wElem = dElems.find(d=> (d.textContent||'').trim() && /weight/i.test(d.getAttribute('key')||''));
+    if(wElem){ const v = parseFloat(wElem.textContent); if(!Number.isNaN(v)) w = v; }
+    return { id:`e${i}`, source:s, target:t, weight:w };
+  });
+
+  state.data = { nodes: Array.from(nodeMap.values()), links };
+  state.legend = legendFile ? JSON.parse(await legendFile.text()) : null;
+  if(state.legend){
+    setLegend(state.legend);
+  } else {
+    setLegend(null);
+  }
+  render();
+  zoomToFit();
+}
+
+// Auto-load if files are hosted next to the HTML
+(async function autoload(){
+  try{
+    const nodes = await fetch('nodes.json').then(r=> r.ok ? r.json() : null);
+    const graphml = await fetch('graph.graphml').then(r=> r.ok ? r.text() : null);
+    const legend = await fetch('legend.json').then(r=> r.ok ? r.json() : null);
+    if(nodes && graphml){
+      const nodeMap = new Map(nodes.map(n=> [n.id, {id:n.id, label:n.label||n.id, description:n.description||'', group:n.group}] ));
+      const xml = new DOMParser().parseFromString(graphml, 'application/xml');
+      const nodeElems = Array.from(xml.getElementsByTagName('node'));
+      const edgeElems = Array.from(xml.getElementsByTagName('edge'));
+      nodeElems.forEach(ne=>{ const id = ne.getAttribute('id'); if(!nodeMap.has(id)) nodeMap.set(id, {id, label:id}); });
+      const links = edgeElems.map((ee,i)=>({ id:'e'+i, source:ee.getAttribute('source'), target:ee.getAttribute('target'), weight:1 }));
+      state.data = { nodes: Array.from(nodeMap.values()), links };
+      state.legend = legend || null;
+      if(state.legend){ setLegend(state.legend); }
+      render(); zoomToFit();
+    }
+  }catch(e){ /* silent */ }
+})();
+
+</script>
+</body>
+</html>

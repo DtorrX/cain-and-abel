@@ -1,42 +1,1522 @@
 [
   {
-    "id": "QMohammed",
-    "label": "Sheikh Mohammed bin Rashid Al Maktoum"
+    "id": "Q556607",
+    "label": "Mansour bin Zayed Al Nahyan",
+    "description": "Emirati royal and politician"
   },
   {
-    "id": "QHamdan",
-    "label": "Sheikh Hamdan bin Mohammed Al Maktoum"
+    "id": "Q7462442",
+    "label": "Shaikha bint Mohammed bin Rashed Al Maktoum",
+    "description": "Emirati royal"
   },
   {
-    "id": "QMaktoum",
-    "label": "Sheikh Maktoum bin Mohammed Al Maktoum"
+    "id": "Q17403156",
+    "label": "Majid bin Mohammed Al Maktoum",
+    "description": "Emirati businessman"
   },
   {
-    "id": "QLatifa",
-    "label": "Sheikha Latifa bint Mohammed Al Maktoum"
+    "id": "Q6902481",
+    "label": "Mons Officer Cadet School",
+    "description": "British Army training establishment 1947\u20131972"
   },
   {
-    "id": "QHind",
-    "label": "Sheikha Hind bint Maktoum bin Juma Al Maktoum"
+    "id": "Q110964264",
+    "label": "Minister of Defence",
+    "description": "cabinet position in United Arab Emirates"
   },
   {
-    "id": "QZayed",
-    "label": "Sheikh Zayed bin Sultan Al Nahyan"
+    "id": "Q48774199",
+    "label": "Vice President of the United Arab Emirates",
+    "description": "cabinet position in United Arab Emirates"
   },
   {
-    "id": "QMohammedNahyan",
-    "label": "Sheikh Mohammed bin Zayed Al Nahyan"
+    "id": "Q712839",
+    "label": "Hamdan bin Rashid Al Maktoum",
+    "description": "Deputy Ruler of Dubai and Minister of Finance (UAE)"
   },
   {
-    "id": "QTahnoon",
-    "label": "Sheikh Tahnoun bin Zayed Al Nahyan"
+    "id": "Q6746819",
+    "label": "Manal bint Mohammed bin Rashid Al Maktoum",
+    "description": "Emirati politician"
   },
   {
-    "id": "QHazza",
-    "label": "Sheikh Hazza bin Zayed Al Nahyan"
+    "id": "Q57655",
+    "label": "Mohammed bin Rashid Al Maktoum",
+    "description": "ruler of Dubai (born 1949)"
   },
   {
-    "id": "QMansour",
-    "label": "Sheikh Mansour bin Zayed Al Nahyan"
+    "id": "Q2257104",
+    "label": "Hind bint Maktoum bin Juma Al-Maktoum",
+    "description": "wife of Sheikh Mohammed bin Rashid Al Maktoum, Ruler of Dubai"
+  },
+  {
+    "id": "Q153284",
+    "label": "Ahmed bin Saeed Al Maktoum",
+    "description": "Emirati businessman and CEO of Emirates"
+  },
+  {
+    "id": "Q556586",
+    "label": "Hamdan bin Mohammed Al Maktoum",
+    "description": "Crown Prince of Dubai"
+  },
+  {
+    "id": "Q733312",
+    "label": "Rashid bin Saeed Al Maktoum",
+    "description": "2nd Prime Minister of the United Arab Emirates and Sheikh of Dubai (1912-1990)"
+  },
+  {
+    "id": "Q7398257",
+    "label": "Saeed bin Maktoum bin Rashid Al Maktoum",
+    "description": "Sheikh"
+  },
+  {
+    "id": "Q110964267",
+    "label": "Ruler of Dubai",
+    "description": "cabinet position in United Arab Emirates"
+  },
+  {
+    "id": "Q131681111",
+    "label": "Prince Zayed bin Mohammed of Dubai",
+    "description": "Dubaian Royal"
+  },
+  {
+    "id": "Q3379198",
+    "label": "Maitha bint Mohammed bin Rashid Al Maktoum",
+    "description": "karate and taekwondo practitioner"
+  },
+  {
+    "id": "Q9317476",
+    "label": "Maryam bint Mohammed bin Rashid Al Maktoum",
+    "description": null
+  },
+  {
+    "id": "Q106370260",
+    "label": "Houria Ahmed Lamara",
+    "description": "wife of Mohammed bin Rashid Al Maktoum"
+  },
+  {
+    "id": "Q272117",
+    "label": "Princess Haya bint Al-Hussein of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q66103593",
+    "label": "Shamsa Al Maktoum",
+    "description": "Emirati aristocrat"
+  },
+  {
+    "id": "Q6893466",
+    "label": "Mohammed bin Hamad Al Sharqi",
+    "description": "Emirati Sheikh and Crown Prince of Fujairah"
+  },
+  {
+    "id": "Q6967647",
+    "label": "Nasser bin Hamad Al Khalifa",
+    "description": "Member of the Bahraini royal family and head of several government organizations"
+  },
+  {
+    "id": "Q215477",
+    "label": "Maktoum bin Rashid Al Maktoum",
+    "description": "Emir of Dubai (1943\u20132006)"
+  },
+  {
+    "id": "Q12244819",
+    "label": "Maktoum bin Mohammed Bin Rashid Al Maktoum",
+    "description": "Deputy Ruler of Dubai, Deputy Prime Minister and Minister of Finance of UAE"
+  },
+  {
+    "id": "Q30101519",
+    "label": "Prime Minister of the United Arab Emirates",
+    "description": "head of government of the United Arab Emirates"
+  },
+  {
+    "id": "Q131681062",
+    "label": "Princess Jalila bint Mohammed of Dubai",
+    "description": "Dubaian Royal"
+  },
+  {
+    "id": "Q125494502",
+    "label": "\u0644\u0637\u064a\u0641\u0629 \u0628\u0646\u062a \u062d\u0645\u062f\u0627\u0646 \u0628\u0646 \u0632\u0627\u064a\u062f \u0622\u0644 \u0646\u0647\u064a\u0627\u0646",
+    "description": null
+  },
+  {
+    "id": "Q7294934",
+    "label": "Rashid bin Mohammed Al Maktoum",
+    "description": "Prince of Dubai and son of the 3rd Prime Minister of the United Arab Emirates (1981\u20132015)"
+  },
+  {
+    "id": "Q111083817",
+    "label": "Latifa bint Mohammed bin Rashid Al Maktoum",
+    "description": "chairperson of the Dubai Culture and Arts Authority (Dubai Culture)"
+  },
+  {
+    "id": "Q401634",
+    "label": "Ahmed bin Rashid Al Maktoum",
+    "description": "Public official of Dubai"
+  },
+  {
+    "id": "Q713801",
+    "label": "Saeed bin Maktoum bin Hasher Al Maktoum",
+    "description": "Omani -Under Sultan Muscat & Oman (1878-1958)"
+  },
+  {
+    "id": "Q51840013",
+    "label": "Latifa bint Mohammed Al Maktoum",
+    "description": "sheikha of Dubai"
+  },
+  {
+    "id": "Q57464",
+    "label": "Abdullah II of Jordan",
+    "description": "King of the Hashemite Kingdom of Jordan"
+  },
+  {
+    "id": "Q122355675",
+    "label": "Ahmed bin Mohammed Al Maktoum",
+    "description": "second Deputy Ruler of Dubai"
+  },
+  {
+    "id": "Q4276421",
+    "label": "Maktoum Hasher Maktoum Al Maktoum",
+    "description": "Emirati Sheikh"
+  },
+  {
+    "id": "Q54672267",
+    "label": "Juma bin Maktoum bin Hasher Al Maktoum",
+    "description": "Dubai royal"
+  },
+  {
+    "id": "Q401135",
+    "label": "Ahmad Mohammad Hasher Al Maktoum",
+    "description": "Sport shooter and Emirati Royal"
+  },
+  {
+    "id": "Q125497760",
+    "label": "Crown Prince of Dubai",
+    "description": null
+  },
+  {
+    "id": "Q575618",
+    "label": "Royal Military Academy Sandhurst",
+    "description": "British Army officer initial training centre"
+  },
+  {
+    "id": "Q106181156",
+    "label": "Deputy Prime Minister of the United Arab Emirates",
+    "description": "\u0645\u0646\u0635\u0628 \u0633\u064a\u0627\u0633\u064a \u0625\u0645\u0627\u0631\u0627\u062a\u064a"
+  },
+  {
+    "id": "Q5310605",
+    "label": "Mohammed bin Rashid School of Government",
+    "description": "university in Dubai (2005-)"
+  },
+  {
+    "id": "Q7294921",
+    "label": "Rashid School For Boys",
+    "description": "private school in Dubai, United Arab Emirates"
+  },
+  {
+    "id": "Q174570",
+    "label": "London School of Economics and Political Science",
+    "description": "public university in London, United Kingdom"
+  },
+  {
+    "id": "Q955006",
+    "label": "President of the United Arab Emirates",
+    "description": "head of state of the United Arab Emirates"
+  },
+  {
+    "id": "Q85804913",
+    "label": "Tahnoun bin Zayed Al Nahyan",
+    "description": "UAE National security advisor"
+  },
+  {
+    "id": "Q28471402",
+    "label": "Ruler of Abu Dhabi",
+    "description": "\u0645\u0646\u0635\u0628 \u0633\u064a\u0627\u0633\u064a \u0625\u0645\u0627\u0631\u0627\u062a\u064a"
+  },
+  {
+    "id": "Q1059948",
+    "label": "Khalifa bin Zayed Al Nahyan",
+    "description": "President of the United Arab Emirates from 2004 to 2022"
+  },
+  {
+    "id": "Q7398258",
+    "label": "Saeed bin Zayed Al Nahyan",
+    "description": "Emirati politician (1965\u20132023)"
+  },
+  {
+    "id": "Q47499755",
+    "label": "Khalid bin Mohammed bin Zayed Al Nahyan",
+    "description": "Emirati politician"
+  },
+  {
+    "id": "Q7675603",
+    "label": "Tahnoon bin Mohammed Al Nahyan",
+    "description": "Ruler's representative of the UAE"
+  },
+  {
+    "id": "Q167846",
+    "label": "Zayed bin Sultan Al Nahyan",
+    "description": "Sheikh of Abu Dhabi from 1966 to 2003"
+  },
+  {
+    "id": "Q58301",
+    "label": "Abdullah bin Zayed Al Nahyan",
+    "description": "United Arab Emirates minister of foreign affairs"
+  },
+  {
+    "id": "Q4120127",
+    "label": "Fatima bint Mubarak Al Ketbi",
+    "description": "Emirati activist"
+  },
+  {
+    "id": "Q1951896",
+    "label": "Mohammed Bin Zayed Al Nahyan",
+    "description": "President of the United Arab Emirates"
+  },
+  {
+    "id": "Q5688471",
+    "label": "Hazza bin Zayed bin Sultan Al Nahyan",
+    "description": "Emirati banker"
+  },
+  {
+    "id": "Q1573260",
+    "label": "Hamdan bin Zayed bin Sultan Al Nahyan",
+    "description": "United Arab Emirates government minister"
+  },
+  {
+    "id": "Q1544739",
+    "label": "United Arab Emirates University",
+    "description": "university"
+  },
+  {
+    "id": "Q110964337",
+    "label": "Minister of Presidential Affairs",
+    "description": "cabinet position in United Arab Emirates"
+  },
+  {
+    "id": "Q7419214",
+    "label": "Santa Barbara City College",
+    "description": "public community college in Santa Barbara, California"
+  },
+  {
+    "id": "Q60786126",
+    "label": "Hamdan bin Zayed bin Khalifa Al Nahyan",
+    "description": "ruler of Abu Dhabi from 1912\u20131922"
+  },
+  {
+    "id": "Q40970",
+    "label": "International Olympic Committee",
+    "description": "non-governmental sports organisation (founded 1894)"
+  },
+  {
+    "id": "Q524703",
+    "label": "Prince Ali bin Al-Hussein of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q7244527",
+    "label": "Princess Alia bint Al-Hussein of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q146906",
+    "label": "Hussein I of Jordan",
+    "description": "King of Jordan from 1952 to 1999"
+  },
+  {
+    "id": "Q7244873",
+    "label": "Princess Zein bint Al-Hussein of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q2817328",
+    "label": "Prince Hashem bin Al-Hussein of Jordan",
+    "description": "Jordanian royal"
+  },
+  {
+    "id": "Q7244519",
+    "label": "Princess Aisha bint Al-Hussein of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q461192",
+    "label": "Prince Feisal bin Al-Hussein of Jordan",
+    "description": "Jordanian prince"
+  },
+  {
+    "id": "Q269437",
+    "label": "Queen Alia of Jordan",
+    "description": "Queen Consort of Jordan (1972-1977)"
+  },
+  {
+    "id": "Q1465651",
+    "label": "St Hilda's College",
+    "description": "college of the University of Oxford"
+  },
+  {
+    "id": "Q995138",
+    "label": "Bryanston School",
+    "description": "school in Dorset, England, UK"
+  },
+  {
+    "id": "Q15195942",
+    "label": "Badminton School",
+    "description": "school in Bristol, UK"
+  },
+  {
+    "id": "Q4667904",
+    "label": "Princess Abir Muhaisen",
+    "description": "adopted by King Hussein of Jordan and his third wife Queen Alia"
+  },
+  {
+    "id": "Q467144",
+    "label": "American University in Dubai",
+    "description": "university in Dubai, United Arab Emirates"
+  },
+  {
+    "id": "Q47166700",
+    "label": "\u0631\u0646\u062f\u0629 \u0627\u0644\u0628\u0646\u0627",
+    "description": "\u0632\u0648\u062c\u0629 \u0645\u062d\u0645\u062f \u0628\u0646 \u0631\u0627\u0634\u062f \u0622\u0644 \u0645\u0643\u062a\u0648\u0645"
+  },
+  {
+    "id": "Q7294934:spouse:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q7294934:father:[[Mohammed bin Rashid Al Maktoum]]",
+    "label": "[[Mohammed bin Rashid Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q7294934:mother:[[Hind bint Maktoum bin Juma Al Maktoum]]",
+    "label": "[[Hind bint Maktoum bin Juma Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q106181563",
+    "label": "Deputy Ruler of Dubai",
+    "description": "\u0645\u0646\u0635\u0628 \u062d\u0643\u0648\u0645\u064a \u0641\u064a \u0625\u0645\u0627\u0631\u0629 \u062f\u064f\u0628\u064a"
+  },
+  {
+    "id": "Q106181285",
+    "label": "Minister of Finance",
+    "description": "\u0645\u0646\u0635\u0628 \u0648\u0632\u0627\u0631\u064a \u0625\u0645\u0627\u0631\u0627\u062a\u064a"
+  },
+  {
+    "id": "Q17403156:father:[[Mohammed bin Rashid Al Maktoum]]",
+    "label": "[[Mohammed bin Rashid Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q17403156:mother:Houria Ahmed Lamara",
+    "label": "Houria Ahmed Lamara",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q17403156:spouse:{{marriage|Hessa Beljafla|2014}}",
+    "label": "{{marriage|Hessa Beljafla|2014}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q66103593:spouse:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q66103593:father:[[Mohammed bin Rashid Al Maktoum]]",
+    "label": "[[Mohammed bin Rashid Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q66103593:mother:Huriah Ahmed al M'aash{{cite news|title=Scandal",
+    "label": "Huriah Ahmed al M'aash{{cite news|title=Scandale / S\u00e9questr\u00e9e durant trois ans, la fille de l'\u00e9mir de Duba\u00ef, n\u00e9e d'une m\u00e8re alg\u00e9rienne, s'enfuit du pays |url=https://www.algerie-focus.com/2018/03/video-scandale-sequestree-durant-trois-ans-la-fille-de-lemir-de-dubai-nee-dune-mere-algerienne-senfuit-du-pays/|access-date=12 April 2019|archive-url=https://web.archive.org/web/20190412083902/https://www.algerie-focus.com/2018/03/video-scandale-sequestree-durant-trois-ans-la-fille-de-lemir-de-dubai-nee-dune-mere-algerienne-senfuit-du-pays/|archive-date=12 April 2019|language=French}}{{cite news|authorlink1=10 March 2018|title=La fille de m\u00e8re alg\u00e9rienne de l'\u00e9mir de Duba\u00ef suscite un scandale (vid\u00e9o) |url=https://www.observalgerie.com/politique/la-fille-de-mere-algerienne-de-lemir-de-dubai-revele-un-scandale/|access-date=31 July 2019|date=10 March 2018|archive-url=https://web.archive.org/web/20190731095508/https://www.observalgerie.com/politique/la-fille-de-mere-algerienne-de-lemir-de-dubai-revele-un-scandale/|archive-date= 31 July 2019}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q8067559",
+    "label": "Zayed University",
+    "description": "University in UAE"
+  },
+  {
+    "id": "Q13574439",
+    "label": "Princess Iman bint Abdullah of Jordan",
+    "description": "Jordanian royal (1996)"
+  },
+  {
+    "id": "Q14625123",
+    "label": "King of Jordan",
+    "description": null
+  },
+  {
+    "id": "Q2762318",
+    "label": "heir apparent",
+    "description": "person who is first in line of succession and cannot be displaced from inheriting, except by death or a change in the rules of succession"
+  },
+  {
+    "id": "Q200678",
+    "label": "Queen Rania of Jordan",
+    "description": "Queen Consort of Jordan"
+  },
+  {
+    "id": "Q5325320",
+    "label": "Eaglebrook School",
+    "description": "private junior boarding school in Deerfield, Massachusetts, United States"
+  },
+  {
+    "id": "Q7244790",
+    "label": "Princess Raiyah bint Al-Hussein of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q294365",
+    "label": "Talal I of Jordan",
+    "description": "King of Jordan from 1951 to 1952"
+  },
+  {
+    "id": "Q124535896",
+    "label": "Custodian of the Holy Sites of Jerusalem",
+    "description": null
+  },
+  {
+    "id": "Q5146516",
+    "label": "Princess Salma bint Abdullah of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q128047",
+    "label": "Walsh School of Foreign Service",
+    "description": "school of international affairs at Georgetown University"
+  },
+  {
+    "id": "Q82606",
+    "label": "Pembroke College",
+    "description": "constituent college of the University of Oxford"
+  },
+  {
+    "id": "Q5250893",
+    "label": "Deerfield Academy",
+    "description": "independent, boarding and day school in Deerfield, Massachusetts, United States"
+  },
+  {
+    "id": "Q7593001",
+    "label": "St Edmund's School",
+    "description": "school in Surrey, UK"
+  },
+  {
+    "id": "Q3307706",
+    "label": "Princess Iman bint Al-Hussein of Jordan",
+    "description": "Jordanian royal (1983)"
+  },
+  {
+    "id": "Q1532902",
+    "label": "Hamzah bin Al-Hussein",
+    "description": "Jordanian royal"
+  },
+  {
+    "id": "Q269898",
+    "label": "Princess Muna Al-Hussein",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q981927",
+    "label": "Hussein bin Abdullah, Crown Prince of Jordan",
+    "description": "Crown Prince of Jordan (born 1994)"
+  },
+  {
+    "id": "Q7244056",
+    "label": "Prince Hashem bin Abdullah of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q140686",
+    "label": "chairperson",
+    "description": "leading or presiding officer of an organized group"
+  },
+  {
+    "id": "Q7731899",
+    "label": "The Emirates Group",
+    "description": "Dubai-based international aviation holding company"
+  },
+  {
+    "id": "Q12556512",
+    "label": "Noor Islamic Bank",
+    "description": "(formerly Noor Islamic Bank), Dubai - United Arab Emirates"
+  },
+  {
+    "id": "Q5310500",
+    "label": "Dubai Airports Company",
+    "description": "UAE based airport authority"
+  },
+  {
+    "id": "Q519427",
+    "label": "University of Denver",
+    "description": "private university in the Rocky Mountain Region of the United States"
+  },
+  {
+    "id": "Q17002310",
+    "label": "Dubai Airport Freezone",
+    "description": "organization"
+  },
+  {
+    "id": "Q5372575",
+    "label": "Emirates NBD",
+    "description": "Middle Eastern banking group"
+  },
+  {
+    "id": "Q30525816",
+    "label": "Saeed bin Ahmed bin Saeed Al Maktoum",
+    "description": "Emirati royal"
+  },
+  {
+    "id": "Q5285844",
+    "label": "dnata",
+    "description": "Emirati airport services provider"
+  },
+  {
+    "id": "Q5310603",
+    "label": "Dubai Royal Air Wing",
+    "description": "Paramilitary airline of the government of Dubai, United Arab Emirates; used by the Royal Family of Dubai and high ranking government officials"
+  },
+  {
+    "id": "Q1060209",
+    "label": "Dubai World",
+    "description": "government owned company"
+  },
+  {
+    "id": "Q4971189",
+    "label": "British University in Dubai",
+    "description": "The Middle East region's first, research based, postgraduate university"
+  },
+  {
+    "id": "Q115725302",
+    "label": "ABLF alumni network",
+    "description": null
+  },
+  {
+    "id": "Q30519512",
+    "label": "Duchess Nivin El-Gamal",
+    "description": "Ambassador of Peace: Universal Peace Federation (UPF-UN) since 2022.\u2022 Commonwealth Ambassador: Commonwealth Entrepreneurs Club (CEC).\u2022 President: CFONHS Central London (since April 2022).\u2022 Founder: Duchess Prestige Cosmetics Brand (Launched in 2019"
+  },
+  {
+    "id": "Q1048495",
+    "label": "flydubai",
+    "description": "Emirati government-owned low-cost airline based in Dubai, United Arab Emirates"
+  },
+  {
+    "id": "Q180432",
+    "label": "Emirates",
+    "description": "flag carrier airline of the United Arab Emirates"
+  },
+  {
+    "id": "Q5310519",
+    "label": "Dubai Civil Aviation Authority",
+    "description": null
+  },
+  {
+    "id": "Q5310504",
+    "label": "Dubai Aviation City Corporation",
+    "description": null
+  },
+  {
+    "id": "Q153284:father:[[Saeed bin Maktoum bin Hasher Al Maktoum]]",
+    "label": "[[Saeed bin Maktoum bin Hasher Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q340089",
+    "label": "Maktoum bin Hushur",
+    "description": "Emir of Dubai"
+  },
+  {
+    "id": "Q713801:father:[[Maktoum bin Hasher Al Maktoum|Sheikh Maktoum bi",
+    "label": "[[Maktoum bin Hasher Al Maktoum|Sheikh Maktoum bin Hasher Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q713801:mother:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q1465303",
+    "label": "Webster University",
+    "description": "university in Webster Groves, St. Louis"
+  },
+  {
+    "id": "Q1371101",
+    "label": "Hamad bin Mohammed Al Sharqi",
+    "description": "Emirati Sheikh"
+  },
+  {
+    "id": "Q6893466:spouse:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q6893466:father:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q6893466:mother:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q309650",
+    "label": "Isa II of Bahrain",
+    "description": "Emir of Bahrain (1961-1999)"
+  },
+  {
+    "id": "Q118352367",
+    "label": "Princess Najla bint Hamad of Bahrain",
+    "description": "Bahraini Royal"
+  },
+  {
+    "id": "Q57352",
+    "label": "Hamad II of Bahrain",
+    "description": "King of Bahrain since 2002 and Emir from 1999 to 2002"
+  },
+  {
+    "id": "Q118352516",
+    "label": "Queen Sheia",
+    "description": "Second Wife of King Hamad II of Bahrain"
+  },
+  {
+    "id": "Q328211",
+    "label": "Prince Faisal bin Hamad of Bahrain",
+    "description": "Bahraini Royal (1991-2006)"
+  },
+  {
+    "id": "Q4666100",
+    "label": "Prince Abdullah bin Hamad of Bahrain",
+    "description": "Bahraini royal (born 1975)"
+  },
+  {
+    "id": "Q16157209",
+    "label": "Prince Khalid bin Hamad of Bahrain",
+    "description": "Bahraini Royal (born 1989)"
+  },
+  {
+    "id": "Q58140",
+    "label": "Salman bin Hamad, Crown Prince of Bahrain",
+    "description": "Prime Minister of the Kingdom of Bahrain"
+  },
+  {
+    "id": "Q118352392",
+    "label": "Prince Khalifa bin Hamad of Bahrain",
+    "description": "Bahraini Royal"
+  },
+  {
+    "id": "Q112125022",
+    "label": "Bapco Energies",
+    "description": "Bahraini petroleum industry agency"
+  },
+  {
+    "id": "Q6967647:spouse:{{Marriage|Shaikha bint Mohammed bin Rashed Al M",
+    "label": "{{Marriage|Shaikha bint Mohammed bin Rashed Al Maktoum|2009}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q6967647:father:[[Hamad bin Isa Al Khalifa]]",
+    "label": "[[Hamad bin Isa Al Khalifa]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q6967647:mother:Sheia bint Hassan Al Khrayyesh Al Ajmi",
+    "label": "Sheia bint Hassan Al Khrayyesh Al Ajmi",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q4725349",
+    "label": "Alia bint Khalifa bin Saeed al Maktoum",
+    "description": "Spouse of the Prime Minister of the United Arab Emirate"
+  },
+  {
+    "id": "Q15614152",
+    "label": "Zeynab Javadli",
+    "description": "Azerbaijani rhythmic gymnast"
+  },
+  {
+    "id": "Q7398257:father:[[Maktoum bin Rashid Al Maktoum]]",
+    "label": "[[Maktoum bin Rashid Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q7398257:mother:[[Alia bint Khalifa Al Maktoum]]",
+    "label": "[[Alia bint Khalifa Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q401634:spouse:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q401634:partner:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q401634:child:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q401634:relative:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q401634:father:[[Rashid bin Saeed Al Maktoum]]",
+    "label": "[[Rashid bin Saeed Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q401634:mother:Latifa bint Hamdan Al Nahyan",
+    "label": "Latifa bint Hamdan Al Nahyan",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q16250382",
+    "label": "Al Ahmadiya School (Dubai)",
+    "description": "The first semi-formal private school in Dubai, established in 1912, historically significant in education and culture."
+  },
+  {
+    "id": "Q35794",
+    "label": "University of Cambridge",
+    "description": "collegiate public research university in Cambridge, England, United Kingdom"
+  },
+  {
+    "id": "Q712839:spouse:Sheikha Rodha bint Ahmad bin Juma Al Maktoum{{cit",
+    "label": "Sheikha Rodha bint Ahmad bin Juma Al Maktoum{{cite news|last=Hartley|first=Joanna|title=UAE Sheikh Ahmad Bin Juma Al Maktoum dies|url=http://www.arabianbusiness.com/uae-sheikh-ahmad-bin-juma-al-maktoum-dies-41000.html|access-date=28 May 2018|newspaper=Arabianbusiness.com|date=23 March 2009}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q712839:child:6{{Cite web|url=http://almaktoumfd.ae/news/32|titl",
+    "label": "6{{Cite web|url=http://almaktoumfd.ae/news/32|title=Al Maktoum Foundation {{!}} almaktoumfd.ae|website=almaktoumfd.ae|access-date=2019-10-01|archive-date=1 October 2019|archive-url=https://web.archive.org/web/20191001124618/http://almaktoumfd.ae/news/32|url-status=dead}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q712839:father:[[Rashid bin Saeed Al Maktoum]]",
+    "label": "[[Rashid bin Saeed Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q712839:mother:Latifa bint Hamdan Al Nahyan|",
+    "label": "Latifa bint Hamdan Al Nahyan|",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q1056123",
+    "label": "Suffolk University",
+    "description": "private university located in Boston, Massachusetts"
+  },
+  {
+    "id": "Q54672267:father:[[Maktoum bin Hasher Al Maktoum|Sheikh Maktoum ",
+    "label": "[[Maktoum bin Hasher Al Maktoum|Sheikh Maktoum bin Hasher Al Maktoum]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q54672267:mother:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q5275956",
+    "label": "Digital Preservation Coalition",
+    "description": "UK-based non-profit limited company which seeks to secure the preservation of digital resources"
+  },
+  {
+    "id": "Q868940",
+    "label": "European University Association",
+    "description": "association and interest group of universities in Europe"
+  },
+  {
+    "id": "Q590631",
+    "label": "Russell Group",
+    "description": "association of 24 public research universities in the United Kingdom"
+  },
+  {
+    "id": "Q19861084",
+    "label": "ORCID, Inc.",
+    "description": "non-profit organization that issues ORCID Identifiers"
+  },
+  {
+    "id": "Q126722671",
+    "label": "CIVICA",
+    "description": "University association in Europe"
+  },
+  {
+    "id": "Q7894986",
+    "label": "University and College Union",
+    "description": "British trade union"
+  },
+  {
+    "id": "Q84314566",
+    "label": "Open Society University Network",
+    "description": "university network funded by the Open Society foundations"
+  },
+  {
+    "id": "Q12249936",
+    "label": "Hazza bin Sultan Al Nahyan",
+    "description": "sheikh"
+  },
+  {
+    "id": "Q6409495",
+    "label": "Sultan bin Zayed bin Khalifa Al Nahyan",
+    "description": "Emirati politician (1881-1926)"
+  },
+  {
+    "id": "Q5679463",
+    "label": "Hassa bint Mohammed bin Khalifa Al Nahyan",
+    "description": "Wife of the President of UAE"
+  },
+  {
+    "id": "Q20383754",
+    "label": "Salama bint Butti",
+    "description": "wife of Sultan bin Zayed bin Khalifa Al Nahyan"
+  },
+  {
+    "id": "Q4118852",
+    "label": "Issa bin hamad Al thani",
+    "description": "Qatari businessman"
+  },
+  {
+    "id": "Q7636761",
+    "label": "Sultan bin Zayed bin Sultan Al Nahyan",
+    "description": "Emirati politician (1956-2019)"
+  },
+  {
+    "id": "Q2661904",
+    "label": "Shakhbut bin Sultan Al Nahyan",
+    "description": "Emirati politician (1905\u20131989)"
+  },
+  {
+    "id": "Q5644454",
+    "label": "Hamed bin Zayed Al Nahyan",
+    "description": "Emirati royal"
+  },
+  {
+    "id": "Q2073929",
+    "label": "Ahmed bin Zayed Al Nahyan",
+    "description": "Emirati businessman (1968\u20132010)"
+  },
+  {
+    "id": "Q5431619",
+    "label": "Falah bin Zayed Al Nahyan",
+    "description": "Son of President of UAE"
+  },
+  {
+    "id": "Q16018226",
+    "label": "Nasser bin Zayed Al Nahyan",
+    "description": "Emirati royal"
+  },
+  {
+    "id": "Q16196176",
+    "label": "Sultan bin Khalifa Al Nahyan",
+    "description": "Emirati businessman"
+  },
+  {
+    "id": "Q16730773",
+    "label": "Mouza bint Suhail Al Khaili",
+    "description": "politician"
+  },
+  {
+    "id": "Q7400024",
+    "label": "Saif bin Zayed Al Nahyan",
+    "description": "Interior Minister of the United Arab Emirates"
+  },
+  {
+    "id": "Q167846:spouse:{{ubli|[[Hassa bint Mohammed Al Nahyan]]|Sheikha ",
+    "label": "{{ubli|[[Hassa bint Mohammed Al Nahyan]]|Sheikha bint Madhad Al Mashghouni|[[Fatima bint Mubarak Al Ketbi]]|[[Mouza bint Suhail Al Khaili]]|Ayesha bint Ali Al Darmaki|Amna bint Salah Buduwa Al Darmaki}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q167846:father:[[Sultan bin Zayed bin Khalifa Al Nahyan|Sultan b",
+    "label": "[[Sultan bin Zayed bin Khalifa Al Nahyan|Sultan bin Zayed Al Nahyan]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q167846:mother:[[Salama bint Butti Al Qubaisi]]",
+    "label": "[[Salama bint Butti Al Qubaisi]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q95373175",
+    "label": "Spouse of the President of the United Arab Emirates",
+    "description": "spouse of the President of the UAE"
+  },
+  {
+    "id": "Q4120127:spouse:{{marriage|[[Zayed bin Sultan Al Nahyan]]|1960|2",
+    "label": "{{marriage|[[Zayed bin Sultan Al Nahyan]]|1960|2004|end=d}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q125497756",
+    "label": "Crown Prince of Abu Dhabi",
+    "description": null
+  },
+  {
+    "id": "Q49120",
+    "label": "Tufts University",
+    "description": "private research university in Medford/Somerville, Massachusetts"
+  },
+  {
+    "id": "Q54875089",
+    "label": "\u0645\u062d\u0645\u062f \u0628\u0646 \u062e\u0644\u064a\u0641\u0629 \u0628\u0646 \u0632\u0627\u064a\u062f \u0627\u0644\u0623\u0648\u0644 \u0622\u0644 \u0646\u0647\u064a\u0627\u0646",
+    "description": "\u0623\u0645\u064a\u0631 \u0645\u0646 \u0623\u0633\u0631\u0629 \u0622\u0644 \u0646\u0647\u064a\u0627\u0646 \u0641\u064a \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0645\u062a\u062d\u062f\u0629 \u0648\u0627\u0628\u0646 \u0639\u0645 \u0627\u0644\u0634\u064a\u062e \u0632\u0627\u064a\u062f \u0628\u0646 \u0633\u0644\u0637\u0627\u0646"
+  },
+  {
+    "id": "Q6751816",
+    "label": "Mansoor Bin Tahnoon Al Nehayan",
+    "description": "Emirati political scientist"
+  },
+  {
+    "id": "Q110964354",
+    "label": "Minister of Information and Culture",
+    "description": "cabinet position in United Arab Emirates"
+  },
+  {
+    "id": "Q110964346",
+    "label": "Minister of Foreign Affairs and International Cooperation of the United Arab Emirates",
+    "description": "cabinet position in United Arab Emirates"
+  },
+  {
+    "id": "Q58301:spouse:Al Jazia bint Saif bin Mohammed Al Nahyan",
+    "label": "Al Jazia bint Saif bin Mohammed Al Nahyan",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q58301:child:{{plainlist|",
+    "label": "{{plainlist|",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q16733119",
+    "label": "Mohammed bin Khalifa Al Nahyan",
+    "description": "Emirati politician"
+  },
+  {
+    "id": "Q10781516",
+    "label": "Shamsa bint Suhail Al Mazrouei",
+    "description": "wife of Sheikh Khalifa bin Zayed Al Nahyan"
+  },
+  {
+    "id": "Q1059948:spouse:{{marriage|[[Shamsa bint Suhail Al Mazrouei]]|19",
+    "label": "{{marriage|[[Shamsa bint Suhail Al Mazrouei]]|1964}}{{Cite news|url=https://www.na.ae/en/Images/LIWA04.pdf|title=Memories of Abu Dhabi and Al Ain in the Early Nineteen-Sixties|date=|work=National Archives|access-date=28 May 2021|archive-date=26 May 2018|archive-url=https://web.archive.org/web/20180526095848/http://www.na.ae/en/Images/LIWA04.pdf|url-status=dead}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q1059948:father:[[Zayed bin Sultan Al Nahyan]]",
+    "label": "[[Zayed bin Sultan Al Nahyan]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q1059948:mother:[[Hassa bint Mohammed Al Nahyan]]",
+    "label": "[[Hassa bint Mohammed Al Nahyan]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q1573260:spouse:Shamsa bint Hamdan Al Nahyan",
+    "label": "Shamsa bint Hamdan Al Nahyan",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q1573260:father:[[Zayed bin Sultan Al Nahyan]]",
+    "label": "[[Zayed bin Sultan Al Nahyan]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q1573260:mother:[[Fatima bint Mubarak Al Ketbi]]",
+    "label": "[[Fatima bint Mubarak Al Ketbi]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q7398258:spouse:Shaikha bint [[Hamdan bin Mohammed Al Nahyan]]",
+    "label": "Shaikha bint [[Hamdan bin Mohammed Al Nahyan]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q7398258:father:[[Zayed bin Sultan Al Nahyan]]",
+    "label": "[[Zayed bin Sultan Al Nahyan]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q7398258:mother:Ayesha bint Ali Al Darmaki",
+    "label": "Ayesha bint Ali Al Darmaki",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q115725499",
+    "label": "Sheikha Khawla Bint Ahmed Al Suwaidi",
+    "description": "Founder, Khawla Art and Culture, UAE"
+  },
+  {
+    "id": "Q59974849",
+    "label": "Networked Digital Library of Theses and Dissertations",
+    "description": "digital library"
+  },
+  {
+    "id": "Q4809602",
+    "label": "Association of American Colleges and Universities",
+    "description": "American industry group"
+  },
+  {
+    "id": "Q4119330",
+    "label": "Zayed bin Khalifa Al Nahyan",
+    "description": "Sheikh of Abu Dhabi from 1855 to 1909"
+  },
+  {
+    "id": "Q60786126:spouse:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q60786126:father:[[Zayed the Great]]",
+    "label": "[[Zayed the Great]]",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q60786126:mother:",
+    "label": "",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q2914726",
+    "label": "Princess Dina bint Abdul-Hamid Hashem",
+    "description": "Queen Consort of Jordan"
+  },
+  {
+    "id": "Q1247373",
+    "label": "Harrow School",
+    "description": "school in Harrow, UK"
+  },
+  {
+    "id": "Q4119533",
+    "label": "Victoria College",
+    "description": "school in\u00a0Alexandria, Egypt"
+  },
+  {
+    "id": "Q4116074",
+    "label": "Zein al-Sharaf Talal",
+    "description": "Queen consort of Jordan (1916\u20131994)"
+  },
+  {
+    "id": "Q240575",
+    "label": "Queen Noor of Jordan",
+    "description": "Queen and Queen Dowager of Jordan; philanthropist and activist"
+  },
+  {
+    "id": "Q4867793",
+    "label": "Princess Basma bint Talal of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q12479977",
+    "label": "Naif bin Abdullah",
+    "description": "younger son of King Abdullah I of Jordan (1914\u20131983)"
+  },
+  {
+    "id": "Q149724",
+    "label": "Faisal II of Iraq",
+    "description": "King of Iraq from 4 April 1939 until 1958"
+  },
+  {
+    "id": "Q689964",
+    "label": "Prince El Hassan bin Talal of Jordan",
+    "description": "Jordanian prince (born 1947)"
+  },
+  {
+    "id": "Q2817261",
+    "label": "Prince Muhammad bin Talal of Jordan",
+    "description": "Jordanian Royal (1940-2021)"
+  },
+  {
+    "id": "Q192780",
+    "label": "Abdullah I of Jordan",
+    "description": "Ruler of Transjordan and Jordan from 1921 to 1951"
+  },
+  {
+    "id": "Q1446181",
+    "label": "Hunter College",
+    "description": "university in New York City"
+  },
+  {
+    "id": "Q115345222",
+    "label": "Consort of Jordan",
+    "description": "Position of the spouse of the Monarch of Jordan"
+  },
+  {
+    "id": "Q28115156",
+    "label": "Baha Uddin Toukan",
+    "description": "Jordanian diplomat"
+  },
+  {
+    "id": "Q7241513",
+    "label": "president of the International Olympic Committee",
+    "description": "head of the Executive Board of the International Olympic Committee"
+  },
+  {
+    "id": "Q274009",
+    "label": "Kirsty Coventry",
+    "description": "Zimbabwean swimmer, politician, and sports administrator"
+  },
+  {
+    "id": "Q125891646",
+    "label": "SportAccord",
+    "description": "sports event organization established in 2003, and currently managing some of GAISF activities since GAISF's dissolution in 2022"
+  },
+  {
+    "id": "Q475646",
+    "label": "International Association for Sports and Leisure Facilities",
+    "description": "voluntary association"
+  },
+  {
+    "id": "Q7244514",
+    "label": "Princess Aisha bint Al Faisal",
+    "description": "Jordanian princess"
+  },
+  {
+    "id": "Q7244189",
+    "label": "Prince Omar bin Al Faisal",
+    "description": "Jordanian prince"
+  },
+  {
+    "id": "Q128212331",
+    "label": "member of the International Olympic Committee",
+    "description": "non-governmental sports organization representative"
+  },
+  {
+    "id": "Q7373601",
+    "label": "Royal Air Force College Cranwell",
+    "description": "Royal Air Force training and education academy"
+  },
+  {
+    "id": "Q7244812",
+    "label": "Princess Sara bint Al Faisal",
+    "description": "Jordanian princess"
+  },
+  {
+    "id": "Q7244555",
+    "label": "Princess Ayah bint Al Faisal",
+    "description": "Jordanian princess"
+  },
+  {
+    "id": "Q7586750",
+    "label": "St. Albans School",
+    "description": "education organization in Washington D.C., United States"
+  },
+  {
+    "id": "Q49114",
+    "label": "Brown University",
+    "description": "private university in Providence, Rhode Island, United States"
+  },
+  {
+    "id": "Q1481050",
+    "label": "London Business School",
+    "description": "business school affiliated to the University of London"
+  },
+  {
+    "id": "Q7244526",
+    "label": "Princess Alia Tabba",
+    "description": "Jordanian princess"
+  },
+  {
+    "id": "Q131382183",
+    "label": "Princess Zeina, Princess Feisal of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q177715",
+    "label": "Princess Rym, Princess Ali bin Al-Hussein of Jordan",
+    "description": "Jordanian Royal"
+  },
+  {
+    "id": "Q7404805",
+    "label": "Salisbury School",
+    "description": "all-boys, private college-preparatory boarding school in Salisbury, Connecticut, United States"
+  },
+  {
+    "id": "Q21578",
+    "label": "Princeton University",
+    "description": "private Ivy League research university in Princeton, New Jersey, United States"
+  },
+  {
+    "id": "Q1255921",
+    "label": "president",
+    "description": "leader of an organization"
+  },
+  {
+    "id": "Q55381977",
+    "label": "Princess Jalilah bint Ali of jordan",
+    "description": "Jordanian princess and a niece of king abdullah ll of jordan."
+  },
+  {
+    "id": "Q16297680",
+    "label": "Abdullah bin Ali",
+    "description": null
+  },
+  {
+    "id": "Q4747130",
+    "label": "Amman Baccalaureate School",
+    "description": "private school in Amman, Jordan"
+  },
+  {
+    "id": "Q5438936",
+    "label": "Fay School",
+    "description": "independent, coeducational junior-prep school located in Southborough, Massachusetts, United States"
+  },
+  {
+    "id": "Q7589975",
+    "label": "St. Mark's School",
+    "description": "preparatory school in Southborough, Massachusetts"
+  },
+  {
+    "id": "Q333886",
+    "label": "Georgetown University",
+    "description": "private university in Washington, D.C., United States"
+  },
+  {
+    "id": "Q9062823",
+    "label": "Rayet Al Noor bint Al Hashim",
+    "description": "Jordanian aristocrat"
+  },
+  {
+    "id": "Q168751",
+    "label": "Duke University",
+    "description": "private university in Durham, North Carolina, USA"
+  },
+  {
+    "id": "Q168000",
+    "label": "American University",
+    "description": "private liberal arts and research-based university in Washington, D.C., USA"
+  },
+  {
+    "id": "Q2303536",
+    "label": "Virginia Commonwealth University",
+    "description": "public research university in Richmond, Virginia, United States"
+  },
+  {
+    "id": "Q7085612",
+    "label": "Oldfields School",
+    "description": "independent, day, boarding school in Glencoe, Maryland, United States"
+  },
+  {
+    "id": "Q117470780",
+    "label": "Zeid Sa'adedine Juma",
+    "description": null
+  },
+  {
+    "id": "Q29588937",
+    "label": "Edward Banayoti",
+    "description": "Canadian"
+  },
+  {
+    "id": "Q4887508",
+    "label": "Benenden School",
+    "description": "school in Kent, UK"
+  },
+  {
+    "id": "Q610253",
+    "label": "University of Jordan",
+    "description": "public university in Amman, Jordan"
+  },
+  {
+    "id": "Q7989536",
+    "label": "Westover School",
+    "description": "school in Middlebury, Connecticut, United States"
+  },
+  {
+    "id": "Q96316895",
+    "label": "Doris Elizabeth Sutton",
+    "description": "9 Jan 1916 - 1993"
+  },
+  {
+    "id": "Q16824038",
+    "label": "Bourne School",
+    "description": "Defunct secondary school in Malaysia"
+  },
+  {
+    "id": "Q12250694",
+    "label": "Walter Percy Gardiner",
+    "description": "British soldier"
+  },
+  {
+    "id": "Q503473",
+    "label": "University of Geneva",
+    "description": "public research university located in Geneva, Switzerland"
+  },
+  {
+    "id": "Q112148518",
+    "label": "Faisal Sedki al-Yassin",
+    "description": "Palestinian physician (1934-2022)"
+  },
+  {
+    "id": "Q312",
+    "label": "Apple Inc.",
+    "description": "American multinational technology company based in Cupertino, California"
+  },
+  {
+    "id": "Q17068953",
+    "label": "New English School",
+    "description": "independent school in Kuwait"
+  },
+  {
+    "id": "Q327591",
+    "label": "independent politician",
+    "description": "individual not affiliated to any political party"
+  },
+  {
+    "id": "Q469476",
+    "label": "The American University in Cairo",
+    "description": "independent English-language research university in Cairo, Egypt"
+  },
+  {
+    "id": "Q200678:spouse:{{marriage|[[Abdullah II of Jordan|Abdullah II]]|",
+    "label": "{{marriage|[[Abdullah II of Jordan|Abdullah II]]|10 June 1993}}",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q200678:father:Faisal Al-Yassin",
+    "label": "Faisal Al-Yassin",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q200678:mother:Ilham Yassin",
+    "label": "Ilham Yassin",
+    "description": "infobox placeholder"
+  },
+  {
+    "id": "Q128405486",
+    "label": "Princess Iman bint Al-Hussein of Jordan",
+    "description": "Jordanian royal (2024)"
+  },
+  {
+    "id": "Q113553273",
+    "label": "Princess Rajwa Al Hussein",
+    "description": "Saudi royal"
+  },
+  {
+    "id": "Q837521",
+    "label": "Amina",
+    "description": "female given name"
+  },
+  {
+    "id": "Q117151107",
+    "label": "Jameel Alexander Thermi\u00f3tis",
+    "description": "Venezuelan businessperson"
+  },
+  {
+    "id": "Q114359315",
+    "label": "Dean of the Walsh School of Foreign Service",
+    "description": "head of the Walsh School of Foregin Service"
+  },
+  {
+    "id": "Q4810007",
+    "label": "Association of Professional Schools of International Affairs",
+    "description": "non-profit educational organization"
+  },
+  {
+    "id": "Q17020147",
+    "label": "Royal Military College, Sandhurst",
+    "description": "British Army military academy"
+  },
+  {
+    "id": "Q6940198",
+    "label": "Musbah bint Nasser",
+    "description": "Queen consort of Jordan (1884\u20131961)"
+  },
+  {
+    "id": "Q54900644",
+    "label": "Crown Prince of Jordan",
+    "description": "heir-Apparent to the Jordanian Throne"
+  },
+  {
+    "id": "Q7244768",
+    "label": "Princess Noor bint Asem Al-Hashem",
+    "description": "Jordanian princess"
+  },
+  {
+    "id": "Q7244558",
+    "label": "Princess Basmah Bani Ahmad",
+    "description": "Jordanian princess"
+  },
+  {
+    "id": "Q13371",
+    "label": "Harvard University",
+    "description": "private university in Cambridge, Massachusetts"
+  },
+  {
+    "id": "Q65930512",
+    "label": "Ned Donovan",
+    "description": "British journalist"
+  },
+  {
+    "id": "Q1152190",
+    "label": "Ritsumeikan University",
+    "description": "private university in Kyoto, Japan"
+  },
+  {
+    "id": "Q1064270",
+    "label": "Gakushuin Women's College",
+    "description": "university"
+  },
+  {
+    "id": "Q756361",
+    "label": "UWC Atlantic College",
+    "description": "independent (private) residential Sixth Form College in the United Kingdom"
+  },
+  {
+    "id": "Q160302",
+    "label": "University of Edinburgh",
+    "description": "public university in Edinburgh, Scotland, United Kingdom"
+  },
+  {
+    "id": "Q174710",
+    "label": "University of California, Los Angeles",
+    "description": "public university in Los Angeles, California, USA"
+  },
+  {
+    "id": "Q49088",
+    "label": "Columbia University",
+    "description": "private university in New York City, New York, US"
+  },
+  {
+    "id": "Q5137991",
+    "label": "Coalition of Urban and Metropolitan Universities",
+    "description": "organisation of US universities"
+  },
+  {
+    "id": "Q5137944",
+    "label": "Coalition for Networked Information",
+    "description": "organization"
+  },
+  {
+    "id": "Q647039",
+    "label": "Scholarly Publishing and Academic Resources Coalition",
+    "description": "international alliance of academic libraries"
+  },
+  {
+    "id": "Q5275906",
+    "label": "Digital Library Federation",
+    "description": "organization"
+  },
+  {
+    "id": "Q116153205",
+    "label": "Council on Governmental Relations",
+    "description": "US organization"
+  },
+  {
+    "id": "Q5059850",
+    "label": "Center for Research Libraries",
+    "description": "international consortium of university, college, and independent research libraries"
+  },
+  {
+    "id": "Q2842325",
+    "label": "American Council on Education",
+    "description": "nonprofit organization"
   }
 ]
