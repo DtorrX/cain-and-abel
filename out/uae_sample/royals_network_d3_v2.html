@@ -76,6 +76,27 @@
     .stats-line{font-size:12px;color:#c9d4ff;margin-top:4px;}
     .flex{display:flex;gap:10px;align-items:center;}
     .range-display{font-size:11px;color:#cbd6ff;margin-bottom:4px;display:flex;justify-content:space-between;}
+    .node.fault circle{stroke:var(--danger);stroke-width:2;}
+    .node.fault-highlight circle{stroke:var(--danger);stroke-width:3;filter:drop-shadow(0 0 6px rgba(255,122,122,0.5));}
+    .node.diagnostic-muted{opacity:0.12;}
+    .link.fault{stroke:var(--danger);stroke-opacity:0.55;}
+    .link.fault-highlight{stroke:var(--danger);stroke-width:2.6;stroke-opacity:0.9;}
+    .link.diagnostic-muted{stroke-opacity:0.05;}
+    .diagnostics-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+    .diagnostics-item{background:#121c3e;border:1px solid rgba(255,255,255,.12);border-left-width:3px;border-radius:10px;padding:8px 10px;text-align:left;color:var(--ink);cursor:pointer;transition:border-color .2s, background .2s;display:flex;flex-direction:column;gap:4px;}
+    .diagnostics-item .title{font-weight:600;font-size:13px;}
+    .diagnostics-item .meta{font-size:11px;color:var(--muted);}
+    .diagnostics-item .recommend{font-size:11px;color:#e6ecff;opacity:0.85;}
+    .diagnostics-item[data-severity="error"]{border-left-color:var(--danger);}
+    .diagnostics-item[data-severity="warning"]{border-left-color:var(--accent2);}
+    .diagnostics-item[data-severity="info"]{border-left-color:var(--accent);}
+    .diagnostics-item:hover{border-color:rgba(255,255,255,.3);background:#182248;}
+    .diagnostics-item.active{outline:1px solid var(--accent2);box-shadow:0 0 0 2px rgba(255,209,102,.18);}
+    .diagnostics-controls{display:flex;justify-content:flex-end;margin-top:8px;}
+    .diagnostics-controls button{font-size:12px;padding:6px 10px;}
+    .diagnostics-raw{margin-top:10px;}
+    .diagnostics-raw summary{cursor:pointer;color:#c9d4ff;font-size:12px;}
+    .diagnostics-raw pre{max-height:160px;overflow:auto;background:#0b1330;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px;font-size:11px;line-height:1.35;color:#e6ecff;}
     #drop{border:1px dashed rgba(255,255,255,.3);border-radius:10px;padding:12px;text-align:center;color:var(--muted);}
     #drop.drag{border-color:var(--accent2);color:#fff;background:rgba(255,209,102,.12);}
   </style>
@@ -194,6 +215,18 @@
     <div id="tooltip" class="tooltip"></div>
   </div>
   <aside class="details">
+    <div class="panel" id="diagnosticsPanel">
+      <h3>Diagnostics</h3>
+      <div id="diagnosticsSummary" class="muted">Running checks…</div>
+      <div class="diagnostics-controls">
+        <button id="btnClearDiagnostics" style="display:none;">Clear highlight</button>
+      </div>
+      <div id="diagnosticsList" class="diagnostics-list muted"></div>
+      <details class="diagnostics-raw">
+        <summary>Raw diagnostics payload</summary>
+        <pre id="diagnosticsJson">{}</pre>
+      </details>
+    </div>
     <div class="panel" id="detailsPanel">
       <h3>Details</h3>
       <div id="detailsContent" class="muted">Click a node to inspect their network relationships.</div>
@@ -213,6 +246,7 @@
   </footer>
 </div>
 
+<script id="diagnostics-data" type="application/json">{}</script>
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script>
 const CONFIG = {
@@ -253,6 +287,83 @@ const CONFIG = {
   }
 };
 
+const DIAGNOSTIC_DEFINITIONS = {
+  isolated_nodes: {
+    label: 'Isolated nodes',
+    severity: 'warning',
+    description: 'Nodes appear without any connected edges in the dataset.',
+    recommendation: 'Confirm the person should exist in the graph or attach at least one relationship.'
+  },
+  missing_role: {
+    label: 'Missing role tag',
+    severity: 'info',
+    description: 'Nodes defaulted to the generic "other" role.',
+    recommendation: 'Populate a specific role in the source data to improve grouping.'
+  },
+  missing_country: {
+    label: 'Missing country',
+    severity: 'info',
+    description: 'Nodes are missing a country assignment.',
+    recommendation: 'Fill in the country field so cross-border ties can be analysed.'
+  },
+  missing_description: {
+    label: 'Missing description',
+    severity: 'info',
+    description: 'Nodes have no descriptive text or summary.',
+    recommendation: 'Add a short synopsis to help analysts and automated systems contextualise the node.'
+  },
+  invalid_year_span: {
+    label: 'Invalid node timeline',
+    severity: 'error',
+    description: 'Node start year occurs after its end year.',
+    recommendation: 'Inspect and correct the timeline fields in the source JSON.'
+  },
+  power_score_out_of_range: {
+    label: 'Power score out of range',
+    severity: 'warning',
+    description: 'Power score is outside the expected 0–1 range.',
+    recommendation: 'Normalise the score to the 0–1 scale or adjust filters accordingly.'
+  },
+  power_score_missing: {
+    label: 'Missing power score',
+    severity: 'info',
+    description: 'Power score is missing or not a number.',
+    recommendation: 'Compute or backfill a numeric power score so size scaling works.'
+  },
+  duplicate_edges: {
+    label: 'Duplicate edges',
+    severity: 'warning',
+    description: 'Multiple edges share the same endpoints and type.',
+    recommendation: 'Deduplicate edges unless multiples are intentional with distinct metadata.'
+  },
+  self_loops: {
+    label: 'Self-loop edges',
+    severity: 'info',
+    description: 'Edges where the source and target are the same node.',
+    recommendation: 'Verify whether the self-reference is meaningful; otherwise remove it.'
+  },
+  missing_edge_type: {
+    label: 'Missing edge type',
+    severity: 'info',
+    description: 'Edges defaulted to the generic "unknown" type.',
+    recommendation: 'Provide an explicit relationship type to improve colour coding.'
+  },
+  invalid_edge_year: {
+    label: 'Invalid edge timeline',
+    severity: 'warning',
+    description: 'Edge start year occurs after its end year.',
+    recommendation: 'Correct the temporal metadata on the relationship.'
+  },
+  non_positive_weight: {
+    label: 'Non-positive edge weight',
+    severity: 'info',
+    description: 'Edges carry a zero or negative weight.',
+    recommendation: 'Review weighting logic; force-directed layout expects positive weights.'
+  }
+};
+
+const SEVERITY_SCORE = { info: 1, warning: 2, error: 3 };
+
 const state = {
   raw: { nodes: [], links: [], nodeById: new Map(), adjacency: new Map(), neighbors: new Map() },
   filtered: { nodes: [], links: [] },
@@ -268,7 +379,9 @@ const state = {
   searchIndex: [],
   highlight: { node: null, neighbors: new Set(), links: new Set(), path: [] },
   pinned: new Set(),
-  reveal: { active: false, depth: 0, schedule: null, depths: new Map() }
+  reveal: { active: false, depth: 0, schedule: null, depths: new Map() },
+  diagnostics: { categories: [], byId: new Map() },
+  activeDiagnostic: null
 };
 
 const svg = d3.select('#svg');
@@ -444,6 +557,243 @@ function updateStats() {
   statsLabel.text(`${n} nodes • ${m} links`);
 }
 
+function runDiagnostics(nodes, links) {
+  nodes.forEach(node => {
+    node.diagnostics = [];
+    node.diagnosticSeverity = 0;
+  });
+  links.forEach(link => {
+    link.diagnostics = [];
+    link.diagnosticSeverity = 0;
+  });
+
+  const categories = new Map();
+
+  const ensureCategory = (id) => {
+    if (!categories.has(id)) {
+      const def = DIAGNOSTIC_DEFINITIONS[id] || { label: id, severity: 'info', description: '', recommendation: '' };
+      categories.set(id, {
+        id,
+        label: def.label,
+        severity: def.severity,
+        description: def.description,
+        recommendation: def.recommendation,
+        nodes: new Set(),
+        links: new Set(),
+        examples: []
+      });
+    }
+    return categories.get(id);
+  };
+
+  const addExample = (category, example) => {
+    if (!example) return;
+    if (category.examples.length >= 5) return;
+    if (!category.examples.includes(example)) category.examples.push(example);
+  };
+
+  const flagNode = (node, id, example) => {
+    if (!node || !id) return;
+    if (!node.diagnostics.includes(id)) node.diagnostics.push(id);
+    const category = ensureCategory(id);
+    addExample(category, example || node.label);
+    category.nodes.add(node.id);
+    const severityScore = SEVERITY_SCORE[category.severity] || 1;
+    node.diagnosticSeverity = Math.max(node.diagnosticSeverity || 0, severityScore);
+  };
+
+  const flagLink = (link, id, example) => {
+    if (!link || !id) return;
+    if (!link.diagnostics.includes(id)) link.diagnostics.push(id);
+    const category = ensureCategory(id);
+    addExample(category, example || `${link.sourceId} ↔ ${link.targetId}`);
+    category.links.add(link.id);
+    if (link.sourceId) category.nodes.add(link.sourceId);
+    if (link.targetId) category.nodes.add(link.targetId);
+    const severityScore = SEVERITY_SCORE[category.severity] || 1;
+    link.diagnosticSeverity = Math.max(link.diagnosticSeverity || 0, severityScore);
+  };
+
+  const degreeMap = new Map();
+  links.forEach(link => {
+    degreeMap.set(link.sourceId, (degreeMap.get(link.sourceId) || 0) + 1);
+    degreeMap.set(link.targetId, (degreeMap.get(link.targetId) || 0) + 1);
+  });
+
+  nodes.forEach(node => {
+    if ((degreeMap.get(node.id) || 0) === 0) flagNode(node, 'isolated_nodes');
+    if (!node.role || node.role === 'other') flagNode(node, 'missing_role');
+    if (!node.country || node.country === 'Unknown') flagNode(node, 'missing_country');
+    if (!node.description) flagNode(node, 'missing_description');
+    if (node.start_year != null && node.end_year != null && node.start_year > node.end_year) flagNode(node, 'invalid_year_span');
+    if (!Number.isFinite(node.power_score)) {
+      flagNode(node, 'power_score_missing');
+    } else if (node.power_score < 0 || node.power_score > 1) {
+      flagNode(node, 'power_score_out_of_range');
+    }
+  });
+
+  const duplicateKey = new Map();
+  links.forEach(link => {
+    const sortedPair = [link.sourceId, link.targetId].sort().join('__');
+    const key = `${sortedPair}__${link.type || 'unknown'}`;
+    if (!duplicateKey.has(key)) duplicateKey.set(key, []);
+    duplicateKey.get(key).push(link);
+  });
+
+  duplicateKey.forEach(group => {
+    if (group.length > 1) {
+      group.forEach(link => flagLink(link, 'duplicate_edges', `${link.sourceId} ↔ ${link.targetId} (${link.type || 'unknown'})`));
+    }
+  });
+
+  links.forEach(link => {
+    if (link.sourceId === link.targetId) flagLink(link, 'self_loops', `${link.sourceId}`);
+    if (!link.type || link.type === 'unknown') flagLink(link, 'missing_edge_type', `${link.sourceId} ↔ ${link.targetId}`);
+    if (link.start_year != null && link.end_year != null && link.start_year > link.end_year) {
+      flagLink(link, 'invalid_edge_year', `${link.sourceId} ↔ ${link.targetId}`);
+    }
+    if (!(link.weight > 0)) flagLink(link, 'non_positive_weight', `${link.sourceId} ↔ ${link.targetId} (w=${link.weight})`);
+  });
+
+  const categoriesArray = Array.from(categories.values()).map(category => ({
+    ...category,
+    nodes: Array.from(category.nodes),
+    links: Array.from(category.links)
+  })).sort((a, b) => {
+    const severityDelta = (SEVERITY_SCORE[b.severity] || 0) - (SEVERITY_SCORE[a.severity] || 0);
+    if (severityDelta !== 0) return severityDelta;
+    const countA = a.nodes.length + a.links.length;
+    const countB = b.nodes.length + b.links.length;
+    return countB - countA;
+  });
+
+  const byId = new Map(categoriesArray.map(category => [category.id, category]));
+  return { categories: categoriesArray, byId };
+}
+
+function formatDiagnosticLabel(id) {
+  if (!id) return '';
+  const fromState = state.diagnostics?.byId?.get(id);
+  if (fromState) return fromState.label;
+  const def = DIAGNOSTIC_DEFINITIONS[id];
+  return def ? def.label : id;
+}
+
+function publishDiagnosticsData(payload) {
+  const serialized = JSON.stringify(payload, null, 2);
+  const script = document.getElementById('diagnostics-data');
+  if (script) script.textContent = serialized;
+  const pretty = document.getElementById('diagnosticsJson');
+  if (pretty) pretty.textContent = serialized;
+  window.diagnosticsReport = payload;
+}
+
+function updateDiagnosticsPanel() {
+  const summaryEl = document.getElementById('diagnosticsSummary');
+  const listEl = document.getElementById('diagnosticsList');
+  const clearBtn = document.getElementById('btnClearDiagnostics');
+  if (!summaryEl || !listEl) return;
+
+  const categories = state.diagnostics?.categories || [];
+  const nodeSet = new Set((state.filtered?.nodes || []).map(n => n.id));
+  const linkSet = new Set((state.filtered?.links || []).map(l => l.id));
+
+  const items = categories.map(cat => {
+    const visibleNodes = cat.nodes.filter(id => nodeSet.has(id));
+    const visibleLinks = cat.links.filter(id => linkSet.has(id));
+    const visibleCount = visibleNodes.length + visibleLinks.length;
+    return { ...cat, visibleNodes, visibleLinks, visibleCount };
+  }).filter(cat => cat.visibleCount > 0);
+
+  const totalVisible = items.reduce((sum, item) => sum + item.visibleCount, 0);
+
+  if (!categories.length) {
+    summaryEl.textContent = 'No diagnostics were triggered for this dataset.';
+    listEl.innerHTML = '';
+    listEl.classList.add('muted');
+  } else if (!items.length) {
+    summaryEl.textContent = 'No diagnostic issues in the current filter view.';
+    listEl.innerHTML = '';
+    listEl.classList.add('muted');
+  } else {
+    summaryEl.textContent = `${items.length} diagnostic group${items.length === 1 ? '' : 's'} covering ${totalVisible} issue${totalVisible === 1 ? '' : 's'}.`;
+    listEl.classList.remove('muted');
+    listEl.innerHTML = items.map(item => {
+      const activeClass = state.activeDiagnostic === item.id ? ' active' : '';
+      const metaParts = [`${item.visibleCount} issue${item.visibleCount === 1 ? '' : 's'} visible`];
+      if (item.examples && item.examples.length) metaParts.push(`e.g. ${item.examples.slice(0, 2).join(', ')}`);
+      const meta = metaParts.join(' • ');
+      return `<button class="diagnostics-item${activeClass}" data-diagnostic="${item.id}" data-severity="${item.severity}"><div class="title">${item.label}</div><div class="meta">${meta}</div><div class="recommend">${item.recommendation}</div></button>`;
+    }).join('');
+  }
+
+  if (clearBtn) {
+    clearBtn.style.display = categories.length ? 'inline-flex' : 'none';
+    clearBtn.disabled = !state.activeDiagnostic;
+  }
+
+  const payload = {
+    generatedAt: new Date().toISOString(),
+    totals: {
+      categories: categories.length,
+      filteredCategories: items.length,
+      visibleIssues: totalVisible
+    },
+    activeDiagnostic: state.activeDiagnostic,
+    categories: categories.map(cat => ({
+      id: cat.id,
+      label: cat.label,
+      severity: cat.severity,
+      description: cat.description,
+      recommendation: cat.recommendation,
+      nodes: cat.nodes,
+      links: cat.links,
+      examples: cat.examples
+    })),
+    filtered: items.map(item => ({
+      id: item.id,
+      visibleNodes: item.visibleNodes,
+      visibleLinks: item.visibleLinks,
+      visibleCount: item.visibleCount
+    }))
+  };
+
+  publishDiagnosticsData(payload);
+}
+
+function updateDiagnosticStyles() {
+  const diagId = state.activeDiagnostic;
+  const diag = diagId ? state.diagnostics?.byId?.get(diagId) : null;
+  const diagNodes = diag ? new Set(diag.nodes) : null;
+  const diagLinks = diag ? new Set(diag.links) : null;
+  const filteredNodes = state.filtered?.nodes || [];
+  const filteredLinks = state.filtered?.links || [];
+  const hasVisibleDiagNode = diagNodes ? filteredNodes.some(n => diagNodes.has(n.id)) : false;
+  const hasVisibleDiagLink = diagLinks ? filteredLinks.some(l => diagLinks.has(l.id)) : false;
+
+  gNodes.selectAll('.node')
+    .classed('fault', d => (d.diagnostics && d.diagnostics.length))
+    .classed('fault-highlight', d => (diagNodes ? diagNodes.has(d.id) : false))
+    .classed('diagnostic-muted', d => (diagNodes && hasVisibleDiagNode ? !diagNodes.has(d.id) : false))
+    .attr('data-diagnostics', d => (d.diagnostics && d.diagnostics.length ? d.diagnostics.join(',') : null))
+    .attr('data-diagnostic-severity', d => d.diagnosticSeverity || null);
+
+  gLinks.selectAll('path')
+    .classed('fault', d => (d.diagnostics && d.diagnostics.length))
+    .classed('fault-highlight', d => (diagLinks ? diagLinks.has(d.id) : false))
+    .classed('diagnostic-muted', d => (diagLinks && hasVisibleDiagLink ? !diagLinks.has(d.id) : false))
+    .attr('data-diagnostics', d => (d.diagnostics && d.diagnostics.length ? d.diagnostics.join(',') : null))
+    .attr('data-diagnostic-severity', d => d.diagnosticSeverity || null);
+
+  const listEl = document.getElementById('diagnosticsList');
+  if (listEl) {
+    Array.from(listEl.querySelectorAll('.diagnostics-item')).forEach(button => {
+      button.classList.toggle('active', button.dataset.diagnostic === diagId);
+    });
+  }
+}
+
 function buildAdjacency(links) {
   const adjacency = new Map();
   const neighborEdges = new Map();
@@ -498,6 +848,8 @@ function prepareData(nodes, links) {
   buildAdjacency(preparedLinks);
   buildSearchIndex(preparedNodes);
   initFilterState(preparedNodes, preparedLinks);
+  state.diagnostics = runDiagnostics(preparedNodes, preparedLinks);
+  state.activeDiagnostic = null;
   updateFilterControls();
   renderRoleLegend(Array.from(state.filters.roles));
   renderCheckGrid('countryFilters', Array.from(state.filters.countries).sort(), 'country');
@@ -545,6 +897,7 @@ function applyFilters() {
   updateStats();
   refreshLegendState();
   renderGraph();
+  updateDiagnosticsPanel();
 }
 
 function refreshLegendState() {
@@ -662,6 +1015,7 @@ function renderGraph() {
 
   startSimulation();
   updateFocusStyles();
+  updateDiagnosticStyles();
   drawMinimap();
 }
 
@@ -840,6 +1194,10 @@ function showTooltip(event, node) {
   if (node.start_year || node.end_year) {
     html.push(`<div class="kv"><span>Active</span><strong>${node.start_year || '…'} – ${node.end_year || '…'}</strong></div>`);
   }
+  if (node.diagnostics && node.diagnostics.length) {
+    const diagText = node.diagnostics.map(formatDiagnosticLabel).join(', ');
+    html.push(`<div class="kv"><span>Diagnostics</span><strong>${diagText}</strong></div>`);
+  }
   if (node.url) {
     html.push(`<div style="margin-top:6px;"><a href="${node.url}" target="_blank" rel="noopener">Open in browser ↗</a></div>`);
   }
@@ -908,6 +1266,16 @@ function populateDetails(node) {
   }
   if (node.start_year || node.end_year) {
     lines.push(`<div class="stats-line">Timeline: ${node.start_year || '…'} – ${node.end_year || '…'}</div>`);
+  }
+  if (node.diagnostics && node.diagnostics.length) {
+    const diagItems = node.diagnostics.map(id => {
+      const diag = state.diagnostics?.byId?.get(id);
+      const label = diag ? diag.label : id;
+      const rec = diag?.recommendation ? ` — ${diag.recommendation}` : '';
+      return `<li><strong>${label}</strong>${rec}</li>`;
+    }).join('');
+    lines.push('<div class="stats-line" style="color:var(--danger);font-weight:600;">Diagnostics flagged</div>');
+    lines.push(`<ul class="muted" style="margin:6px 0 10px 18px;">${diagItems}</ul>`);
   }
   if (node.aliases && node.aliases.length) {
     lines.push(`<div class="stats-line">Aliases: ${node.aliases.join(', ')}</div>`);
@@ -1288,6 +1656,22 @@ function bindDynamicEvents() {
   });
   document.getElementById('fileInput').addEventListener('change', async e => {
     await handleFileInput(e.target.files);
+  });
+
+  document.getElementById('diagnosticsList').addEventListener('click', e => {
+    const target = e.target.closest('.diagnostics-item');
+    if (!target) return;
+    e.preventDefault();
+    const diagId = target.dataset.diagnostic;
+    state.activeDiagnostic = state.activeDiagnostic === diagId ? null : diagId;
+    updateDiagnosticStyles();
+    updateDiagnosticsPanel();
+  });
+
+  document.getElementById('btnClearDiagnostics').addEventListener('click', () => {
+    state.activeDiagnostic = null;
+    updateDiagnosticStyles();
+    updateDiagnosticsPanel();
   });
 }
 
