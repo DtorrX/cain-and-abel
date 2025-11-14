@@ -5,10 +5,11 @@ from __future__ import annotations
 import json
 import os
 from collections import deque
-from typing import Iterable, Optional, Set, Tuple
+from typing import Iterable, List, Optional, Set, Tuple
 
 import networkx as nx
 
+from .cia import GovernmentIndex
 from .resolver import Resolver
 from .utils import console, logger
 from .wikidata import WikidataClient
@@ -27,6 +28,7 @@ class GraphBuilder:
         max_depth: int = 1,
         max_nodes: Optional[int] = None,
         max_edges: Optional[int] = None,
+        government_index: GovernmentIndex | None = None,
     ) -> None:
         self.resolver = resolver
         self.wikidata = wikidata
@@ -36,6 +38,7 @@ class GraphBuilder:
         self.max_depth = max_depth
         self.max_nodes = max_nodes
         self.max_edges = max_edges
+        self.government_index = government_index
 
     def _should_continue(self, graph: nx.MultiDiGraph) -> bool:
         if self.max_nodes and graph.number_of_nodes() >= self.max_nodes:
@@ -44,8 +47,28 @@ class GraphBuilder:
             return False
         return True
 
+    def _augment_with_government_seeds(self, qids: List[str]) -> List[str]:
+        assert self.government_index is not None
+        labels = self.wikidata.fetch_labels(qids)
+        for node_id, data in labels.items():
+            self.government_index.associate_qid(node_id, data.get("label"))
+        countries = self.government_index.countries_for_labels(
+            data.get("label")
+            for data in labels.values()
+            if data.get("label")
+        )
+        augmented: List[str] = list(dict.fromkeys(qids))
+        for country in countries:
+            for official in self.government_index.officials_by_country(country):
+                qid = self.government_index.resolve_official(official, self.resolver)
+                if qid and qid not in augmented:
+                    augmented.append(qid)
+        return augmented
+
     def crawl(self, seeds: Iterable[str]) -> nx.MultiDiGraph:
         qids = self.resolver.resolve_seeds(seeds)
+        if self.government_index:
+            qids = self._augment_with_government_seeds(qids)
         graph = nx.MultiDiGraph()
         queue: deque[Tuple[str, int]] = deque((qid, 0) for qid in qids)
         visited: Set[str] = set()
@@ -63,6 +86,10 @@ class GraphBuilder:
             edges = self.wikidata.fetch_relations([qid], self.include_family, self.include_political)
             neighbor_ids = {edge.target for edge in edges} | {edge.source for edge in edges}
             labels = self.wikidata.fetch_labels(neighbor_ids | {qid})
+            if self.government_index:
+                for node_id in neighbor_ids | {qid}:
+                    label = labels.get(node_id, {}).get("label")
+                    self.government_index.associate_qid(node_id, label)
             for node_id in neighbor_ids | {qid}:
                 data = labels.get(node_id, {})
                 graph.add_node(
@@ -70,6 +97,12 @@ class GraphBuilder:
                     label=data.get("label", node_id),
                     description=data.get("description"),
                 )
+                if self.government_index:
+                    self.government_index.annotate_graph_node(
+                        graph,
+                        node_id,
+                        data.get("label"),
+                    )
             for edge in edges:
                 graph.add_edge(
                     edge.source,
