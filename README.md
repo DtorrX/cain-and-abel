@@ -27,6 +27,7 @@ wikinet validate out/bahrain
 - Resolves page titles, categories, and direct Q-IDs to Wikidata items.
 - Fetches family (P22, P25, P26, P40, P3373, P1038, P451) and political (P39, P102, P463, P108, P69, P6, P35, P488, P2388) relations in batches.
 - Falls back to Wikipedia infobox parsing when SPARQL lacks family data.
+- Pulls the CIA World Leaders roster to expand crawls with ministers and security chiefs while tagging government, military, and bureaucratic officials.
 - Produces JSON, GraphML, DOT, and optional PNG outputs alongside a styling legend for visualization.
 - Uses SQLite-backed caching with retries, throttling, and resumable runs.
 - Rich CLI with `crawl` and `validate` commands plus configurable depth and rate limits.

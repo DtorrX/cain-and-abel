@@ -10,7 +10,7 @@ import networkx as nx
 
 from .utils import console
 
-LEGEND = {
+EDGE_STYLES = {
     "father": {"color": "#1f77b4", "style": "solid"},
     "mother": {"color": "#ff7f0e", "style": "solid"},
     "spouse": {"color": "#2ca02c", "style": "solid"},
@@ -28,6 +28,14 @@ LEGEND = {
     "chairperson": {"color": "#c5b0d5", "style": "solid"},
     "officeholder": {"color": "#c49c94", "style": "solid"},
 }
+
+NODE_LAYERS = {
+    "government": {"color": "#004170"},
+    "military": {"color": "#8b0000"},
+    "bureaucrat": {"color": "#556b2f"},
+}
+
+LEGEND = {"edges": EDGE_STYLES, "node_layers": NODE_LAYERS}
 
 
 def export_graph(graph: nx.MultiDiGraph, out_dir: str) -> Dict[str, str]:
@@ -93,4 +101,4 @@ def export_graph(graph: nx.MultiDiGraph, out_dir: str) -> Dict[str, str]:
     }
 
 
-__all__ = ["export_graph", "LEGEND"]
+__all__ = ["export_graph", "LEGEND", "EDGE_STYLES", "NODE_LAYERS"]

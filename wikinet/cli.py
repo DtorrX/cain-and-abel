@@ -10,6 +10,7 @@ from typing import Iterable, List, Sequence
 import networkx as nx
 
 from .cache import CacheManager
+from .cia import CIAWorldLeadersClient, GovernmentIndex
 from .export import export_graph
 from .graph import GraphBuilder, load_graph
 from .http import HTTPClient
@@ -74,6 +75,15 @@ def run_crawl(args: argparse.Namespace) -> None:
     wikipedia_client = WikipediaClient(http, lang=args.lang)
     include_family, include_political = _parse_mode(args.mode)
 
+    government_index: GovernmentIndex | None = None
+    cia_client = CIAWorldLeadersClient(http)
+    officials = cia_client.fetch()
+    if officials:
+        government_index = GovernmentIndex(officials)
+        console.log(f"Loaded {len(officials)} CIA world leaders entries")
+    else:
+        console.log("[yellow]CIA world leaders dataset unavailable[/yellow]")
+
     builder = GraphBuilder(
         resolver,
         wikidata_client,
@@ -83,6 +93,7 @@ def run_crawl(args: argparse.Namespace) -> None:
         max_depth=args.max_depth,
         max_nodes=args.max_nodes,
         max_edges=args.max_edges,
+        government_index=government_index,
     )
 
     seeds = _collect_seeds(args, resolver)
