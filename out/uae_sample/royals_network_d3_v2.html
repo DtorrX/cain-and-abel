@@ -3,151 +3,175 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Interactive Royal Network — D3 (v2 High-Contrast)</title>
+  <title>Royal Network Intelligence — D3 Enhanced</title>
   <style>
     :root{
-      --bg:#0b1020;
-      --card:#0f1530;
-      --ink:#e6ecff;
-      --muted:#9fb0ff;
+      --bg:#080d1e;
+      --panel:#0f1732;
+      --panel-border:rgba(255,255,255,.09);
+      --ink:#f1f5ff;
+      --muted:#99a7d6;
       --accent:#7aa2ff;
       --accent2:#ffca7a;
-      --link:#5b74ff;
-      --link-hi:#ffd166;
       --danger:#ff7a7a;
       --ok:#7affc5;
-      --label-bg:#101735;
-      --label-pill:#141d42;
+      --link:#556dff;
+      --link-hi:#ffd166;
+      --label-pill:#151e40;
     }
-    html,body{
-      margin:0; height:100%; background:radial-gradient(1200px 800px at 10% -10%, #1c2448 0%, var(--bg) 60%);
-      color:var(--ink); font:14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
-      overflow:hidden;
-    }
-    #app{ display:grid; grid-template-columns: 340px 1fr; grid-template-rows:auto 1fr auto; height:100%; }
-    header{ grid-column:1 / -1; padding:10px 14px; display:flex; align-items:center; gap:10px; background:transparent; border-bottom:1px solid rgba(255,255,255,.08); }
-    header h1{ font-size:16px; letter-spacing:.4px; margin:0 6px 0 0; color:#fff; }
-    header .pill{ background:#0e1838; border:1px solid rgba(255,255,255,.08); padding:6px 10px; border-radius:999px; color:var(--muted); }
-    .left{ grid-row:2 / span 1; grid-column:1; overflow:auto; padding:12px; backdrop-filter: blur(4px); background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0)); border-right:1px solid rgba(255,255,255,.08); }
-    .panel{ background:var(--card); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:12px; margin-bottom:12px; box-shadow: 0 10px 40px rgba(0,0,0,.25), inset 0 1px 1px rgba(255,255,255,.06); }
-    .panel h3{ margin:0 0 8px; font-size:13px; color:#c9d4ff; letter-spacing:.3px; text-transform:uppercase; }
-    .controls label{ display:block; margin:6px 0 6px; font-size:13px; color:#b7c4ff;}
-    .controls input[type="range"]{ width:100%; }
-    .controls input[type="text"], .controls select{
-      width:100%; padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,.1); background:#0b1330; color:#e7ecff; outline:none;
-    }
-    .controls .check{ display:flex; align-items:center; gap:10px; margin:8px 0; font-size:13px; color:#b7c4ff; }
-    .controls .check input{ width:auto; accent-color:var(--accent2); }
-    .btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:#0e1838; color:#dfe6ff; border:1px solid rgba(255,255,255,.1); cursor:pointer; }
-    .btn:hover{ border-color: rgba(255,255,255,.25); }
-    .btn.primary{ background:linear-gradient(180deg,#1d2b6b,#0e1838); border-color:#3342a3; }
-    .btn-row{ display:flex; gap:8px; flex-wrap:wrap; }
-    .legend{ display:flex; flex-wrap:wrap; gap:8px; }
-    .legend .item{ display:flex; align-items:center; gap:8px; background:#0e1838; border:1px solid rgba(255,255,255,.1); padding:6px 10px; border-radius:999px; }
-    .legend .sw{ width:12px; height:12px; border-radius:50%; display:inline-block; }
-    .footer{ grid-column:1 / -1; padding:8px 12px; color:#b6c3ff; border-top:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02); display:flex; justify-content:space-between; align-items:center; gap:10px;}
-    #canvasWrap{ position:relative; grid-column:2; grid-row:2; }
-    svg{ width:100%; height:100%; display:block; }
-    .halo{ filter:url(#glow); }
-    .link{ stroke:var(--link); stroke-opacity:.25; }
-    .link--hi{ stroke:var(--link-hi) !important; stroke-opacity:.9 !important; }
-    .node{ cursor:pointer; }
-    .node circle{ stroke:#fff; stroke-width:.6; }
-    .node.fixed circle{ stroke:var(--ok); stroke-width:1.6; }
-    .label{ pointer-events:none; }
-    .label text{ font-size:12px; font-weight:600; }
-    .label .shadow{ paint-order: stroke; stroke:#000; stroke-opacity:.75; stroke-width:3.5; }
-    .label .pill{ fill:var(--label-pill); fill-opacity:.9; stroke:rgba(255,255,255,.2); stroke-width:.6; rx:6; ry:6; }
-    .tooltip{
-      position:absolute; pointer-events:none; transform:translate(-50%, calc(-100% - 14px));
-      background:#0b1330; color:#e7ecff; border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:8px 10px; white-space:nowrap; box-shadow: 0 10px 35px rgba(0,0,0,.4);
-    }
-    .tooltip::after{
-      content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
-      border:7px solid transparent; border-top-color:rgba(255,255,255,.15);
-    }
-    .minimap{ position:absolute; right:14px; bottom:14px; width:180px; height:120px; background:#0b1330; border:1px solid rgba(255,255,255,.12); border-radius:8px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
-    .badge{ background:#0e1838; border:1px solid rgba(255,255,255,.1); padding:2px 6px; border-radius:6px; font-size:11px; color:#c9d4ff; }
-    .muted{ color:#9bb2ff; }
-    a{ color:#c3d2ff; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,.2) }
-    a:hover{ color:#fff; border-bottom-color:#fff }
-    .dropzone{ border:1px dashed rgba(255,255,255,.3); border-radius:10px; padding:10px; text-align:center; background:rgba(255,255,255,.03); }
-    .dropzone.drag{ border-color:#ffd166; background:rgba(255,209,102,.08); }
+    *{box-sizing:border-box;}
+    html,body{margin:0;height:100%;background:radial-gradient(1200px 900px at 12% -10%, #1b2550 0%, var(--bg) 62%);color:var(--ink);font:14px/1.45 "Inter",system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;overflow:hidden;}
+    #app{display:grid;height:100%;grid-template-columns:340px minmax(0,1fr) 320px;grid-template-rows:auto 1fr auto;gap:0;}
+    header{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(6px);background:rgba(8,12,32,.55);} 
+    header h1{margin:0;font-size:18px;letter-spacing:.4px;}
+    header .pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--panel-border);color:var(--muted);font-size:12px;}
+    .btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;}
+    button{border:none;cursor:pointer;padding:8px 12px;border-radius:10px;font-size:13px;background:#101a3d;color:var(--ink);border:1px solid rgba(255,255,255,.12);display:inline-flex;align-items:center;gap:6px;transition:all .2s ease;}
+    button:hover{border-color:rgba(255,255,255,.35);}
+    button.primary{background:linear-gradient(180deg,#1f2f70,#0f1732);border-color:#4050a8;}
+    aside.sidebar, aside.details{padding:14px;overflow:auto;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));border-right:1px solid rgba(255,255,255,.08);}
+    aside.details{border-right:none;border-left:1px solid rgba(255,255,255,.08);}
+    .panel{background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 12px 40px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05);}
+    .panel h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.35px;color:#c9d4ff;}
+    .controls label{display:block;margin:6px 0;font-size:12px;color:#b7c4ff;letter-spacing:.2px;}
+    .controls input[type="text"],
+    .controls input[type="number"],
+    .controls select{width:100%;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0b1330;color:var(--ink);outline:none;}
+    .controls input[type="range"]{width:100%;}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border-radius:999px;background:#121b3d;border:1px solid rgba(255,255,255,.12);font-size:12px;cursor:pointer;}
+    .chip.off{opacity:.35;border-style:dashed;}
+    .chip .swatch{width:12px;height:12px;border-radius:50%;display:inline-block;}
+    .check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;}
+    .check-grid label{display:flex;align-items:center;gap:8px;margin:0;background:#121b3d;border:1px solid rgba(255,255,255,.1);padding:6px 8px;border-radius:10px;cursor:pointer;}
+    .check-grid input{margin:0;accent-color:var(--accent2);}
+    #canvasWrap{position:relative;grid-column:2;grid-row:2;}
+    svg{width:100%;height:100%;display:block;}
+    .link{stroke:var(--link);stroke-opacity:.25;}
+    .link.hidden{opacity:0;pointer-events:none;}
+    .node{cursor:pointer;}
+    .node circle{stroke:#fff;stroke-width:.7;}
+    .node.fixed circle{stroke:var(--ok);stroke-width:1.8;}
+    .node.dimmed{opacity:0.15;}
+    .link.dimmed{stroke-opacity:0.05;}
+    .label{pointer-events:none;}
+    .label text{font-size:12px;font-weight:600;}
+    .label .shadow{paint-order:stroke;stroke:#000;stroke-opacity:.7;stroke-width:3.2;}
+    .label-pill{fill:var(--label-pill);fill-opacity:.88;stroke:rgba(255,255,255,.18);stroke-width:.6;rx:6;ry:6;}
+    .tooltip{position:absolute;pointer-events:none;background:#0e1636;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:10px 12px;color:var(--ink);box-shadow:0 16px 40px rgba(0,0,0,.4);min-width:220px;display:none;}
+    .tooltip h4{margin:0 0 4px;font-size:14px;}
+    .tooltip .meta{font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;flex-wrap:wrap;gap:6px;}
+    .tooltip .kv{display:flex;justify-content:space-between;font-size:12px;}
+    .tooltip a{color:#c7d6ff;text-decoration:none;border-bottom:1px dashed rgba(255,255,255,.3);} 
+    .tooltip a:hover{color:#fff;border-bottom-color:#fff;}
+    .minimap{position:absolute;right:16px;bottom:16px;width:200px;height:130px;background:#0d1230;border:1px solid rgba(255,255,255,.14);border-radius:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);}
+    footer{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.08);padding:8px 14px;background:rgba(8,12,32,.65);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);}
+    .neighbors{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow:auto;padding-right:4px;}
+    .neighbors .group{border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px;background:#121c3e;}
+    .neighbors .group h4{margin:0 0 6px;font-size:12px;color:#d7e1ff;text-transform:uppercase;letter-spacing:.35px;}
+    .neighbors ul{margin:0;padding-left:16px;font-size:12px;color:var(--ink);}
+    .neighbors li{margin-bottom:3px;}
+    .badge{display:inline-flex;align-items:center;padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.2);font-size:11px;color:#d3ddff;background:#111a36;}
+    .muted{color:var(--muted);}
+    .stats-line{font-size:12px;color:#c9d4ff;margin-top:4px;}
+    .flex{display:flex;gap:10px;align-items:center;}
+    .range-display{font-size:11px;color:#cbd6ff;margin-bottom:4px;display:flex;justify-content:space-between;}
+    #drop{border:1px dashed rgba(255,255,255,.3);border-radius:10px;padding:12px;text-align:center;color:var(--muted);}
+    #drop.drag{border-color:var(--accent2);color:#fff;background:rgba(255,209,102,.12);}
   </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <h1>Interactive Royal Network</h1>
+    <h1>Royal Network Intelligence</h1>
     <span class="pill">D3 v7</span>
     <span id="stats" class="pill">—</span>
-    <div style="margin-left:auto" class="btn-row">
-      <button class="btn" id="btnFit" title="Zoom to fit">Fit</button>
-      <button class="btn" id="btnFreeze" title="Freeze/unfreeze nodes">Freeze</button>
-      <button class="btn" id="btnReset" title="Reset positions">Reset</button>
-      <label class="btn">
-        Load files… <input id="fileInput" type="file" accept=".json,.graphml,.xml" multiple style="display:none">
-      </label>
+    <div class="btn-row">
+      <button class="primary" id="btnFit">Fit</button>
+      <button id="btnResetView">Reset View</button>
+      <button id="btnFreeze">Freeze</button>
+      <button id="btnUnpin">Unpin All</button>
+      <button id="btnReveal">Play Reveal</button>
+      <label class="btn" style="margin-left:4px;">Load…<input id="fileInput" type="file" accept=".json,.graphml,.xml" multiple style="display:none"></label>
     </div>
   </header>
-  <div class="left">
+  <aside class="sidebar">
     <div class="panel">
-      <h3>Labels</h3>
+      <h3>Search & Focus</h3>
       <div class="controls">
-        <label>Mode</label>
+        <label for="searchInput">Search people or titles</label>
+        <input id="searchInput" type="text" placeholder="Type ≥2 chars, press Enter…" autocomplete="off">
+        <div id="searchResults" class="muted" style="margin-top:6px;min-height:16px;"></div>
+        <div class="flex" style="margin-top:10px;">
+          <button id="btnClear">Clear</button>
+          <button id="btnExportPath" title="Export highlighted path" style="display:none;">Export Path</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Filters</h3>
+      <div class="controls">
+        <label>Color by</label>
+        <select id="colorMode">
+          <option value="role">Role</option>
+          <option value="country">Country</option>
+          <option value="community_id">Community</option>
+        </select>
+        <label>Size nodes by</label>
+        <select id="sizeMode">
+          <option value="power_score">Power score</option>
+          <option value="degree">Degree</option>
+          <option value="betweenness_centrality">Betweenness</option>
+        </select>
+        <div class="range-display"><span>Min degree</span><span id="degVal">0</span></div>
+        <input id="degreeMin" type="range" min="0" max="10" step="1" value="0">
+        <div class="range-display"><span>Min power</span><span id="powerVal">0.0</span></div>
+        <input id="powerMin" type="range" min="0" max="1" step="0.01" value="0">
+        <div class="range-display"><span>Timeline window</span><span id="timeVal">All years</span></div>
+        <input id="timeStart" type="range" min="1900" max="2025" step="1" value="1900">
+        <input id="timeEnd" type="range" min="1900" max="2025" step="1" value="2025">
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button id="btnResetFilters">Reset filters</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Roles</h3>
+      <div id="roleLegend" class="chips"></div>
+    </div>
+    <div class="panel">
+      <h3>Countries</h3>
+      <div id="countryFilters" class="check-grid"></div>
+    </div>
+    <div class="panel">
+      <h3>Layers & Edge Types</h3>
+      <div id="layerFilters" class="check-grid" style="margin-bottom:10px;"></div>
+      <div id="typeFilters" class="check-grid"></div>
+    </div>
+    <div class="panel">
+      <h3>Labels & Layout</h3>
+      <div class="controls">
+        <label for="labelMode">Label mode</label>
         <select id="labelMode">
-          <option value="auto">Auto (important only)</option>
+          <option value="auto">Auto</option>
           <option value="all">All</option>
           <option value="none">None</option>
         </select>
-        <label>Size</label>
-        <input id="labelSize" type="range" min="10" max="22" step="1" value="12">
-        <label class="check"><input id="togglePills" type="checkbox" checked> Label pills (high contrast)</label>
-        <label class="check"><input id="toggleHighContrast" type="checkbox" checked> Force high-contrast text</label>
-        <label class="check"><input id="toggleZoomAware" type="checkbox" checked> Zoom-aware label scaling</label>
-      </div>
-    </div>
-    <div class="panel">
-      <h3>Search &amp; Filter</h3>
-      <div class="controls">
-        <label>Find a node</label>
-        <input id="q" type="text" placeholder="Type a name… (Enter to select)" list="nodeList">
-        <datalist id="nodeList"></datalist>
-        <label>Minimum degree <span id="mindegDisplay" class="badge">0</span></label>
-        <input id="minDegree" type="range" min="0" max="20" step="1" value="0">
-      </div>
-    </div>
-    <div class="panel">
-      <h3>Layout</h3>
-      <div class="controls">
-        <label>Link distance <span id="ldisplay" class="badge">90</span></label>
-        <input id="linkDist" type="range" min="30" max="250" step="5" value="90">
-        <label>Charge strength <span id="cdisplay" class="badge">-700</span></label>
-        <input id="charge" type="range" min="-2000" max="-50" step="10" value="-700">
-        <label>Node size by</label>
-        <select id="sizeBy">
-          <option value="degree">Degree</option>
-          <option value="fixed">Fixed</option>
-        </select>
-      </div>
-    </div>
-    <div class="panel">
-      <h3>Legend</h3>
-      <div id="legend" class="legend"></div>
-    </div>
-    <div class="panel">
-      <h3>Export</h3>
-      <div class="btn-row" style="margin-top:4px">
-        <button class="btn primary" id="btnExportPNG">Export PNG</button>
-        <button class="btn" id="btnExportJSON">Export JSON</button>
+        <label for="labelSize">Label size</label>
+        <input id="labelSize" type="range" min="10" max="26" value="14">
+        <label class="check"><input id="togglePills" type="checkbox" checked> High-contrast pills</label>
+        <label class="check"><input id="toggleZoomAware" type="checkbox" checked> Zoom-aware text scaling</label>
+        <label for="linkDist">Link distance <span class="badge" id="linkDistVal">120</span></label>
+        <input id="linkDist" type="range" min="30" max="260" step="5" value="120">
+        <label for="charge">Charge strength <span class="badge" id="chargeVal">-700</span></label>
+        <input id="charge" type="range" min="-2000" max="-80" step="20" value="-700">
       </div>
     </div>
     <div class="panel">
       <h3>Data</h3>
-      <div class="dropzone" id="drop">Drop <b>nodes.json</b> and <b>graph.graphml</b> (and optional <b>legend.json</b>) here.</div>
-      <div class="muted" style="margin-top:8px">Or place the files next to this HTML and use the button above.</div>
+      <div id="drop">Drop nodes/edges/legend here to override.</div>
     </div>
-  </div>
+  </aside>
   <div id="canvasWrap">
     <svg id="svg" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -162,30 +186,89 @@
       <g id="zoomLayer">
         <g class="links"></g>
         <g class="nodes"></g>
-        <g class="labelPills"></g>
+        <g class="label-pills"></g>
         <g class="labels"></g>
       </g>
     </svg>
-    <canvas class="minimap" id="minimap"></canvas>
-    <div class="tooltip" id="tip" style="display:none"></div>
+    <canvas id="minimap" class="minimap"></canvas>
+    <div id="tooltip" class="tooltip"></div>
   </div>
-  <div class="footer">
-    <div>Tip: Hover to highlight ego-network • Ctrl/Cmd+Click to pin • Double-click to unpin</div>
-    <div id="sel" class="muted">—</div>
-  </div>
+  <aside class="details">
+    <div class="panel" id="detailsPanel">
+      <h3>Details</h3>
+      <div id="detailsContent" class="muted">Click a node to inspect their network relationships.</div>
+    </div>
+    <div class="panel">
+      <h3>Export</h3>
+      <div class="btn-row" style="margin-top:4px;">
+        <button class="primary" id="btnExportPNG">Export PNG</button>
+        <button id="btnExportSVG">Export SVG</button>
+        <button id="btnExportJSON">Export subgraph</button>
+      </div>
+    </div>
+  </aside>
+  <footer>
+    <div>Hover to preview, click to focus. Drag nodes to pin; double-click to unpin. Ctrl/Cmd+Click toggles pin without drag.</div>
+    <div id="status" class="stats-line">Ready.</div>
+  </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script>
+const CONFIG = {
+  minRadius: 6,
+  maxRadius: 28,
+  highlightFade: 0.12,
+  minimap: { enabled: true },
+  reveal: { delay: 500, maxDepth: 3 },
+  storageKey: 'royal-network-pins-v1',
+  roleColors: {
+    monarch: '#ffd166',
+    royal_family: '#7aa2ff',
+    politician: '#ff7a7a',
+    business_elite: '#7affc5',
+    military: '#ff9f7a',
+    cleric: '#c17aff',
+    bureaucrat: '#c7d6ff',
+    other: '#6f7a99'
+  },
+  layerStyles: {
+    royal: { stroke: '#7aa2ff', opacity: 0.45 },
+    business: { stroke: '#7affc5', opacity: 0.38 },
+    political: { stroke: '#ff7a7a', opacity: 0.38 },
+    ngo: { stroke: '#c7d6ff', opacity: 0.28 },
+    other: { stroke: '#596080', opacity: 0.18 }
+  },
+  edgeTypeStyles: {
+    family: { strokeWidth: 1.6, dasharray: '1,0' },
+    marriage: { strokeWidth: 2.2, dasharray: '2,2' },
+    business: { strokeWidth: 1.3, dasharray: '6,4' },
+    political: { strokeWidth: 1.5, dasharray: '4,2' },
+    ngo: { strokeWidth: 1.1, dasharray: '2,4' },
+    unknown: { strokeWidth: 0.8, dasharray: '1,6' }
+  },
+  forces: {
+    link: { base: 140, min: 40, weightFactor: 12 },
+    charge: -700
+  }
+};
+
 const state = {
-  raw: { nodes: [], links: [], nodeIndex: new Map() },
-  data: { nodes: [], links: [] },
-  sizeBy: 'degree',
+  raw: { nodes: [], links: [], nodeById: new Map(), adjacency: new Map(), neighbors: new Map() },
+  filtered: { nodes: [], links: [] },
+  filters: { roles: new Set(), countries: new Set(), layers: new Set(), edgeTypes: new Set(), degree: [0, Infinity], power: [0], yearRange: [null, null] },
+  ranges: { degree: [0, 1], power: [0, 1], years: [null, null] },
   labelMode: 'auto',
-  settings: { pills:true, highContrast:true, zoomAware:true, labelSize:12 },
-  fixed: false,
-  legend: null,
-  filters: { minDegree: 0 },
+  labelSize: 14,
+  colorMode: 'role',
+  sizeMode: 'power_score',
+  simulation: null,
+  zoom: null,
+  sizeScale: d3.scaleLinear().range([CONFIG.minRadius, CONFIG.maxRadius]),
+  searchIndex: [],
+  highlight: { node: null, neighbors: new Set(), links: new Set(), path: [] },
+  pinned: new Set(),
+  reveal: { active: false, depth: 0, schedule: null, depths: new Map() }
 };
 
 const svg = d3.select('#svg');
@@ -193,537 +276,1203 @@ const gZoom = d3.select('#zoomLayer');
 const gLinks = svg.select('.links');
 const gNodes = svg.select('.nodes');
 const gLabels = svg.select('.labels');
-const gLabelPills = svg.select('.labelPills');
-const tip = d3.select('#tip');
-const stats = d3.select('#stats');
-const sel = d3.select('#sel');
+const gPills = svg.select('.label-pills');
+const tooltip = d3.select('#tooltip');
 const minimap = document.getElementById('minimap');
 const mctx = minimap.getContext('2d');
-const datalist = document.getElementById('nodeList');
+const statsLabel = d3.select('#stats');
+const statusLine = d3.select('#status');
 
-const minDegSlider = document.getElementById('minDegree');
-const minDegDisplay = document.getElementById('mindegDisplay');
-
-let width = svg.node().clientWidth, height = svg.node().clientHeight;
-let simulation, zoom;
+let width = svg.node().clientWidth;
+let height = svg.node().clientHeight;
+svg.attr('viewBox', [0, 0, width, height]);
 
 window.addEventListener('resize', () => {
-  width = svg.node().clientWidth; height = svg.node().clientHeight;
-  svg.attr('viewBox', [0,0,width,height]);
+  width = svg.node().clientWidth;
+  height = svg.node().clientHeight;
+  svg.attr('viewBox', [0, 0, width, height]);
   drawMinimap();
 });
-svg.attr('viewBox', [0,0,width,height]);
 
-function colorScale(keys){
-  const palette = d3.schemeTableau10.concat(d3.schemeSet3);
-  return d3.scaleOrdinal().domain(keys).range(keys.map((k,i)=> palette[i % palette.length]));
+function safeLocalStorage(fn) {
+  try { return fn(); } catch (err) { return null; }
 }
 
-function deriveUrl(n){
-  if(n.url) return n.url;
-  if(/^Q\d+/.test(n.id)) return `https://www.wikidata.org/wiki/${n.id}`;
-  if(n.label){
-    const slug = n.label.replace(/\s+/g,'_');
-    return `https://en.wikipedia.org/wiki/${encodeURIComponent(slug)}`;
+function deriveUrl(node) {
+  if (node.url) return node.url;
+  if (/^Q\d+$/.test(node.id)) return `https://www.wikidata.org/wiki/${node.id}`;
+  if (node.label) {
+    const slug = encodeURIComponent(node.label.replace(/\s+/g, '_'));
+    return `https://en.wikipedia.org/wiki/${slug}`;
   }
   return '';
 }
 
-function computeDegrees(nodes, links, prop='degree'){
-  const deg = new Map();
-  links.forEach(e=>{
-    if(!e.sourceId||!e.targetId) return;
-    deg.set(e.sourceId, (deg.get(e.sourceId)||0)+1);
-    deg.set(e.targetId, (deg.get(e.targetId)||0)+1);
+function buildSearchIndex(nodes) {
+  state.searchIndex = nodes.map(node => {
+    const tokens = [node.label, node.description, node.role, node.country]
+      .concat(node.aliases || [])
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return { node, tokens };
   });
-  nodes.forEach(n=> n[prop] = deg.get(n.id)||0 );
 }
 
-function prepareRawData(nodes, links){
-  const preparedNodes = nodes.map(n=>{
-    const node = Object.assign({}, n);
-    node.label = node.label || node.id;
-    node.description = node.description || '';
-    node.url = deriveUrl(node);
-    return node;
+function initFilterState(nodes, links) {
+  const roles = new Set(nodes.map(n => n.role || 'other'));
+  state.filters.roles = new Set(roles);
+  const countries = new Set(nodes.map(n => n.country || 'Unknown'));
+  state.filters.countries = new Set(countries);
+  const layers = new Set(links.map(l => l.layer || 'other'));
+  state.filters.layers = new Set(layers);
+  const edgeTypes = new Set(links.map(l => l.type || 'unknown'));
+  state.filters.edgeTypes = new Set(edgeTypes);
+
+  const degExtent = d3.extent(nodes, d => d.degree || 0);
+  state.ranges.degree = [Math.floor(degExtent[0] || 0), Math.ceil(degExtent[1] || 1)];
+  const powerExtent = d3.extent(nodes, d => d.power_score ?? 0);
+  state.ranges.power = [Math.max(0, powerExtent[0] || 0), Math.min(1, powerExtent[1] || 1)];
+
+  const years = [];
+  nodes.forEach(n => { if (n.start_year) years.push(n.start_year); if (n.end_year) years.push(n.end_year); });
+  links.forEach(l => { if (l.start_year) years.push(l.start_year); if (l.end_year) years.push(l.end_year); });
+  if (years.length) {
+    state.ranges.years = [Math.min(...years), Math.max(...years)];
+  } else {
+    state.ranges.years = [null, null];
+  }
+  state.filters.degree = [state.ranges.degree[0], Infinity];
+  state.filters.power = [state.ranges.power[0]];
+  state.filters.yearRange = [...state.ranges.years];
+}
+
+function updateFilterControls() {
+  const [degMin, degMax] = state.ranges.degree;
+  const degSlider = document.getElementById('degreeMin');
+  degSlider.min = degMin;
+  degSlider.max = degMax;
+  degSlider.value = state.filters.degree[0];
+  document.getElementById('degVal').textContent = state.filters.degree[0];
+
+  const powerSlider = document.getElementById('powerMin');
+  powerSlider.min = 0;
+  powerSlider.max = 1;
+  powerSlider.step = 0.01;
+  powerSlider.value = state.filters.power[0];
+  document.getElementById('powerVal').textContent = state.filters.power[0].toFixed(2);
+
+  const [yearMin, yearMax] = state.ranges.years;
+  const timeStart = document.getElementById('timeStart');
+  const timeEnd = document.getElementById('timeEnd');
+  if (yearMin != null && yearMax != null) {
+    timeStart.min = yearMin;
+    timeStart.max = yearMax;
+    timeEnd.min = yearMin;
+    timeEnd.max = yearMax;
+    if (state.filters.yearRange[0] == null) state.filters.yearRange[0] = yearMin;
+    if (state.filters.yearRange[1] == null) state.filters.yearRange[1] = yearMax;
+    timeStart.value = state.filters.yearRange[0];
+    timeEnd.value = state.filters.yearRange[1];
+    document.getElementById('timeVal').textContent = `${state.filters.yearRange[0]} – ${state.filters.yearRange[1]}`;
+  } else {
+    document.getElementById('timeVal').textContent = 'All years';
+    timeStart.disabled = true;
+    timeEnd.disabled = true;
+  }
+}
+
+function renderRoleLegend(roles) {
+  const container = document.getElementById('roleLegend');
+  container.innerHTML = '';
+  roles.forEach(role => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.dataset.role = role;
+    chip.innerHTML = `<span class="swatch" style="background:${colorForRole(role)}"></span>${role}`;
+    container.appendChild(chip);
   });
-  const preparedLinks = links.map((l,i)=>({
-    id: l.id || `e${i}`,
-    sourceId: l.source || l.sourceId,
-    targetId: l.target || l.targetId,
-    weight: l.weight || 1
+}
+
+function renderCheckGrid(containerId, items, type) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  items.forEach(item => {
+    const id = `${containerId}-${item.replace(/[^a-z0-9]+/gi,'-')}`;
+    const label = document.createElement('label');
+    label.innerHTML = `<input type="checkbox" id="${id}" data-${type}="${item}" checked> <span>${item}</span>`;
+    container.appendChild(label);
+  });
+}
+
+function colorForRole(role) {
+  return CONFIG.roleColors[role] || CONFIG.roleColors.other;
+}
+
+function colorForCountry(country) {
+  const palette = d3.schemeTableau10.concat(d3.schemeSet3);
+  const hash = country.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  return palette[Math.abs(hash) % palette.length];
+}
+
+function colorForCommunity(id) {
+  const palette = d3.schemeCategory10.concat(d3.schemeSet3);
+  const idx = Math.abs(parseInt(id, 10)) || 0;
+  return palette[idx % palette.length];
+}
+
+function nodeColor(node) {
+  if (state.colorMode === 'country') return colorForCountry(node.country || 'Unknown');
+  if (state.colorMode === 'community_id') return colorForCommunity(node.community_id || 0);
+  return colorForRole(node.role || 'other');
+}
+
+function nodeRadius(node) {
+  const metric = state.sizeMode;
+  const value = Number(node[metric]) || 0;
+  const domain = d3.extent(state.filtered.nodes, d => Number(d[metric]) || 0);
+  if (!domain[0] && !domain[1]) {
+    return CONFIG.minRadius;
+  }
+  state.sizeScale.domain([domain[0] || 0, domain[1] || 1]);
+  return state.sizeScale(value || 0);
+}
+
+function updateStats() {
+  const n = state.filtered.nodes.length;
+  const m = state.filtered.links.length;
+  statsLabel.text(`${n} nodes • ${m} links`);
+}
+
+function buildAdjacency(links) {
+  const adjacency = new Map();
+  const neighborEdges = new Map();
+  links.forEach(link => {
+    if (!adjacency.has(link.sourceId)) adjacency.set(link.sourceId, new Set());
+    if (!adjacency.has(link.targetId)) adjacency.set(link.targetId, new Set());
+    adjacency.get(link.sourceId).add(link.targetId);
+    adjacency.get(link.targetId).add(link.sourceId);
+    const keyForward = `${link.sourceId}__${link.targetId}`;
+    const keyReverse = `${link.targetId}__${link.sourceId}`;
+    if (!neighborEdges.has(keyForward)) neighborEdges.set(keyForward, []);
+    if (!neighborEdges.has(keyReverse)) neighborEdges.set(keyReverse, []);
+    neighborEdges.get(keyForward).push(link);
+    neighborEdges.get(keyReverse).push(link);
+  });
+  state.raw.adjacency = adjacency;
+  state.raw.neighbors = neighborEdges;
+}
+
+function prepareData(nodes, links) {
+  const preparedNodes = nodes.map(n => ({
+    ...n,
+    id: String(n.id),
+    label: n.label || n.name || n.id,
+    description: n.description || '',
+    url: deriveUrl(n),
+    role: n.role || 'other',
+    country: n.country || 'Unknown',
+    power_score: Number(n.power_score ?? 0),
+    degree: Number(n.degree ?? 0),
+    start_year: n.start_year ? Number(n.start_year) : null,
+    end_year: n.end_year ? Number(n.end_year) : null
   }));
-  const nodeIndex = new Map(preparedNodes.map(n=>[n.id, n]));
-  state.raw = { nodes: preparedNodes, links: preparedLinks, nodeIndex };
-  computeDegrees(preparedNodes, preparedLinks, 'degreeRaw');
+
+  const nodeById = new Map(preparedNodes.map(n => [n.id, n]));
+
+  const preparedLinks = links
+    .map((l, idx) => ({
+      id: l.id || `e${idx}`,
+      sourceId: String(l.source),
+      targetId: String(l.target),
+      weight: Number(l.weight || 1),
+      type: l.type || 'unknown',
+      layer: l.layer || 'other',
+      start_year: l.start_year ? Number(l.start_year) : null,
+      end_year: l.end_year ? Number(l.end_year) : null,
+      raw: l
+    }))
+    .filter(l => nodeById.has(l.sourceId) && nodeById.has(l.targetId));
+
+  state.raw = { nodes: preparedNodes, links: preparedLinks, nodeById, adjacency: new Map(), neighbors: new Map() };
+  buildAdjacency(preparedLinks);
+  buildSearchIndex(preparedNodes);
+  initFilterState(preparedNodes, preparedLinks);
+  updateFilterControls();
+  renderRoleLegend(Array.from(state.filters.roles));
+  renderCheckGrid('countryFilters', Array.from(state.filters.countries).sort(), 'country');
+  renderCheckGrid('layerFilters', Array.from(state.filters.layers).sort(), 'layer');
+  renderCheckGrid('typeFilters', Array.from(state.filters.edgeTypes).sort(), 'type');
   applyFilters();
+  bindDynamicEvents();
 }
 
-function applyFilters(){
-  const minDeg = state.filters.minDegree || 0;
-  const nodes = state.raw.nodes.filter(n=> (n.degreeRaw||0) >= minDeg);
-  const nodeSet = new Set(nodes.map(n=>n.id));
-  const links = state.raw.links
-    .filter(l=> nodeSet.has(l.sourceId) && nodeSet.has(l.targetId))
-    .map(l=>({
-      id:l.id,
-      weight:l.weight,
-      source: state.raw.nodeIndex.get(l.sourceId),
-      target: state.raw.nodeIndex.get(l.targetId),
-      sourceId:l.sourceId,
-      targetId:l.targetId
-    }));
-  state.data = { nodes, links };
-  computeDegrees(nodes, links, 'degree');
-  updateSearchList();
+function overlapsRange(start, end, min, max) {
+  if (min == null || max == null) return true;
+  const from = start ?? min;
+  const to = end ?? max;
+  return to >= min && from <= max;
 }
 
-function updateSearchList(){
-  datalist.innerHTML = '';
-  const frag = document.createDocumentFragment();
-  state.data.nodes.slice().sort((a,b)=>(a.label||a.id).localeCompare(b.label||b.id)).forEach(n=>{
-    const opt = document.createElement('option'); opt.value = n.label || n.id; frag.appendChild(opt);
+function applyFilters() {
+  const roleAllow = state.filters.roles;
+  const countryAllow = state.filters.countries;
+  const layerAllow = state.filters.layers;
+  const typeAllow = state.filters.edgeTypes;
+  const degMin = state.filters.degree[0] || 0;
+  const powerMin = state.filters.power[0] || 0;
+  const [yearMin, yearMax] = state.filters.yearRange;
+
+  const nodes = state.raw.nodes.filter(n => {
+    if (roleAllow.size && !roleAllow.has(n.role)) return false;
+    if (countryAllow.size && !countryAllow.has(n.country)) return false;
+    if ((n.degree || 0) < degMin) return false;
+    if ((n.power_score || 0) < powerMin) return false;
+    if (!overlapsRange(n.start_year, n.end_year, yearMin, yearMax)) return false;
+    return true;
   });
-  datalist.appendChild(frag);
-}
+  const nodeSet = new Set(nodes.map(n => n.id));
 
-function nodeSize(n){
-  if(state.sizeBy==='fixed') return 8;
-  return 4 + Math.pow(n.degree||1, 0.6) * 2.2;
-}
-
-// Contrast helpers
-function luminance(r,g,b){
-  const a=[r,g,b].map(v=>{
-    v/=255;
-    return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+  const links = state.raw.links.filter(l => {
+    if (!nodeSet.has(l.sourceId) || !nodeSet.has(l.targetId)) return false;
+    if (layerAllow.size && !layerAllow.has(l.layer)) return false;
+    if (typeAllow.size && !typeAllow.has(l.type)) return false;
+    if (!overlapsRange(l.start_year, l.end_year, yearMin, yearMax)) return false;
+    return true;
   });
-  return a[0]*0.2126 + a[1]*0.7152 + a[2]*0.0722;
-}
-function contrast(rgb1, rgb2){
-  const L1=luminance(rgb1[0],rgb1[1],rgb1[2]);
-  const L2=luminance(rgb2[0],rgb2[1],rgb2[2]);
-  const L=Math.max(L1,L2), s=Math.min(L1,L2);
-  return (L+0.05)/(s+0.05);
-}
-function hexToRgb(hex){
-  hex=hex.replace('#','');
-  if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
-  const num=parseInt(hex,16);
-  return [(num>>16)&255,(num>>8)&255,num&255];
-}
-function ensureHighContrast(textHex, bgHex){
-  const t = hexToRgb(textHex), b = hexToRgb(bgHex);
-  const c = contrast(t,b);
-  if(c >= 4.5) return textHex;
-  const white = [255,255,255], black=[0,0,0];
-  const whiteC = contrast(white,b), blackC = contrast(black,b);
-  return whiteC >= blackC ? '#ffffff' : '#000000';
+
+  state.filtered = { nodes, links };
+  updateStats();
+  refreshLegendState();
+  renderGraph();
 }
 
-function updateStats(){
-  const n = state.data.nodes.length, m = state.data.links.length;
-  stats.textContent = `${n} nodes • ${m} links`;
+function refreshLegendState() {
+  const container = document.getElementById('roleLegend');
+  Array.from(container.children).forEach(chip => {
+    const role = chip.dataset.role;
+    if (!state.filters.roles.has(role)) {
+      chip.classList.add('off');
+    } else {
+      chip.classList.remove('off');
+    }
+  });
+
+  const updateCheckGrid = (containerId, allowed, attr) => {
+    document.querySelectorAll(`#${containerId} input`).forEach(input => {
+      const value = input.dataset[attr];
+      input.checked = allowed.has(value);
+    });
+  };
+  updateCheckGrid('countryFilters', state.filters.countries, 'country');
+  updateCheckGrid('layerFilters', state.filters.layers, 'layer');
+  updateCheckGrid('typeFilters', state.filters.edgeTypes, 'type');
 }
 
-// NEW: startSim implementation
-function startSim(onTick){
-  if (simulation) simulation.stop();
+function edgeStyle(link) {
+  const layerStyle = CONFIG.layerStyles[link.layer] || CONFIG.layerStyles.other;
+  const typeStyle = CONFIG.edgeTypeStyles[link.type] || CONFIG.edgeTypeStyles.unknown;
+  return {
+    stroke: layerStyle.stroke,
+    opacity: layerStyle.opacity,
+    strokeWidth: typeStyle.strokeWidth + (link.weight || 1) * 0.1,
+    dasharray: typeStyle.dasharray
+  };
+}
 
-  const linkDist = +document.getElementById('linkDist').value || 90;
-  const charge   = +document.getElementById('charge').value   || -700;
+function renderGraph() {
+  const links = gLinks.selectAll('path').data(state.filtered.links, d => d.id);
+  links.exit().remove();
+  links.enter().append('path')
+    .attr('class', 'link')
+    .merge(links)
+    .each(function(d){
+      const style = edgeStyle(d);
+      d3.select(this)
+        .attr('stroke', style.stroke)
+        .attr('stroke-opacity', style.opacity)
+        .attr('stroke-width', style.strokeWidth)
+        .attr('stroke-dasharray', style.dasharray);
+    });
 
-  simulation = d3.forceSimulation(state.data.nodes)
-    .force('link',
-      d3.forceLink(state.data.links)
-        .id(d => d.id)
-        .distance(linkDist)
-        .strength(0.6)
+  const nodes = gNodes.selectAll('.node').data(state.filtered.nodes, d => d.id);
+  nodes.exit().remove();
+  const nodeEnter = nodes.enter().append('g')
+    .attr('class', 'node')
+    .call(d3.drag()
+      .on('start', (event, d) => {
+        if (!event.active) state.simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on('drag', (event, d) => {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on('end', (event, d) => {
+        if (event.sourceEvent && (event.sourceEvent.ctrlKey || event.sourceEvent.metaKey)) {
+          togglePin(d);
+          return;
+        }
+        d.fx = event.x;
+        d.fy = event.y;
+        pinNode(d);
+        state.simulation.alphaTarget(0);
+      })
     )
+    .on('dblclick', (event, d) => {
+      d.fx = null;
+      d.fy = null;
+      unpinNode(d);
+    })
+    .on('mouseenter', (event, d) => showTooltip(event, d))
+    .on('mousemove', moveTooltip)
+    .on('mouseleave', hideTooltip)
+    .on('click', (event, d) => {
+      event.stopPropagation();
+      focusNode(d);
+    });
+
+  nodeEnter.append('circle')
+    .attr('r', d => nodeRadius(d))
+    .attr('fill', d => nodeColor(d))
+    .attr('filter', 'url(#glow)');
+
+  nodeEnter.append('text')
+    .attr('class', 'badge')
+    .attr('y', d => -nodeRadius(d) - 4)
+    .attr('text-anchor', 'middle')
+    .text(d => (d.power_score ? d.power_score.toFixed(2) : ''))
+    .style('display', d => d.power_score >= 0.5 ? 'block' : 'none');
+
+  nodes.merge(nodeEnter).classed('fixed', d => d.fx != null && d.fy != null);
+  nodes.merge(nodeEnter).select('circle')
+    .attr('r', d => nodeRadius(d))
+    .attr('fill', d => nodeColor(d));
+
+  const labels = gLabels.selectAll('g.label').data(labelCandidates(), d => d.id);
+  labels.exit().remove();
+  const labelEnter = labels.enter().append('g').attr('class', 'label');
+  labelEnter.append('text').attr('class', 'shadow').text(d => d.label);
+  labelEnter.append('text').attr('class', 'fg').text(d => d.label);
+
+  const pills = gPills.selectAll('rect').data(labelCandidates(), d => d.id);
+  pills.exit().remove();
+  pills.enter().append('rect').attr('class', 'label-pill');
+
+  startSimulation();
+  updateFocusStyles();
+  drawMinimap();
+}
+
+function labelCandidates() {
+  if (state.labelMode === 'none') return [];
+  if (state.labelMode === 'all') return state.filtered.nodes;
+  const sorted = state.filtered.nodes.slice().sort((a, b) => (b.power_score || 0) - (a.power_score || 0));
+  const maxLabels = Math.min(80, Math.ceil(sorted.length * 0.3));
+  return sorted.slice(0, maxLabels);
+}
+
+function startSimulation() {
+  if (state.simulation) state.simulation.stop();
+  const linkDistance = Number(document.getElementById('linkDist').value) || CONFIG.forces.link.base;
+  const charge = Number(document.getElementById('charge').value) || CONFIG.forces.charge;
+
+  state.simulation = d3.forceSimulation(state.filtered.nodes)
+    .force('link', d3.forceLink(state.filtered.links)
+      .id(d => d.id)
+      .distance(link => Math.max(CONFIG.forces.link.min, linkDistance - (link.weight || 1) * CONFIG.forces.link.weightFactor))
+      .strength(0.6))
     .force('charge', d3.forceManyBody().strength(charge))
     .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collide', d3.forceCollide().radius(d => nodeSize(d) + 2).iterations(2))
-    .on('tick', onTick);
+    .force('collision', d3.forceCollide().radius(d => nodeRadius(d) + 4))
+    .on('tick', ticked);
 }
 
-// Minimap renderer
-function drawMinimap(){
-  const nodes = state.data.nodes;
-  const links = state.data.links;
-  const w = minimap.width, h = minimap.height;
-  mctx.clearRect(0,0,w,h);
-  if(!nodes.length) return;
+function ticked() {
+  gLinks.selectAll('path')
+    .attr('d', d => `M${d.source.x},${d.source.y} L${d.target.x},${d.target.y}`);
 
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-  nodes.forEach(n=>{
-    if(n.x == null || n.y == null) return;
-    if(n.x < minX) minX = n.x;
-    if(n.x > maxX) maxX = n.x;
-    if(n.y < minY) minY = n.y;
-    if(n.y > maxY) maxY = n.y;
+  gNodes.selectAll('.node').attr('transform', d => `translate(${d.x},${d.y})`);
+
+  const labelSize = state.labelSize;
+  const zoomK = d3.zoomTransform(svg.node()).k;
+  const size = state.settingsZoomAware ? Math.max(10, Math.min(26, labelSize * (1 + (zoomK - 1) * 0.35))) : labelSize;
+
+  const candidates = new Map(labelCandidates().map(n => [n.id, n]));
+
+  gLabels.selectAll('g.label').each(function(d){
+    if (!candidates.has(d.id)) {
+      d3.select(this).style('display', 'none');
+      return;
+    }
+    d3.select(this).style('display', null);
+    const node = candidates.get(d.id);
+    d3.select(this)
+      .attr('transform', `translate(${node.x + nodeRadius(node) + 6},${node.y - nodeRadius(node) - 4})`)
+      .selectAll('text')
+      .style('font-size', `${size}px`);
   });
-  if(!isFinite(minX) || !isFinite(minY)) return;
+
+  const pillColor = getComputedStyle(document.documentElement).getPropertyValue('--label-pill').trim() || '#151e40';
+  const textColor = state.settingsHighContrast ? ensureHighContrast('#f1f5ff', pillColor) : '#f1f5ff';
+
+  gLabels.selectAll('text.fg').attr('fill', textColor);
+  if (state.settingsPills) {
+    gPills.selectAll('rect').style('display', null).each(function(d){
+      const node = candidates.get(d.id);
+      if (!node) {
+        d3.select(this).style('display', 'none');
+        return;
+      }
+      const label = gLabels.selectAll('g.label').filter(ld => ld.id === d.id).node();
+      if (!label) return;
+      const text = label.querySelector('text.fg');
+      if (!text) return;
+      const bb = text.getBBox();
+      d3.select(this)
+        .attr('x', node.x + nodeRadius(node) + 4)
+        .attr('y', node.y - nodeRadius(node) - bb.height - 6)
+        .attr('width', bb.width + 12)
+        .attr('height', bb.height + 6);
+    });
+  } else {
+    gPills.selectAll('rect').style('display', 'none');
+  }
+
+  if (CONFIG.minimap.enabled) drawMinimap();
+}
+
+state.settingsPills = true;
+state.settingsHighContrast = true;
+state.settingsZoomAware = true;
+
+function ensureHighContrast(textHex, bgHex){
+  function luminance(r,g,b){
+    const a=[r,g,b].map(v=>{v/=255;return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055,2.4);});
+    return a[0]*0.2126 + a[1]*0.7152 + a[2]*0.0722;
+  }
+  function contrast(rgb1,rgb2){
+    const L1=luminance(rgb1[0],rgb1[1],rgb1[2]);
+    const L2=luminance(rgb2[0],rgb2[1],rgb2[2]);
+    const L=Math.max(L1,L2),s=Math.min(L1,L2);
+    return (L+0.05)/(s+0.05);
+  }
+  function hexToRgb(hex){
+    hex=hex.replace('#','');
+    if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+    const num=parseInt(hex,16);
+    return [(num>>16)&255,(num>>8)&255,num&255];
+  }
+  const t=hexToRgb(textHex), b=hexToRgb(bgHex);
+  if(contrast(t,b)>=4.5) return textHex;
+  const white=[255,255,255], black=[0,0,0];
+  return contrast(white,b)>=contrast(black,b)? '#ffffff':'#000000';
+}
+
+function drawMinimap() {
+  if (!CONFIG.minimap.enabled) return;
+  const nodes = state.filtered.nodes;
+  if (!nodes.length) { mctx.clearRect(0,0,minimap.width,minimap.height); return; }
+  const links = state.filtered.links;
+  const w = minimap.width;
+  const h = minimap.height;
+  mctx.clearRect(0,0,w,h);
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  nodes.forEach(n => {
+    if (n.x == null || n.y == null) return;
+    if (n.x < minX) minX = n.x;
+    if (n.x > maxX) maxX = n.x;
+    if (n.y < minY) minY = n.y;
+    if (n.y > maxY) maxY = n.y;
+  });
+  if (!isFinite(minX) || !isFinite(minY)) return;
   const dx = maxX - minX || 1;
   const dy = maxY - minY || 1;
-  const pad = 6;
-  const sx = (w - 2*pad) / dx;
-  const sy = (h - 2*pad) / dy;
-  const s = Math.min(sx, sy);
-
+  const pad = 8;
+  const sx = (w - pad*2) / dx;
+  const sy = (h - pad*2) / dy;
+  const scale = Math.min(sx, sy);
   mctx.save();
-  mctx.fillStyle = '#050816';
+  mctx.fillStyle = '#050815';
   mctx.fillRect(0,0,w,h);
-  mctx.strokeStyle = 'rgba(255,255,255,0.12)';
-  mctx.strokeRect(0.5,0.5,w-1,h-1);
-
-  mctx.translate(
-    (w - s*dx)/2 - minX*s,
-    (h - s*dy)/2 - minY*s
-  );
-  mctx.scale(s,s);
-
-  // edges
-  mctx.strokeStyle = 'rgba(120,140,255,0.4)';
-  mctx.lineWidth = 0.5 / s;
+  mctx.translate((w - scale*dx)/2 - minX*scale, (h - scale*dy)/2 - minY*scale);
+  mctx.scale(scale, scale);
+  mctx.strokeStyle = 'rgba(130,150,255,0.4)';
+  mctx.lineWidth = 0.6 / scale;
   mctx.beginPath();
-  links.forEach(l=>{
-    if(!l.source || !l.target) return;
+  links.forEach(l => {
+    if (!l.source || !l.target) return;
     mctx.moveTo(l.source.x, l.source.y);
     mctx.lineTo(l.target.x, l.target.y);
   });
   mctx.stroke();
-
-  // nodes
   mctx.fillStyle = 'rgba(255,255,255,0.9)';
-  nodes.forEach(n=>{
-    if(n.x == null || n.y == null) return;
+  nodes.forEach(n => {
+    if (n.x == null || n.y == null) return;
     mctx.beginPath();
-    mctx.arc(n.x, n.y, 2/s, 0, Math.PI*2);
+    mctx.arc(n.x, n.y, 2/scale, 0, Math.PI*2);
     mctx.fill();
   });
-
+  const transform = d3.zoomTransform(svg.node());
+  const viewWidth = width / transform.k;
+  const viewHeight = height / transform.k;
+  mctx.strokeStyle = '#ffd166';
+  mctx.lineWidth = 1/scale;
+  mctx.strokeRect(transform.x * -1 / transform.k, transform.y * -1 / transform.k, viewWidth, viewHeight);
   mctx.restore();
 }
 
-function render(){
-  const groups = Array.from(new Set(state.data.nodes.map(n=> n.group || 'Other')));
-  const col = colorScale(groups);
-
-  const linkSel = gLinks.selectAll('path').data(state.data.links, d=>d.id);
-  linkSel.exit().remove();
-  linkSel.enter().append('path').attr('class','link')
-    .attr('stroke-width', d=> 0.7 + Math.min(4, (d.weight||1)));
-
-  const nodeSel = gNodes.selectAll('.node').data(state.data.nodes, d=>d.id);
-  nodeSel.exit().remove();
-  const nodeEnter = nodeSel.enter().append('g').attr('class','node')
-    .call(d3.drag()
-      .on('start', (event,d)=>{ if(!event.active) simulation.alphaTarget(0.2).restart(); d.fx = d.x; d.fy = d.y; })
-      .on('drag', (event,d)=>{ d.fx = event.x; d.fy = event.y; })
-      .on('end', (event,d)=>{ if(!state.fixed){ d.fx = null; d.fy = null; } }))
-    .on('mouseenter', (event,d)=>{
-      tip.style('display','block').html(
-        `<b>${d.label||d.id}</b>` +
-        (d.description? `<div class="muted">${d.description}</div>`:'' ) +
-        (d.url? `<div><a target="_blank" rel="noopener" href="${d.url}">Open ↗</a></div>`:'' )
-      );
-    })
-    .on('mousemove', (event)=> tip.style('left', (event.pageX)+'px').style('top', (event.pageY)+'px'))
-    .on('mouseleave', ()=> tip.style('display','none'))
-    .on('dblclick', (event,d)=>{ d.fx=null; d.fy=null; });
-
-  nodeEnter.append('circle')
-    .attr('r', d=> nodeSize(d))
-    .attr('fill', d=> col(d.group||'Other'))
-    .attr('class','halo');
-
-  nodeEnter.merge(nodeSel).select('circle')
-    .attr('r', d=> nodeSize(d))
-    .attr('fill', d=> col(d.group||'Other'));
-
-  const labelSel = gLabels.selectAll('g.label').data(state.data.nodes, d=>d.id);
-  labelSel.exit().remove();
-  const labelEnter = labelSel.enter().append('g').attr('class','label');
-  labelEnter.append('text').attr('class','shadow').text(d=>d.label||d.id);
-  labelEnter.append('text').attr('class','fg').text(d=>d.label||d.id);
-  const merged = labelEnter.merge(labelSel);
-
-  const pillSel = gLabelPills.selectAll('rect').data(state.data.nodes, d=>d.id);
-  pillSel.exit().remove();
-  pillSel.enter().append('rect').attr('class','pill').attr('rx',6).attr('ry',6);
-
-  function applyLabelStyles(){
-    const base = +document.getElementById('labelSize').value;
-    const k = d3.zoomTransform(svg.node()).k;
-    const size = state.settings.zoomAware ? Math.max(10, Math.min(26, base * (1 + (k-1)*0.35))) : base;
-    merged.selectAll('text').style('font-size', size+'px').style('font-weight','700');
-
-    const pillColor = getComputedStyle(document.documentElement).getPropertyValue('--label-pill').trim() || '#141d42';
-    const txt = state.settings.highContrast ? ensureHighContrast('#e6ecff', pillColor) : '#e6ecff';
-    merged.selectAll('text.fg').attr('fill', txt);
-    gLabelPills.style('display', state.settings.pills ? null : 'none');
+function showTooltip(event, node) {
+  const html = [`<h4>${node.label}</h4>`];
+  const meta = [];
+  if (node.role) meta.push(node.role.replace('_',' '));
+  if (node.country) meta.push(node.country);
+  html.push(`<div class="meta">${meta.join(' • ')}</div>`);
+  html.push(`<div class="kv"><span>Power score</span><strong>${(node.power_score || 0).toFixed(3)}</strong></div>`);
+  html.push(`<div class="kv"><span>Degree</span><strong>${node.degree || 0}</strong></div>`);
+  if (node.betweenness_centrality != null) {
+    html.push(`<div class="kv"><span>Betweenness</span><strong>${Number(node.betweenness_centrality).toFixed(4)}</strong></div>`);
   }
-  applyLabelStyles();
-
-  function ticked(){
-    gLinks.selectAll('path')
-      .attr('d', d=>{
-        const dx = d.target.x - d.source.x;
-        const dy = d.target.y - d.source.y;
-        const dr = Math.sqrt(dx*dx + dy*dy)*0.9;
-        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-      });
-    gNodes.selectAll('.node').attr('transform', d=>`translate(${d.x},${d.y})`);
-    merged.attr('transform', d=>`translate(${d.x+10},${d.y-10})`);
-
-    // Compute pill sizes around text
-    merged.each(function(d){
-      const t = d3.select(this).select('text.fg').node();
-      if(!t) return;
-      const bb = t.getBBox();
-      d._lb = { x: d.x+10-6, y: d.y-10-3, w: bb.width+10, h: bb.height+6 };
-    });
-    gLabelPills.selectAll('rect')
-      .attr('x', d=> d._lb ? d._lb.x : d.x)
-      .attr('y', d=> d._lb ? d._lb.y : d.y)
-      .attr('width', d=> d._lb ? d._lb.w : 0)
-      .attr('height', d=> d._lb ? d._lb.h : 0);
-
-    drawMinimap();
+  if (node.in_degree != null && node.out_degree != null) {
+    html.push(`<div class="kv"><span>In / Out</span><strong>${node.in_degree} / ${node.out_degree}</strong></div>`);
   }
-  startSim(ticked);
-  updateStats();
-  svg.on('zoom.applyLabels', ()=> applyLabelStyles());
+  if (node.start_year || node.end_year) {
+    html.push(`<div class="kv"><span>Active</span><strong>${node.start_year || '…'} – ${node.end_year || '…'}</strong></div>`);
+  }
+  if (node.url) {
+    html.push(`<div style="margin-top:6px;"><a href="${node.url}" target="_blank" rel="noopener">Open in browser ↗</a></div>`);
+  }
+  tooltip.html(html.join(''));
+  tooltip.style('display', 'block');
+  moveTooltip(event);
 }
 
-// Zoom
-zoom = d3.zoom().scaleExtent([0.1,4]).on('zoom', (e)=> gZoom.attr('transform', e.transform) );
-svg.call(zoom).on("dblclick.zoom", null);
+function moveTooltip(event) {
+  tooltip.style('left', `${event.pageX + 16}px`).style('top', `${event.pageY - 16}px`);
+}
 
-// Controls
-document.getElementById('labelMode').addEventListener('change', e=>{ state.labelMode = e.target.value; render(); });
-document.getElementById('labelSize').addEventListener('input', e=>{ state.settings.labelSize = +e.target.value; render(); });
-document.getElementById('togglePills').addEventListener('change', e=>{ state.settings.pills = e.target.checked; render(); });
-document.getElementById('toggleHighContrast').addEventListener('change', e=>{ state.settings.highContrast = e.target.checked; render(); });
-document.getElementById('toggleZoomAware').addEventListener('change', e=>{ state.settings.zoomAware = e.target.checked; render(); });
+function hideTooltip() {
+  tooltip.style('display', 'none');
+}
 
-document.getElementById('linkDist').addEventListener('input', e=>{
-  document.getElementById('ldisplay').textContent = e.target.value;
-  if(simulation){ simulation.force('link').distance(+e.target.value); simulation.alpha(0.6).restart(); }
-});
-document.getElementById('charge').addEventListener('input', e=>{
-  document.getElementById('cdisplay').textContent = e.target.value;
-  if(simulation){ simulation.force('charge').strength(+e.target.value); simulation.alpha(0.6).restart(); }
-});
-document.getElementById('sizeBy').addEventListener('change', e=>{
-  state.sizeBy = e.target.value; render();
-});
-
-document.getElementById('btnFit').addEventListener('click', ()=>{
-  const bounds = gZoom.node().getBBox();
-  const pad = 40;
-  const fullWidth = width, fullHeight = height;
-  if(!bounds.width || !bounds.height){ return; }
-  const widthScale = (fullWidth - pad) / bounds.width;
-  const heightScale = (fullHeight - pad) / bounds.height;
-  const scale = Math.min(widthScale, heightScale);
-  const tx = -bounds.x * scale + (fullWidth - bounds.width * scale) / 2;
-  const ty = -bounds.y * scale + (fullHeight - bounds.height * scale) / 2;
-  svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity.translate(tx,ty).scale(scale));
-});
-document.getElementById('btnFreeze').addEventListener('click', ()=>{
-  state.fixed = !state.fixed;
-  document.getElementById('btnFreeze').textContent = state.fixed ? 'Unfreeze' : 'Freeze';
-  if(!state.fixed){ state.data.nodes.forEach(n=>{ n.fx=null; n.fy=null; }); }
-});
-document.getElementById('btnReset').addEventListener('click', ()=>{
-  state.data.nodes.forEach(n=>{ n.fx=null; n.fy=null; n.x = (Math.random()*width); n.y=(Math.random()*height); });
-  if(simulation){ simulation.alpha(1).restart(); }
-});
-
-// Search
-document.getElementById('q').addEventListener('keydown', e=>{
-  if(e.key==='Enter'){
-    const q = e.target.value.trim().toLowerCase();
-    const hit = state.data.nodes.find(n => (n.label||n.id).toLowerCase().includes(q));
-    if(hit){
-      const t = d3.zoomTransform(svg.node());
-      svg.transition().duration(600).call(zoom.transform, t.translate(width/2 - hit.x*t.k, height/2 - hit.y*t.k));
-      sel.textContent = hit.label||hit.id;
+function focusNode(node) {
+  state.highlight.node = node;
+  state.highlight.neighbors = new Set();
+  state.highlight.links = new Set();
+  state.filtered.links.forEach(link => {
+    if (link.sourceId === node.id || link.targetId === node.id) {
+      state.highlight.neighbors.add(link.sourceId);
+      state.highlight.neighbors.add(link.targetId);
+      state.highlight.links.add(link.id);
     }
-  }
-});
+  });
+  updateFocusStyles();
+  populateDetails(node);
+}
 
-minDegSlider.addEventListener('input', e=>{
-  state.filters.minDegree = +e.target.value;
-  minDegDisplay.textContent = e.target.value;
-  applyFilters();
-  render();
-});
+function clearFocus() {
+  state.highlight = { node: null, neighbors: new Set(), links: new Set(), path: [] };
+  updateFocusStyles();
+  populateDetails(null);
+}
 
-// File loading
-document.getElementById('fileInput').addEventListener('change', (e)=> handleFiles(e.target.files));
-const drop = document.getElementById('drop');
-['dragenter','dragover'].forEach(evt=> drop.addEventListener(evt, (e)=>{e.preventDefault(); drop.classList.add('drag'); }));
-['dragleave','drop'].forEach(evt=> drop.addEventListener(evt, (e)=>{e.preventDefault(); drop.classList.remove('drag'); }));
-drop.addEventListener('drop', (e)=> handleFiles(e.dataTransfer.files));
+function updateFocusStyles() {
+  gNodes.selectAll('.node')
+    .classed('dimmed', d => {
+      if (!state.highlight.node) return false;
+      return !(d.id === state.highlight.node.id || state.highlight.neighbors.has(d.id));
+    });
 
-async function handleFiles(fileList){
-  const files = Array.from(fileList);
+  gLinks.selectAll('path')
+    .classed('dimmed', d => {
+      if (!state.highlight.node) return false;
+      return !state.highlight.links.has(d.id);
+    })
+    .classed('link--path', d => state.highlight.path.includes(d.id));
+}
 
-  const legendFile   = files.find(f => /legend\.json$/i.test(f.name));
-  const enrichedNodesFile = files.find(f => /enriched_nodes\.json$/i.test(f.name));
-  const enrichedEdgesFile = files.find(f => /enriched_edges\.json$/i.test(f.name));
-  const nodesFile    = files.find(f => /nodes\.json$/i.test(f.name));
-  const graphmlFile  = files.find(f => /\.graphml$|\.xml$/i.test(f.name));
-
-  // 1) Prefer enriched JSON if both are present
-  if (enrichedNodesFile && enrichedEdgesFile) {
-    const nodes = JSON.parse(await enrichedNodesFile.text());
-    const edges = JSON.parse(await enrichedEdgesFile.text());
-
-    const preparedNodes = nodes.map(n => ({
-      id: n.id,
-      label: n.label || n.id,
-      description: n.description || '',
-      image: n.image || null,
-      group: n.group || n.type || 'Other',
-      url: n.url || deriveUrl(n)
-    }));
-
-    const links = edges.map((e, i) => ({
-      id: e.id || `e${i}`,
-      sourceId: e.source,
-      targetId: e.target,
-      weight: 1,
-      type: e.type || null
-    }));
-
-    state.legend = legendFile ? JSON.parse(await legendFile.text()) : null;
-    prepareRawData(preparedNodes, links);
-    render();
-    document.getElementById('btnFit').click();
+function populateDetails(node) {
+  const container = document.getElementById('detailsContent');
+  if (!node) {
+    container.innerHTML = '<div class="muted">Click a node to inspect their network relationships.</div>';
     return;
   }
-
-  // 2) Fallback: original nodes.json + graph.graphml
-  if (!nodesFile || !graphmlFile) {
-    alert('Please include either (enriched_nodes.json + enriched_edges.json) OR (nodes.json + graph.graphml).');
-    return;
+  const lines = [];
+  lines.push(`<h2 style="margin:0 0 6px;font-size:18px;">${node.label}</h2>`);
+  lines.push(`<div class="muted" style="margin-bottom:8px;">${node.description || ''}</div>`);
+  lines.push(`<div class="stats-line">Role: <b>${node.role}</b> • Country: <b>${node.country}</b></div>`);
+  lines.push(`<div class="stats-line">Power score: <b>${(node.power_score || 0).toFixed(3)}</b> &nbsp; Degree: <b>${node.degree}</b> (in ${node.in_degree || 0} / out ${node.out_degree || 0})</div>`);
+  if (node.community_id != null) {
+    lines.push(`<div class="stats-line">Community: <b>${node.community_id}</b> • Distance to monarch: <b>${(node.distance_to_monarch || 0).toFixed(1)}</b></div>`);
+  }
+  if (node.start_year || node.end_year) {
+    lines.push(`<div class="stats-line">Timeline: ${node.start_year || '…'} – ${node.end_year || '…'}</div>`);
+  }
+  if (node.aliases && node.aliases.length) {
+    lines.push(`<div class="stats-line">Aliases: ${node.aliases.join(', ')}</div>`);
+  }
+  if (node.url) {
+    lines.push(`<div class="stats-line"><a href="${node.url}" target="_blank" rel="noopener">Open Wiki entry ↗</a></div>`);
   }
 
-  const nodes = JSON.parse(await nodesFile.text());
-  const xml = new DOMParser().parseFromString(await graphmlFile.text(), 'application/xml');
-  const nodeElems = Array.from(xml.getElementsByTagName('node'));
-  const edgeElems = Array.from(xml.getElementsByTagName('edge'));
-
-  const nodeMap = new Map(
-    nodes.map(n => [
-      n.id,
-      {
-        id: n.id,
-        label: n.label || n.id,
-        description: n.description || '',
-        group: n.group,
-        url: n.url || deriveUrl(n)
-      }
-    ])
-  );
-  nodeElems.forEach(ne => {
-    const id = ne.getAttribute('id');
-    if (!nodeMap.has(id)) nodeMap.set(id, { id, label: id });
+  const groups = new Map();
+  state.filtered.links.forEach(link => {
+    if (link.sourceId === node.id || link.targetId === node.id) {
+      const otherId = link.sourceId === node.id ? link.targetId : link.sourceId;
+      const otherNode = state.raw.nodeById.get(otherId);
+      if (!otherNode) return;
+      const key = link.type || 'unknown';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push({ node: otherNode, link });
+    }
   });
 
-  const links = edgeElems.map((ee, i) => ({
-    id: `e${i}`,
-    sourceId: ee.getAttribute('source'),
-    targetId: ee.getAttribute('target'),
-    weight: 1
-  }));
+  if (groups.size) {
+    lines.push('<div class="neighbors">');
+    Array.from(groups.entries()).sort().forEach(([type, entries]) => {
+      lines.push(`<div class="group"><h4>${type}</h4><ul>`);
+      entries.forEach(({ node: neigh, link }) => {
+        lines.push(`<li>${neigh.label} <span class="muted">(${link.layer} • weight ${link.weight})</span></li>`);
+      });
+      lines.push('</ul></div>');
+    });
+    lines.push('</div>');
+  }
 
-  state.legend = legendFile ? JSON.parse(await legendFile.text()) : null;
-  prepareRawData(Array.from(nodeMap.values()), links);
-  render();
-  document.getElementById('btnFit').click();
+  container.innerHTML = lines.join('');
 }
 
+function pinNode(node) {
+  node.fx = node.fx ?? node.x;
+  node.fy = node.fy ?? node.y;
+  state.pinned.add(node.id);
+  persistPins();
+}
 
-// Autoload — prefer enriched_* if present, otherwise fall back
-(async function autoload(){
-  try{
-    // 1) Try enriched JSON (what enrich_wikidata.py generated)
-    const enrichedNodes = await fetch('enriched_nodes.json').then(r => r.ok ? r.json() : null);
-    const enrichedEdges = await fetch('enriched_edges.json').then(r => r.ok ? r.json() : null);
-    const legend = await fetch('legend.json').then(r => r.ok ? r.json() : null).catch(() => null);
+function unpinNode(node) {
+  node.fx = null;
+  node.fy = null;
+  state.pinned.delete(node.id);
+  persistPins();
+}
 
-    if (enrichedNodes && enrichedEdges) {
-      const nodes = enrichedNodes.map(n => ({
-        id: n.id,
-        label: n.label || n.id,
-        description: n.description || '',
-        image: n.image || null,
-        group: n.group || n.type || 'Other',
-        url: n.url || deriveUrl(n)
-      }));
+function togglePin(node) {
+  if (state.pinned.has(node.id)) {
+    unpinNode(node);
+  } else {
+    pinNode(node);
+  }
+}
 
-      const links = enrichedEdges.map((e, i) => ({
-        id: e.id || `e${i}`,
-        sourceId: e.source,
-        targetId: e.target,
-        weight: 1,
-        type: e.type || null
-      }));
+function persistPins() {
+  const data = state.filtered.nodes
+    .filter(n => n.fx != null && n.fy != null)
+    .map(n => ({ id: n.id, x: n.fx, y: n.fy }));
+  safeLocalStorage(() => localStorage.setItem(CONFIG.storageKey, JSON.stringify(data)));
+}
 
-      state.legend = legend || null;
-      prepareRawData(nodes, links);
-      render();
-      document.getElementById('btnFit').click();
-      return; // stop here if enriched data worked
+function restorePins() {
+  const saved = safeLocalStorage(() => localStorage.getItem(CONFIG.storageKey));
+  if (!saved) return;
+  try {
+    const parsed = JSON.parse(saved);
+    parsed.forEach(item => {
+      const node = state.raw.nodeById.get(item.id);
+      if (node) {
+        node.fx = item.x;
+        node.fy = item.y;
+        state.pinned.add(node.id);
+      }
+    });
+    if (state.simulation) state.simulation.alpha(0.4).restart();
+  } catch (err) {
+    console.warn('Failed to restore pins', err);
+  }
+}
+
+function clearPins() {
+  state.raw.nodes.forEach(n => { n.fx = null; n.fy = null; });
+  state.pinned.clear();
+  safeLocalStorage(() => localStorage.removeItem(CONFIG.storageKey));
+  if (state.simulation) state.simulation.alpha(0.6).restart();
+}
+
+function drawRevealSchedule(rootIds) {
+  const queue = [...rootIds];
+  const visited = new Set(rootIds);
+  const depths = new Map();
+  rootIds.forEach(id => depths.set(id, 0));
+  const adj = state.raw.adjacency;
+  while (queue.length) {
+    const current = queue.shift();
+    const depth = depths.get(current) || 0;
+    const neighbors = adj.get(current) || new Set();
+    neighbors.forEach(nid => {
+      if (!visited.has(nid)) {
+        visited.add(nid);
+        depths.set(nid, depth + 1);
+        queue.push(nid);
+      }
+    });
+  }
+  state.reveal.depths = depths;
+}
+
+function runRevealAnimation() {
+  const monarchs = state.filtered.nodes.filter(n => n.role === 'monarch');
+  const seeds = monarchs.length ? monarchs.map(n => n.id) : state.filtered.nodes.slice(0, 3).map(n => n.id);
+  drawRevealSchedule(seeds);
+  state.reveal.active = true;
+  state.reveal.depth = 0;
+  state.filtered.nodes.forEach(n => { n._revealed = false; });
+  state.filtered.links.forEach(l => { l._revealed = false; });
+
+  function step(depth) {
+    state.filtered.nodes.forEach(n => {
+      if (!n._revealed && (state.reveal.depths.get(n.id) ?? Infinity) <= depth) {
+        n._revealed = true;
+        const nodeElement = gNodes.selectAll('.node').filter(d => d.id === n.id).node();
+        if (nodeElement) {
+          d3.select(nodeElement).transition().duration(400).style('opacity', 1);
+        }
+      }
+    });
+    state.filtered.links.forEach(l => {
+      const sd = state.reveal.depths.get(l.sourceId) ?? Infinity;
+      const td = state.reveal.depths.get(l.targetId) ?? Infinity;
+      if (!l._revealed && sd <= depth && td <= depth) {
+        l._revealed = true;
+        const linkElement = gLinks.selectAll('path').filter(d => d.id === l.id).node();
+        if (linkElement) {
+          d3.select(linkElement).transition().duration(400).style('stroke-opacity', edgeStyle(l).opacity);
+        }
+      }
+    });
+    if (depth < CONFIG.reveal.maxDepth) {
+      state.reveal.schedule = setTimeout(() => step(depth + 1), CONFIG.reveal.delay);
+    } else {
+      state.reveal.active = false;
     }
+  }
 
-    // 2) Fallback: original nodes.json + graph.graphml path
-    const nodes = await fetch('nodes.json').then(r => r.ok ? r.json() : null);
+  gNodes.selectAll('.node').style('opacity', 0.05);
+  gLinks.selectAll('path').style('stroke-opacity', 0.02);
+  step(0);
+}
+
+function cancelReveal() {
+  if (state.reveal.schedule) clearTimeout(state.reveal.schedule);
+  state.reveal.active = false;
+}
+
+function resetView() {
+  if (!state.zoom) return;
+  svg.transition().duration(600).call(state.zoom.transform, d3.zoomIdentity);
+}
+
+function fitView() {
+  const nodes = state.filtered.nodes;
+  if (!nodes.length) return;
+  const minX = d3.min(nodes, d => d.x);
+  const maxX = d3.max(nodes, d => d.x);
+  const minY = d3.min(nodes, d => d.y);
+  const maxY = d3.max(nodes, d => d.y);
+  const dx = maxX - minX;
+  const dy = maxY - minY;
+  const padding = 80;
+  const scale = Math.min(4, 0.9 / Math.max(dx / (width - padding), dy / (height - padding)));
+  const translate = [width / 2 - scale * (minX + dx / 2), height / 2 - scale * (minY + dy / 2)];
+  svg.transition().duration(600).call(state.zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+}
+
+function bindZoom() {
+  state.zoom = d3.zoom().scaleExtent([0.1, 6]).on('zoom', (event) => {
+    gZoom.attr('transform', event.transform);
+    if (state.settingsZoomAware) ticked();
+  });
+  svg.call(state.zoom).on('dblclick.zoom', null);
+}
+
+function searchNodes(query) {
+  if (!query || query.length < 2) return [];
+  const term = query.toLowerCase();
+  return state.searchIndex
+    .map(entry => ({ node: entry.node, score: entry.tokens.includes(term) ? term.length : entry.tokens.split(term).length > 1 ? term.length - 1 : 0 }))
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8)
+    .map(item => item.node);
+}
+
+function highlightSearchResults(results) {
+  const container = document.getElementById('searchResults');
+  if (!results.length) {
+    container.textContent = '—';
+    return;
+  }
+  container.innerHTML = results.map(n => `<a href="#" data-id="${n.id}">${n.label}</a>`).join('<br>');
+}
+
+function focusSearchResult(node) {
+  focusNode(node);
+  svg.transition().duration(600).call(state.zoom.scaleTo, 2, [node.x, node.y]);
+  svg.transition().duration(600).call(state.zoom.translateTo, node.x, node.y);
+}
+
+function bindDynamicEvents() {
+  if (bindDynamicEvents.bound) return;
+  bindDynamicEvents.bound = true;
+
+  document.getElementById('colorMode').addEventListener('change', e => {
+    state.colorMode = e.target.value;
+    renderGraph();
+  });
+  document.getElementById('sizeMode').addEventListener('change', e => {
+    state.sizeMode = e.target.value;
+    renderGraph();
+  });
+  document.getElementById('degreeMin').addEventListener('input', e => {
+    state.filters.degree[0] = Number(e.target.value);
+    document.getElementById('degVal').textContent = e.target.value;
+    applyFilters();
+  });
+  document.getElementById('powerMin').addEventListener('input', e => {
+    state.filters.power[0] = Number(e.target.value);
+    document.getElementById('powerVal').textContent = Number(e.target.value).toFixed(2);
+    applyFilters();
+  });
+  document.getElementById('timeStart').addEventListener('input', e => {
+    state.filters.yearRange[0] = Number(e.target.value);
+    document.getElementById('timeVal').textContent = `${state.filters.yearRange[0]} – ${state.filters.yearRange[1]}`;
+    applyFilters();
+  });
+  document.getElementById('timeEnd').addEventListener('input', e => {
+    state.filters.yearRange[1] = Number(e.target.value);
+    document.getElementById('timeVal').textContent = `${state.filters.yearRange[0]} – ${state.filters.yearRange[1]}`;
+    applyFilters();
+  });
+
+  document.getElementById('btnResetFilters').addEventListener('click', () => {
+    initFilterState(state.raw.nodes, state.raw.links);
+    updateFilterControls();
+    applyFilters();
+  });
+
+  document.getElementById('labelMode').addEventListener('change', e => {
+    state.labelMode = e.target.value;
+    renderGraph();
+  });
+  document.getElementById('labelSize').addEventListener('input', e => {
+    state.labelSize = Number(e.target.value);
+    ticked();
+  });
+  document.getElementById('togglePills').addEventListener('change', e => {
+    state.settingsPills = e.target.checked;
+    ticked();
+  });
+  document.getElementById('toggleZoomAware').addEventListener('change', e => {
+    state.settingsZoomAware = e.target.checked;
+    ticked();
+  });
+  document.getElementById('linkDist').addEventListener('input', e => {
+    document.getElementById('linkDistVal').textContent = e.target.value;
+    if (state.simulation) {
+      state.simulation.force('link').distance(link => Math.max(CONFIG.forces.link.min, Number(e.target.value) - (link.weight || 1) * CONFIG.forces.link.weightFactor));
+      state.simulation.alpha(0.6).restart();
+    }
+  });
+  document.getElementById('charge').addEventListener('input', e => {
+    document.getElementById('chargeVal').textContent = e.target.value;
+    if (state.simulation) {
+      state.simulation.force('charge').strength(Number(e.target.value));
+      state.simulation.alpha(0.6).restart();
+    }
+  });
+
+  document.getElementById('roleLegend').addEventListener('click', e => {
+    const role = e.target.closest('.chip')?.dataset.role;
+    if (!role) return;
+    if (state.filters.roles.has(role)) state.filters.roles.delete(role); else state.filters.roles.add(role);
+    if (!state.filters.roles.size) {
+      state.filters.roles = new Set(state.raw.nodes.map(n => n.role || 'other'));
+    }
+    applyFilters();
+  });
+
+  document.getElementById('countryFilters').addEventListener('change', e => {
+    const value = e.target.dataset.country;
+    if (!value) return;
+    if (e.target.checked) state.filters.countries.add(value); else state.filters.countries.delete(value);
+    if (!state.filters.countries.size) state.filters.countries = new Set(state.raw.nodes.map(n => n.country || 'Unknown'));
+    applyFilters();
+  });
+  document.getElementById('layerFilters').addEventListener('change', e => {
+    const value = e.target.dataset.layer;
+    if (!value) return;
+    if (e.target.checked) state.filters.layers.add(value); else state.filters.layers.delete(value);
+    if (!state.filters.layers.size) state.filters.layers = new Set(state.raw.links.map(l => l.layer || 'other'));
+    applyFilters();
+  });
+  document.getElementById('typeFilters').addEventListener('change', e => {
+    const value = e.target.dataset.type;
+    if (!value) return;
+    if (e.target.checked) state.filters.edgeTypes.add(value); else state.filters.edgeTypes.delete(value);
+    if (!state.filters.edgeTypes.size) state.filters.edgeTypes = new Set(state.raw.links.map(l => l.type || 'unknown'));
+    applyFilters();
+  });
+
+  document.getElementById('btnFit').addEventListener('click', fitView);
+  document.getElementById('btnResetView').addEventListener('click', resetView);
+  document.getElementById('btnFreeze').addEventListener('click', () => {
+    if (!state.simulation) return;
+    if (state.simulation.alpha() > 0.01) {
+      state.simulation.stop();
+      statusLine.text('Simulation paused');
+    } else {
+      state.simulation.alpha(0.7).restart();
+      statusLine.text('Simulation running');
+    }
+  });
+  document.getElementById('btnUnpin').addEventListener('click', () => {
+    clearPins();
+    statusLine.text('Pins cleared');
+  });
+  document.getElementById('btnReveal').addEventListener('click', () => {
+    cancelReveal();
+    runRevealAnimation();
+  });
+
+  document.getElementById('btnClear').addEventListener('click', () => {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').textContent = '—';
+    clearFocus();
+  });
+
+  document.getElementById('searchInput').addEventListener('keyup', e => {
+    if (!state.raw.nodes.length) return;
+    const query = e.target.value.trim();
+    const results = searchNodes(query);
+    highlightSearchResults(results);
+    if (e.key === 'Enter' && results.length) {
+      focusSearchResult(results[0]);
+    }
+  });
+
+  document.getElementById('searchResults').addEventListener('click', e => {
+    const id = e.target.dataset.id;
+    if (!id) return;
+    e.preventDefault();
+    const node = state.raw.nodeById.get(id);
+    if (node) focusSearchResult(node);
+  });
+
+  document.getElementById('btnExportPNG').addEventListener('click', exportPNG);
+  document.getElementById('btnExportSVG').addEventListener('click', exportSVG);
+  document.getElementById('btnExportJSON').addEventListener('click', exportSubgraph);
+
+  svg.on('click', () => clearFocus());
+
+  document.getElementById('drop').addEventListener('dragover', e => {
+    e.preventDefault();
+    e.currentTarget.classList.add('drag');
+  });
+  document.getElementById('drop').addEventListener('dragleave', e => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag');
+  });
+  document.getElementById('drop').addEventListener('drop', async e => {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag');
+    await handleFileInput(e.dataTransfer.files);
+  });
+  document.getElementById('fileInput').addEventListener('change', async e => {
+    await handleFileInput(e.target.files);
+  });
+}
+
+function exportSVG() {
+  const serializer = new XMLSerializer();
+  const clone = svg.node().cloneNode(true);
+  const source = serializer.serializeToString(clone);
+  const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
+  downloadBlob(blob, 'royal_network.svg');
+}
+
+function exportPNG() {
+  const serializer = new XMLSerializer();
+  const source = serializer.serializeToString(svg.node());
+  const image = new Image();
+  const url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }));
+  image.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = width * 2;
+    canvas.height = height * 2;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg') || '#080d1e';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(blob => downloadBlob(blob, 'royal_network.png'));
+  };
+  image.src = url;
+}
+
+function exportSubgraph() {
+  const nodes = state.filtered.nodes.map(n => ({ id: n.id, label: n.label, role: n.role, country: n.country, power_score: n.power_score }));
+  const links = state.filtered.links.map(l => ({ id: l.id, source: l.sourceId, target: l.targetId, type: l.type, layer: l.layer, weight: l.weight }));
+  downloadBlob(new Blob([JSON.stringify({ nodes, links }, null, 2)], { type: 'application/json' }), 'royal_subgraph.json');
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function handleFileInput(fileList) {
+  if (!fileList || !fileList.length) return;
+  const files = Array.from(fileList);
+  let nodesFile = files.find(f => /enriched_nodes\.json$/i.test(f.name) || /nodes\.json$/i.test(f.name));
+  let edgesFile = files.find(f => /enriched_edges\.json$/i.test(f.name) || /edges\.json$/i.test(f.name));
+  let legendFile = files.find(f => /legend\.json$/i.test(f.name));
+  const graphmlFile = files.find(f => /\.graphml$/i.test(f.name));
+
+  if (nodesFile && edgesFile) {
+    const nodes = JSON.parse(await nodesFile.text());
+    const edges = JSON.parse(await edgesFile.text());
+    prepareData(nodes, edges);
+    if (legendFile) state.legend = JSON.parse(await legendFile.text());
+    restorePins();
+    renderGraph();
+    fitView();
+    return;
+  }
+
+  if (nodesFile && graphmlFile) {
+    const nodes = JSON.parse(await nodesFile.text());
+    const text = await graphmlFile.text();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(text, 'application/xml');
+    const nodeElems = Array.from(xml.getElementsByTagName('node'));
+    const edgeElems = Array.from(xml.getElementsByTagName('edge'));
+    const nodeMap = new Map(nodes.map(n => [n.id, n]));
+    nodeElems.forEach(el => {
+      const id = el.getAttribute('id');
+      if (id && !nodeMap.has(id)) nodeMap.set(id, { id, label: id });
+    });
+    const edges = edgeElems.map((el, idx) => ({ id: `e${idx}`, source: el.getAttribute('source'), target: el.getAttribute('target'), weight: 1 }));
+    prepareData(Array.from(nodeMap.values()), edges);
+    fitView();
+  }
+}
+
+function findShortestPath(sourceId, targetId) {
+  const adj = state.raw.adjacency;
+  if (!adj.has(sourceId) || !adj.has(targetId)) return null;
+  const queue = [[sourceId]];
+  const visited = new Set([sourceId]);
+  while (queue.length) {
+    const path = queue.shift();
+    const node = path[path.length - 1];
+    if (node === targetId) return path;
+    (adj.get(node) || []).forEach(neigh => {
+      if (!visited.has(neigh)) {
+        visited.add(neigh);
+        queue.push([...path, neigh]);
+      }
+    });
+  }
+  return null;
+}
+
+function highlightPath(path) {
+  if (!path) return;
+  const edgeIds = [];
+  for (let i = 0; i < path.length - 1; i++) {
+    const a = path[i];
+    const b = path[i+1];
+    const key = `${a}__${b}`;
+    const edges = state.raw.neighbors.get(key) || state.raw.neighbors.get(`${b}__${a}`) || [];
+    edges.forEach(e => edgeIds.push(e.id));
+  }
+  state.highlight.path = edgeIds;
+  updateFocusStyles();
+  document.getElementById('btnExportPath').style.display = edgeIds.length ? 'inline-flex' : 'none';
+  document.getElementById('btnExportPath').onclick = () => {
+    const nodes = path.map(id => state.raw.nodeById.get(id));
+    const edges = edgeIds.map(id => state.filtered.links.find(l => l.id === id)).filter(Boolean);
+    downloadBlob(new Blob([JSON.stringify({ nodes, edges }, null, 2)], { type: 'application/json' }), 'shortest_path.json');
+  };
+}
+
+window.findShortestPath = (a, b) => {
+  const path = findShortestPath(a, b);
+  if (path) highlightPath(path);
+  return path;
+};
+
+async function loadDefaultData() {
+  try {
+    const nodes = await fetch('enriched_nodes.json').then(r => r.ok ? r.json() : null);
+    const edges = await fetch('enriched_edges.json').then(r => r.ok ? r.json() : null);
+    if (nodes && edges) {
+      prepareData(nodes, edges);
+      restorePins();
+      renderGraph();
+      bindZoom();
+      fitView();
+      statusLine.text('Loaded enriched JSON');
+      return;
+    }
+    const baseNodes = await fetch('nodes.json').then(r => r.ok ? r.json() : null);
     const graphml = await fetch('graph.graphml').then(r => r.ok ? r.text() : null);
-
-    if (nodes && graphml) {
-      const nodeMap = new Map(
-        nodes.map(n => [
-          n.id,
-          {
-            id: n.id,
-            label: n.label || n.id,
-            description: n.description || '',
-            group: n.group,
-            url: n.url || deriveUrl(n)
-          }
-        ])
-      );
-
+    if (baseNodes && graphml) {
       const xml = new DOMParser().parseFromString(graphml, 'application/xml');
       const nodeElems = Array.from(xml.getElementsByTagName('node'));
       const edgeElems = Array.from(xml.getElementsByTagName('edge'));
-
-      nodeElems.forEach(ne => {
-        const id = ne.getAttribute('id');
-        if (!nodeMap.has(id)) nodeMap.set(id, { id, label: id });
+      const nodeMap = new Map(baseNodes.map(n => [n.id, n]));
+      nodeElems.forEach(el => {
+        const id = el.getAttribute('id');
+        if (id && !nodeMap.has(id)) nodeMap.set(id, { id, label: id });
       });
-
-      const links = edgeElems.map((ee, i) => ({
-        id: `e${i}`,
-        sourceId: ee.getAttribute('source'),
-        targetId: ee.getAttribute('target'),
-        weight: 1
-      }));
-
-      state.legend = legend || null;
-      prepareRawData(Array.from(nodeMap.values()), links);
-      render();
-      document.getElementById('btnFit').click();
+      const edges = edgeElems.map((el, idx) => ({ id: `e${idx}`, source: el.getAttribute('source'), target: el.getAttribute('target'), weight: 1 }));
+      prepareData(Array.from(nodeMap.values()), edges);
+      bindZoom();
+      fitView();
+      statusLine.text('Loaded base nodes + graphml');
     }
-  } catch (e) {
-    console.error('Autoload error:', e);
+  } catch (err) {
+    console.error('Failed to load default data', err);
+    statusLine.text('Failed to load data');
   }
-})();
+}
+
+function downloadLegend() {
+  if (!state.legend) return;
+  downloadBlob(new Blob([JSON.stringify(state.legend, null, 2)], { type: 'application/json' }), 'legend.json');
+}
+
+function exportPathBetween(idA, idB) {
+  const path = findShortestPath(idA, idB);
+  if (!path) return;
+  highlightPath(path);
+}
+
+function buildStatusTicker() {
+  const now = new Date();
+  statusLine.text(`Ready • ${now.toLocaleTimeString()}`);
+}
+
+bindZoom();
+loadDefaultData();
+buildStatusTicker();
+setInterval(buildStatusTicker, 60000);
 
 </script>
 </body>
