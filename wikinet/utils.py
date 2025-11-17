@@ -39,6 +39,13 @@ def get_logger() -> logging.Logger:
 logger = get_logger()
 
 
+def set_log_level(level: str) -> None:
+    """Allow callers (e.g. CLI) to adjust logging verbosity at runtime."""
+
+    level_value = getattr(logging, level.upper(), logging.INFO)
+    logger.setLevel(level_value)
+
+
 def hash_request(method: str, url: str, params: Optional[Mapping[str, Any]] = None, data: Optional[Any] = None) -> str:
     """Create a stable hash for caching HTTP requests."""
     payload = {

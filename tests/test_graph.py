@@ -1,5 +1,3 @@
-import networkx as nx
-
 from wikinet.cia import CIAOfficial, GovernmentIndex
 from wikinet.graph import GraphBuilder
 from wikinet.schemas import Edge
@@ -46,11 +44,13 @@ def test_graph_builder_creates_nodes_and_edges():
         DummyWikipedia(),
         max_depth=1,
     )
-    graph = builder.crawl(["Q1"])
+    result = builder.crawl(["Q1"])
+    graph = result.graph
     assert graph.number_of_nodes() == 2
     assert graph.number_of_edges() == 1
     data = graph.get_edge_data("Q1", "Q2", 0)
     assert data["relation"] == "father"
+    assert result.stats.relation_counts["father"] == 1
 
 
 def test_graph_builder_integrates_government_index():
@@ -90,7 +90,8 @@ def test_graph_builder_integrates_government_index():
         max_depth=0,
         government_index=government_index,
     )
-    graph = builder.crawl(["Q1"])
+    result = builder.crawl(["Q1"])
+    graph = result.graph
     if hasattr(graph, "_nodes"):
         assert "Q2" in graph._nodes
     else:  # pragma: no cover - real networkx path
@@ -103,3 +104,4 @@ def test_graph_builder_integrates_government_index():
     assert "government" in q2_data.get("layers", [])
     assert "military" in q2_data.get("layers", [])
     assert any("Minister of Defense" in role for role in q2_data.get("government_roles", []))
+    assert "Q2" in result.stats.seed_qids
