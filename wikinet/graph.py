@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import json
 import os
-from collections import deque
-from typing import Iterable, List, Optional, Set, Tuple
+from collections import Counter, deque
+from dataclasses import dataclass, field
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 import networkx as nx
 
@@ -14,6 +15,59 @@ from .resolver import Resolver
 from .utils import console, logger
 from .wikidata import WikidataClient
 from .wikipedia import WikipediaClient
+
+
+@dataclass
+class CrawlStats:
+    """Diagnostics collected during a crawl run for debugging/QA."""
+
+    seed_qids: List[str]
+    expanded_nodes: int = 0
+    relation_counts: Counter[str] = field(default_factory=Counter)
+    depth_histogram: Counter[int] = field(default_factory=Counter)
+    infobox_edges: int = 0
+    warnings: List[str] = field(default_factory=list)
+    total_nodes: int = 0
+    total_edges: int = 0
+
+    def to_dict(self) -> Dict[str, object]:
+        return {
+            "seed_qids": self.seed_qids,
+            "expanded_nodes": self.expanded_nodes,
+            "relation_counts": dict(self.relation_counts),
+            "depth_histogram": dict(self.depth_histogram),
+            "infobox_edges": self.infobox_edges,
+            "warnings": list(self.warnings),
+            "total_nodes": self.total_nodes,
+            "total_edges": self.total_edges,
+        }
+
+    def log(self) -> None:
+        """Pretty-print a concise run summary to the console."""
+
+        console.log(
+            "Run summary",
+            {
+                "seeds": len(self.seed_qids),
+                "expanded": self.expanded_nodes,
+                "depths": dict(self.depth_histogram),
+                "edges": self.total_edges,
+            },
+        )
+        if self.relation_counts:
+            console.log("Relations", dict(sorted(self.relation_counts.items())))
+        if self.infobox_edges:
+            console.log(f"Infobox fallback edges: {self.infobox_edges}")
+        for warning in self.warnings:
+            console.log(f"[yellow]{warning}[/yellow]")
+
+
+@dataclass
+class CrawlResult:
+    """Return value for :meth:`GraphBuilder.crawl`. Holds graph + stats."""
+
+    graph: nx.MultiDiGraph
+    stats: CrawlStats
 
 
 class GraphBuilder:
@@ -65,13 +119,14 @@ class GraphBuilder:
                     augmented.append(qid)
         return augmented
 
-    def crawl(self, seeds: Iterable[str]) -> nx.MultiDiGraph:
+    def crawl(self, seeds: Iterable[str]) -> CrawlResult:
         qids = self.resolver.resolve_seeds(seeds)
         if self.government_index:
             qids = self._augment_with_government_seeds(qids)
         graph = nx.MultiDiGraph()
         queue: deque[Tuple[str, int]] = deque((qid, 0) for qid in qids)
         visited: Set[str] = set()
+        stats = CrawlStats(seed_qids=list(qids))
 
         while queue:
             qid, depth = queue.popleft()
@@ -83,6 +138,8 @@ class GraphBuilder:
             if not self._should_continue(graph):
                 break
             console.log(f"Expanding {qid} at depth {depth}")
+            stats.expanded_nodes += 1
+            stats.depth_histogram[depth] += 1
             edges = self.wikidata.fetch_relations([qid], self.include_family, self.include_political)
             neighbor_ids = {edge.target for edge in edges} | {edge.source for edge in edges}
             labels = self.wikidata.fetch_labels(neighbor_ids | {qid})
@@ -104,6 +161,7 @@ class GraphBuilder:
                         data.get("label"),
                     )
             for edge in edges:
+                stats.relation_counts[edge.relation] += 1
                 graph.add_edge(
                     edge.source,
                     edge.target,
@@ -130,13 +188,18 @@ class GraphBuilder:
                             retrieved_at=payload["retrieved_at"],
                             data={"note": "infobox"},
                         )
+                        stats.infobox_edges += 1
                 except Exception as exc:
-                    logger.debug("Infobox fallback failed for %s: %s", qid, exc)
+                    warning = f"Infobox fallback failed for {qid}: {exc}"
+                    logger.debug(warning)
+                    stats.warnings.append(warning)
             if depth < self.max_depth:
                 for edge in edges:
                     if edge.target not in visited and self._should_continue(graph):
                         queue.append((edge.target, depth + 1))
-        return graph
+        stats.total_nodes = graph.number_of_nodes()
+        stats.total_edges = graph.number_of_edges()
+        return CrawlResult(graph=graph, stats=stats)
 
 
 def load_graph(path: str) -> nx.MultiDiGraph:
@@ -157,4 +220,4 @@ def load_graph(path: str) -> nx.MultiDiGraph:
     return graph
 
 
-__all__ = ["GraphBuilder", "load_graph"]
+__all__ = ["GraphBuilder", "load_graph", "CrawlResult", "CrawlStats"]

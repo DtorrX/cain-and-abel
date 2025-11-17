@@ -36,7 +36,23 @@ def test_crawl_invokes_builder(monkeypatch, tmp_path):
             called["seeds"] = seeds
             graph = nx.MultiDiGraph()
             graph.add_node("Q1", label="Node")
-            return graph
+            return DummyResult(graph)
+
+    class DummyStats:
+        def __init__(self):
+            self.total_nodes = 0
+            self.total_edges = 0
+
+        def log(self):
+            called["stats_log"] = True
+
+        def to_dict(self):
+            return {}
+
+    class DummyResult:
+        def __init__(self, graph):
+            self.graph = graph
+            self.stats = DummyStats()
 
     class DummyCIA:
         def __init__(self, http):
@@ -66,3 +82,4 @@ def test_crawl_invokes_builder(monkeypatch, tmp_path):
     assert called["init"]
     assert called["seeds"] == ["Q1"]
     assert "export" in called
+    assert called["stats_log"]

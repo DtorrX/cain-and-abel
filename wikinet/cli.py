@@ -15,7 +15,7 @@ from .export import export_graph
 from .graph import GraphBuilder, load_graph
 from .http import HTTPClient
 from .resolver import Resolver
-from .utils import RateLimiter, console, logger
+from .utils import RateLimiter, console, logger, set_log_level
 from .wikidata import WikidataClient
 from .wikipedia import WikipediaClient
 
@@ -37,6 +37,15 @@ def build_parser() -> argparse.ArgumentParser:
     crawl.add_argument("--out", required=True, help="Output directory")
     crawl.add_argument("--cache-dir", help="Cache directory (default: .wikinet-cache)")
     crawl.add_argument("--resume", action="store_true", help="Merge with existing output")
+    crawl.add_argument(
+        "--log-level",
+        default=os.getenv("WIKINET_LOG_LEVEL", "INFO"),
+        help="Python logging level (DEBUG, INFO, WARNING, ERROR)",
+    )
+    crawl.add_argument(
+        "--report-path",
+        help="Optional JSON file to store crawl diagnostics (relations, depth histogram, etc.)",
+    )
 
     validate = sub.add_parser("validate", help="Validate exported graph")
     validate.add_argument("path", help="Output directory to validate")
@@ -67,6 +76,7 @@ def _parse_mode(mode: str) -> tuple[bool, bool]:
 
 
 def run_crawl(args: argparse.Namespace) -> None:
+    set_log_level(args.log_level)
     cache = CacheManager(args.cache_dir)
     rate_limiter = RateLimiter(rate=args.rate)
     http = HTTPClient(cache=cache, rate_limiter=rate_limiter)
@@ -97,13 +107,21 @@ def run_crawl(args: argparse.Namespace) -> None:
     )
 
     seeds = _collect_seeds(args, resolver)
-    graph = builder.crawl(seeds)
+    result = builder.crawl(seeds)
+    graph = result.graph
     if args.resume:
         existing = load_graph(args.out)
         graph = nx.compose(existing, graph)
     paths = export_graph(graph, args.out)
     console.log(f"Export completed with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges")
     console.log(paths)
+    result.stats.total_nodes = graph.number_of_nodes()
+    result.stats.total_edges = graph.number_of_edges()
+    result.stats.log()
+    if args.report_path:
+        with open(args.report_path, "w", encoding="utf-8") as fh:
+            json.dump(result.stats.to_dict(), fh, indent=2)
+        console.log(f"Diagnostics report saved to {args.report_path}")
 
 
 def run_validate(path: str) -> None:

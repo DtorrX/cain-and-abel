@@ -3,7 +3,9 @@
 This script computes graph metrics (degrees, centrality, power score),
 infers categorical attributes (role, country, communities), and annotates
 edges with semantic types/layers. Output is written to enriched JSON files
-consumed by the D3 visualization.
+consumed by the D3 visualization. Use ``--taxonomy`` to override the
+keyword heuristics so the same enrichment pipeline works for royal families,
+Israeli defense firms, political parties, or any other sector.
 
 Run:
     python scripts/enrich_network.py \
@@ -32,11 +34,12 @@ from networkx.algorithms import community
 ROLE_KEYWORDS: Dict[str, Sequence[str]] = {
     "monarch": ("monarch", "sovereign", "king", "queen", "ruler", "emir", "sheikh", "sultan"),
     "royal_family": ("prince", "princess", "royal", "emirati royal", "al nahyan", "al maktoum"),
-    "politician": ("politician", "prime minister", "minister", "ruler of", "governor", "president"),
+    "politician": ("politician", "prime minister", "minister", "ruler of", "governor", "president", "member of knesset"),
     "business_elite": ("business", "investor", "ceo", "entrepreneur", "billionaire", "financier"),
-    "military": ("general", "army", "commander", "defense", "military"),
+    "military": ("general", "army", "commander", "defense", "military", "idf"),
     "cleric": ("imam", "cleric", "sheikh", "mufti", "religious"),
     "bureaucrat": ("civil servant", "bureaucrat", "official", "administrator"),
+    "defense_industry": ("defense", "aerospace", "arms", "missile", "intelligence", "contractor", "security"),
 }
 
 COUNTRY_KEYWORDS: Dict[str, Sequence[str]] = {
@@ -45,19 +48,28 @@ COUNTRY_KEYWORDS: Dict[str, Sequence[str]] = {
     "Qatar": ("qatari", "qatar"),
     "Bahrain": ("bahrain", "bahraini"),
     "Kuwait": ("kuwait", "kuwaiti"),
+    "Israel": ("israel", "israeli", "idf", "tel aviv", "ra'anana"),
+    "United States": ("usa", "u.s.", "united states", "american", "washington"),
+    "United Kingdom": ("uk", "british", "united kingdom", "london"),
 }
 
 EDGE_TYPE_BY_PID: Dict[str, str] = {
     "P22": "family",  # father
     "P25": "family",  # mother
     "P26": "marriage",  # spouse
+    "P40": "family",  # child
     "P1038": "family",  # relative
     "P3373": "family",  # sibling
-    "P1037": "business",
+    "P1037": "business",  # main employer
     "P463": "ngo",  # member of
     "P108": "business",  # employer
     "P39": "political",  # position held
     "P102": "political",  # party
+    "P488": "corporate_governance",  # chairperson
+    "P355": "corporate_structure",  # subsidiary
+    "P749": "corporate_structure",  # parent organization
+    "P127": "ownership",  # owned by
+    "P2388": "political",  # officeholder
 }
 
 EDGE_TYPE_BY_RELATION: Dict[str, str] = {
@@ -70,6 +82,10 @@ EDGE_TYPE_BY_RELATION: Dict[str, str] = {
     "employer": "business",
     "member": "ngo",
     "position": "political",
+    "subsidiary": "corporate_structure",
+    "parent": "corporate_structure",
+    "chair": "corporate_governance",
+    "owner": "ownership",
 }
 
 EDGE_WEIGHT_BY_TYPE: Dict[str, int] = {
@@ -78,6 +94,9 @@ EDGE_WEIGHT_BY_TYPE: Dict[str, int] = {
     "business": 3,
     "political": 3,
     "ngo": 2,
+    "corporate_structure": 3,
+    "corporate_governance": 3,
+    "ownership": 4,
     "unknown": 1,
 }
 
@@ -87,6 +106,9 @@ LAYER_BY_TYPE: Dict[str, str] = {
     "business": "business",
     "political": "political",
     "ngo": "ngo",
+    "corporate_structure": "business",
+    "corporate_governance": "business",
+    "ownership": "business",
     "unknown": "other",
 }
 
@@ -390,17 +412,52 @@ def enrich(nodes: List[Dict[str, Any]], edges: List[Dict[str, Any]]) -> Tuple[Li
 # ---------------------------------------------------------------------------
 
 
+def apply_taxonomy_overrides(config_path: Optional[Path]) -> None:
+    """Override keyword heuristics for arbitrary verticals (e.g. defense sector)."""
+
+    if not config_path:
+        return
+    overrides = load_json(config_path)
+    if not isinstance(overrides, dict):
+        raise ValueError("Taxonomy overrides must be provided as an object/dict")
+
+    def _normalize_mapping(value: Dict[str, Iterable[str]]) -> Dict[str, Tuple[str, ...]]:
+        return {
+            str(key): tuple(str(item).lower() for item in items)
+            for key, items in value.items()
+        }
+
+    if "role_keywords" in overrides:
+        ROLE_KEYWORDS.update(_normalize_mapping(overrides["role_keywords"]))
+    if "country_keywords" in overrides:
+        COUNTRY_KEYWORDS.update(_normalize_mapping(overrides["country_keywords"]))
+    if "edge_type_by_pid" in overrides:
+        EDGE_TYPE_BY_PID.update({str(k): str(v) for k, v in overrides["edge_type_by_pid"].items()})
+    if "edge_type_by_relation" in overrides:
+        EDGE_TYPE_BY_RELATION.update({str(k).lower(): str(v) for k, v in overrides["edge_type_by_relation"].items()})
+    if "edge_weight_by_type" in overrides:
+        EDGE_WEIGHT_BY_TYPE.update({str(k): int(v) for k, v in overrides["edge_weight_by_type"].items()})
+    if "layer_by_type" in overrides:
+        LAYER_BY_TYPE.update({str(k): str(v) for k, v in overrides["layer_by_type"].items()})
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Enrich Wikidata network JSON for visualization.")
     parser.add_argument("--nodes", type=Path, required=True, help="Path to nodes.json")
     parser.add_argument("--edges", type=Path, required=True, help="Path to edges.json")
     parser.add_argument("--out-nodes", type=Path, required=True, help="Destination for enriched nodes JSON")
     parser.add_argument("--out-edges", type=Path, required=True, help="Destination for enriched edges JSON")
+    parser.add_argument(
+        "--taxonomy",
+        type=Path,
+        help="Optional JSON file with overrides for role/country keywords and edge typing",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+    apply_taxonomy_overrides(args.taxonomy)
     raw_nodes = load_json(args.nodes)
     raw_edges = load_json(args.edges)
 
