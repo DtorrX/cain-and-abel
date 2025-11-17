@@ -308,6 +308,41 @@ function deriveUrl(node) {
   return '';
 }
 
+function sanitizeFilteredGraph() {
+  const nodes = state.filtered.nodes || [];
+  const links = state.filtered.links || [];
+
+  const nodeById = new Map(nodes.map(d => [d.id, d]));
+  const cleanLinks = [];
+
+  for (const link of links) {
+    // Normalize source/target (can be id string or node object)
+    const rawSource = typeof link.source === "object" ? (link.source.id ?? link.source) : link.source;
+    const rawTarget = typeof link.target === "object" ? (link.target.id ?? link.target) : link.target;
+
+    const srcNode = nodeById.get(rawSource);
+    const tgtNode = nodeById.get(rawTarget);
+
+    if (!srcNode || !tgtNode) {
+      console.warn("Dropping link with missing node:", {
+        link,
+        srcExists: !!srcNode,
+        tgtExists: !!tgtNode,
+      });
+      continue;
+    }
+
+    cleanLinks.push({
+      ...link,
+      source: srcNode,
+      target: tgtNode,
+    });
+  }
+
+  state.filtered.links = cleanLinks;
+}
+
+
 function buildSearchIndex(nodes) {
   state.searchIndex = nodes.map(node => {
     const tokens = [node.label, node.description, node.role, node.country]
@@ -675,19 +710,64 @@ function labelCandidates() {
 
 function startSimulation() {
   if (state.simulation) state.simulation.stop();
+
   const linkDistance = Number(document.getElementById('linkDist').value) || CONFIG.forces.link.base;
   const charge = Number(document.getElementById('charge').value) || CONFIG.forces.charge;
 
-  state.simulation = d3.forceSimulation(state.filtered.nodes)
-    .force('link', d3.forceLink(state.filtered.links)
-      .id(d => d.id)
-      .distance(link => Math.max(CONFIG.forces.link.min, linkDistance - (link.weight || 1) * CONFIG.forces.link.weightFactor))
-      .strength(0.6))
+  const nodes = state.filtered.nodes || [];
+  const links = state.filtered.links || [];
+
+  // ---- Normalize links so they always point to real node objects ----
+  const nodeById = new Map(nodes.map(d => [d.id, d]));
+  const cleanLinks = [];
+
+  for (const link of links) {
+    // Handle both string ids and objects
+    const rawSource = typeof link.source === "object" ? (link.source.id ?? link.source) : link.source;
+    const rawTarget = typeof link.target === "object" ? (link.target.id ?? link.target) : link.target;
+
+    const srcNode = nodeById.get(rawSource);
+    const tgtNode = nodeById.get(rawTarget);
+
+    if (!srcNode || !tgtNode) {
+      console.warn("Dropping link with missing node:", {
+        link,
+        srcExists: !!srcNode,
+        tgtExists: !!tgtNode,
+      });
+      continue;
+    }
+
+    cleanLinks.push({
+      ...link,
+      source: srcNode,
+      target: tgtNode,
+    });
+  }
+
+  // Overwrite filtered links with the cleaned set
+  state.filtered.links = cleanLinks;
+
+  // ---- Now start the simulation with safe nodes/links ----
+  state.simulation = d3.forceSimulation(nodes)
+    .force(
+      'link',
+      d3.forceLink(cleanLinks)
+        .id(d => d.id) // now d is always a node object with .id
+        .distance(link =>
+          Math.max(
+            CONFIG.forces.link.min,
+            linkDistance - (link.weight || 1) * CONFIG.forces.link.weightFactor
+          )
+        )
+        .strength(0.6)
+    )
     .force('charge', d3.forceManyBody().strength(charge))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(d => nodeRadius(d) + 4))
     .on('tick', ticked);
 }
+
 
 function ticked() {
   gLinks.selectAll('path')
