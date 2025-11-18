@@ -218,8 +218,24 @@ def draw_interactive(G: nx.Graph, metrics: Dict[str, Dict[str, float]], outpath:
         return
     from pyvis.network import Network
 
-    net = Network(height="800px", width="100%", bgcolor="#111111", font_color="#EEEEEE", notebook=False, directed=G.is_directed())
-    net.barnes_hut()
+    net = Network(
+        height="800px",
+        width="100%",
+        bgcolor="#111111",
+        font_color="#EEEEEE",
+        notebook=False,
+        directed=G.is_directed(),
+    )
+    # ForceAtlas2 keeps clusters compact while still being interactive.
+    net.force_atlas_2based(
+        gravity=-30,
+        central_gravity=0.02,
+        spring_length=60,
+        spring_strength=0.09,
+        damping=0.4,
+        overlap=0.5,
+    )
+    net.show_buttons(filter_=["physics", "interaction"])
 
     # Optional style helpers
     cat_styles = (legend or {}).get("category_styles") or {}
@@ -253,23 +269,63 @@ def draw_interactive(G: nx.Graph, metrics: Dict[str, Dict[str, float]], outpath:
 
     # Add edges
     for u, v, d in G.edges(data=True):
-        etype = d.get("type") or d.get("relation") or d.get("label") or d.get("predicate")
+        # Human-readable relationship text shown both on the edge and tooltip.
+        etype = d.get("fact") or d.get("type") or d.get("relation") or d.get("label") or d.get("predicate")
         e_style = edge_styles.get(etype, {}) if edge_styles else {}
         e_kwargs = {}
+
         if e_style.get("dashed") is True:
             e_kwargs["dashes"] = True
         if "width" in e_style:
             e_kwargs["width"] = e_style["width"]
+
+        fact_bits = []
         if etype:
-            e_kwargs["title"] = str(etype)
+            fact_bits.append(f"<strong>{etype}</strong>")
+        if d.get("pid"):
+            fact_bits.append(f"PID: {d['pid']}")
+        if d.get("source_system"):
+            fact_bits.append(f"Source: {d['source_system']}")
+        if d.get("evidence_url"):
+            fact_bits.append(f"Evidence: {d['evidence_url']}")
+        if d.get("description"):
+            fact_bits.append(d["description"])
+
+        if fact_bits:
+            e_kwargs["title"] = "<br>".join(str(bit) for bit in fact_bits)
+
+        if etype:
+            e_kwargs["label"] = str(etype)
+            e_kwargs["font"] = {"size": 10, "align": "horizontal", "background": "#050505"}
+
+        if G.is_directed():
+            e_kwargs["arrows"] = "to"
+
         net.add_edge(str(u), str(v), **e_kwargs)
 
     net.set_options("""
     const options = {
       nodes: { scaling: { min: 5, max: 50 } },
-      edges: { color: { inherit: true }, smooth: { type: "continuous" } },
-      physics: { stabilization: { iterations: 250 }, barnesHut: { springLength: 120 } },
-      interaction: { tooltipDelay: 120, hideEdgesOnDrag: false, multiselect: true }
+      edges: {
+        color: { inherit: true },
+        smooth: { type: "continuous", roundness: 0.3 },
+        font: { size: 10, face: "Inter", strokeWidth: 1, strokeColor: "#000000" }
+      },
+      physics: {
+        enabled: true,
+        solver: "forceAtlas2Based",
+        stabilization: { iterations: 300 },
+        forceAtlas2Based: { springLength: 60, damping: 0.4, avoidOverlap: 0.5 }
+      },
+      interaction: {
+        tooltipDelay: 120,
+        hideEdgesOnDrag: false,
+        multiselect: true,
+        dragNodes: true,
+        dragView: true,
+        navigationButtons: true,
+        keyboard: { enabled: true }
+      }
     }""")
     net.show(outpath)
 
