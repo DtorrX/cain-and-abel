@@ -53,6 +53,74 @@ def test_graph_builder_creates_nodes_and_edges():
     assert result.stats.relation_counts["father"] == 1
 
 
+def test_family_clusters_and_hierarchy_levels():
+    edges = [
+        Edge(
+            source="Q1",
+            target="Q2",
+            relation="child",
+            pid="P40",
+            source_system="wikidata",
+            evidence_url="https://example.com",
+            retrieved_at="2024-01-01T00:00:00Z",
+        ),
+        Edge(
+            source="Q2",
+            target="Q3",
+            relation="child",
+            pid="P40",
+            source_system="wikidata",
+            evidence_url="https://example.com",
+            retrieved_at="2024-01-01T00:00:00Z",
+        ),
+        Edge(
+            source="Q2",
+            target="Q4",
+            relation="spouse",
+            pid="P26",
+            source_system="wikidata",
+            evidence_url="https://example.com",
+            retrieved_at="2024-01-01T00:00:00Z",
+        ),
+    ]
+    labels = {
+        "Q1": {"label": "Founder"},
+        "Q2": {"label": "Heir"},
+        "Q3": {"label": "Grandchild"},
+        "Q4": {"label": "Partner"},
+    }
+    builder = GraphBuilder(
+        DummyResolver(),
+        DummyWikidata(edges, labels),
+        DummyWikipedia(),
+        max_depth=2,
+    )
+    result = builder.crawl(["Q1"])
+    graph = result.graph
+
+    node_store = getattr(graph, "_nodes", None)
+    if node_store is None:
+        node_store = graph.nodes  # type: ignore[assignment]
+
+    def node_attrs(node_id):
+        try:
+            return node_store[node_id]
+        except Exception:
+            return graph.nodes[node_id]  # type: ignore[index]
+
+    clusters = node_attrs("Q1").get("clusters", [])
+    assert clusters, "family cluster should be assigned"
+    cluster_id = clusters[0]
+    assert cluster_id in node_attrs("Q2").get("clusters", [])
+    assert cluster_id in node_attrs("Q3").get("clusters", [])
+    assert cluster_id in node_attrs("Q4").get("clusters", [])
+
+    assert node_attrs("Q1")["family_hierarchy_level"] == 0
+    assert node_attrs("Q2")["family_hierarchy_level"] == 1
+    assert node_attrs("Q3")["family_hierarchy_level"] == 2
+    assert node_attrs("Q4")["family_hierarchy_level"] == 1
+
+
 def test_graph_builder_integrates_government_index():
     official = CIAOfficial(
         country="United Arab Emirates",

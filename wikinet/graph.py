@@ -13,7 +13,7 @@ import networkx as nx
 from .cia import GovernmentIndex
 from .resolver import Resolver
 from .utils import console, logger
-from .wikidata import WikidataClient
+from .wikidata import FAMILY_PROPS, WikidataClient
 from .wikipedia import WikipediaClient
 
 
@@ -119,6 +119,119 @@ class GraphBuilder:
                     augmented.append(qid)
         return augmented
 
+    def _annotate_family_hierarchy(self, graph: nx.MultiDiGraph) -> None:
+        """Attach family clusters and hierarchy levels to graph nodes.
+
+        Royal-family investigations often hinge on quickly spotting kinship
+        groupings and generational layers. This helper walks the existing
+        graph, clusters nodes connected via family relations, and annotates
+        each node with a stable cluster id plus a best-effort generation
+        level. Peer relations (spouse/sibling/partner/relative) sit on the
+        same level, while parent/child edges push descendants down the
+        hierarchy.
+        """
+
+        family_relations = set(FAMILY_PROPS.values())
+        if not any(
+            data.get("relation") in family_relations
+            for _, _, data in graph.edges(data=True)
+        ):
+            return
+
+        def iter_nodes() -> List[str]:
+            try:
+                nodes_obj = graph.nodes  # type: ignore[attr-defined]
+                if callable(nodes_obj):
+                    return list(nodes_obj())
+                return list(nodes_obj)
+            except Exception:
+                return list(getattr(graph, "_nodes", {}).keys())
+
+        adjacency: Dict[str, Set[str]] = {node: set() for node in iter_nodes()}
+        for u, v, data in graph.edges(data=True):
+            if data.get("relation") in family_relations:
+                adjacency.setdefault(u, set()).add(v)
+                adjacency.setdefault(v, set()).add(u)
+
+        parent_edges: List[Tuple[str, str]] = []
+        peer_edges: Dict[str, Set[str]] = {}
+        for u, v, data in graph.edges(data=True):
+            relation = data.get("relation")
+            if relation == "child":
+                parent_edges.append((u, v))
+            elif relation in {"father", "mother"}:
+                parent_edges.append((v, u))
+            elif relation in {"spouse", "sibling", "partner", "relative"}:
+                peer_edges.setdefault(u, set()).add(v)
+                peer_edges.setdefault(v, set()).add(u)
+
+        def annotate_node(node_id: str, cluster_id: str) -> None:
+            try:
+                node_attrs = graph.nodes[node_id]  # type: ignore[index]
+            except Exception:
+                node_attrs = getattr(graph, "_nodes", {}).setdefault(node_id, {})
+            existing_clusters = set(node_attrs.get("clusters", []))
+            node_attrs["clusters"] = sorted(existing_clusters | {cluster_id})
+
+        def compute_levels(nodes: Set[str]) -> Dict[str, int]:
+            incoming: Dict[str, int] = {node: 0 for node in nodes}
+            children: Dict[str, List[str]] = {node: [] for node in nodes}
+            for parent, child in parent_edges:
+                if parent not in nodes or child not in nodes:
+                    continue
+                children[parent].append(child)
+                incoming[child] = incoming.get(child, 0) + 1
+                incoming.setdefault(parent, 0)
+
+            roots = {
+                parent
+                for parent, _ in parent_edges
+                if parent in nodes and incoming.get(parent, 0) == 0
+            }
+            frontier = list(roots) or [node for node, indegree in incoming.items() if indegree == 0]
+            if not frontier:
+                frontier = list(nodes)
+            levels: Dict[str, int] = {}
+            queue: deque[Tuple[str, int]] = deque((node, 0) for node in frontier)
+            while queue:
+                node, level = queue.popleft()
+                if node in levels:
+                    continue
+                levels[node] = level
+                for child in children.get(node, []):
+                    queue.append((child, level + 1))
+                for peer in peer_edges.get(node, set()):
+                    queue.append((peer, level))
+            for node in nodes:
+                levels.setdefault(node, 0)
+            return levels
+
+        visited: Set[str] = set()
+        component_idx = 0
+        for node in adjacency:
+            if node in visited or not adjacency.get(node):
+                continue
+            component_idx += 1
+            stack = [node]
+            component_nodes: Set[str] = set()
+            while stack:
+                current = stack.pop()
+                if current in visited:
+                    continue
+                visited.add(current)
+                component_nodes.add(current)
+                stack.extend(adjacency.get(current, set()))
+            component_levels = compute_levels(component_nodes)
+            cluster_id = f"royal_family_{component_idx}"
+            for member in component_nodes:
+                annotate_node(member, cluster_id)
+                try:
+                    graph.nodes[member]["family_hierarchy_level"] = component_levels[member]  # type: ignore[index]
+                except Exception:
+                    getattr(graph, "_nodes", {}).setdefault(member, {})[
+                        "family_hierarchy_level"
+                    ] = component_levels[member]
+
     def crawl(self, seeds: Iterable[str]) -> CrawlResult:
         qids = self.resolver.resolve_seeds(seeds)
         if self.government_index:
@@ -197,6 +310,8 @@ class GraphBuilder:
                 for edge in edges:
                     if edge.target not in visited and self._should_continue(graph):
                         queue.append((edge.target, depth + 1))
+        if self.include_family:
+            self._annotate_family_hierarchy(graph)
         stats.total_nodes = graph.number_of_nodes()
         stats.total_edges = graph.number_of_edges()
         return CrawlResult(graph=graph, stats=stats)

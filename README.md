@@ -113,6 +113,24 @@ The resulting `graph.graphml` and `graph.dot` files can be opened with Gephi, Cy
 - CIA world-leader augmentation looks up country labels in the crawl and automatically pulls the ministry/security roster for that country so you always capture the top brass, not just royals.
 - Relationship metadata (PID + human-readable relation) is preserved end-to-end. When the exporter writes `edges.json`, every edge still carries `pid`, `relation`, `source_system`, and `evidence_url`.
 
+### Royal-family hierarchy clusters
+
+When `--mode family` is enabled, Wikinet groups kinship edges into clustered
+family components and annotates each node with two helpful attributes:
+
+- `clusters`: stable identifiers like `royal_family_1` that keep spouses,
+  siblings, parents, and children together for visualization or post-processing
+  (e.g., filtering to just the ruling house in Gephi).
+- `family_hierarchy_level`: a generation-style level (0 for progenitors,
+  +1 for each descendant step) that keeps spouses/partners on the same level
+  and walks parent/child edges downward. This makes kinship layers apparent in
+  DOT/GraphML exports without extra tooling.
+
+If node relationships appear sparse in your viewer, double-check that you ran
+with `--mode family` (or left it at the default `family,political`) and that
+the generated `edges.json` carries the expected `relation` keys. The exporter
+preserves these attributes so layout tools can color/label edges correctly.
+
 ## Enrichment script and taxonomy overrides
 
 The optional `scripts/enrich_network.py` utility annotates the exported graph with graph metrics, inferred roles/countries, semantic edge layers, and time ranges. It now supports a `--taxonomy` flag that points to a JSON file with overrides so you can retarget heuristics away from Gulf royals toward any custom sector:
