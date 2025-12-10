@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
+import json
 import re
 import unicodedata
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Set
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set
 
 from .http import HTTPClient, HTTPError
 from .utils import logger
 
-CIA_WORLD_LEADERS_URL = "https://www.cia.gov/resources/world-leaders/page-data/index/page-data.json"
+CIA_WORLD_LEADERS_URL = "https://data.opensanctions.org/datasets/latest/us_cia_world_leaders/entities.ftm.json"
+LEGACY_CIA_URL = "https://www.cia.gov/resources/world-leaders/page-data/index/page-data.json"
 
 GOVERNMENT_KEYWORDS = (
     "minister",
@@ -108,16 +110,86 @@ class CIAWorldLeadersClient:
         self.http = http
 
     def fetch(self) -> List[CIAOfficial]:
-        """Fetch the CIA leadership dataset and return structured officials."""
+        """Fetch the CIA leadership dataset and return structured officials.
 
+        The preferred source is the OpenSanctions mirror of the CIA roster, which
+        exposes newline-delimited FollowTheMoney entities. If that endpoint fails
+        or returns no entries, we fall back to the legacy CIA site structure to
+        preserve functionality.
+        """
+
+        officials = self._fetch_opensanctions()
+        if officials:
+            return officials
+        logger.info("Falling back to legacy CIA world leaders endpoint")
+        return self._fetch_legacy()
+
+    def _fetch_opensanctions(self) -> List[CIAOfficial]:
         try:
-            payload = self.http.get_json(
+            resp = self.http.request(
+                "GET",
                 CIA_WORLD_LEADERS_URL,
                 headers={"Accept": "application/json"},
             )
         except HTTPError as exc:  # pragma: no cover - network failures handled by caller
-            logger.warning("CIA World Leaders fetch failed: %s", exc)
+            logger.warning("OpenSanctions CIA World Leaders fetch failed: %s", exc)
             return []
+
+        text = getattr(resp, "text", "")
+        if not text:
+            return []
+
+        officials: List[CIAOfficial] = []
+        for line in text.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                entity = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            official = self._official_from_entity(entity)
+            if official:
+                officials.append(official)
+        return officials
+
+    def _official_from_entity(self, entity: Mapping[str, Any]) -> Optional[CIAOfficial]:
+        if not isinstance(entity, Mapping):
+            return None
+        props = entity.get("properties")
+        if not isinstance(props, Mapping):
+            return None
+
+        def _first(key: str) -> Optional[str]:
+            value = props.get(key)
+            if isinstance(value, list):
+                for candidate in value:
+                    if isinstance(candidate, str) and candidate.strip():
+                        return candidate.strip()
+            elif isinstance(value, str) and value.strip():
+                return value.strip()
+            return None
+
+        name = _first("name") or _first("alias")
+        position = _first("position") or _first("title") or _first("summary")
+        country = _first("country") or _first("jurisdiction") or _first("nationality")
+
+        if not name or not position or not country:
+            return None
+
+        categories = tuple(sorted(_category_keys(position)))
+        return CIAOfficial(country=country, position=position, name=name, categories=categories)
+
+    def _fetch_legacy(self) -> List[CIAOfficial]:
+        try:
+            payload = self.http.get_json(
+                LEGACY_CIA_URL,
+                headers={"Accept": "application/json"},
+            )
+        except HTTPError as exc:  # pragma: no cover - network failures handled by caller
+            logger.warning("Legacy CIA World Leaders fetch failed: %s", exc)
+            return []
+
         countries = self._extract_countries(payload)
         officials: List[CIAOfficial] = []
         for country in countries:
@@ -282,4 +354,5 @@ __all__ = [
     "CIAOfficial",
     "GovernmentIndex",
     "CIA_WORLD_LEADERS_URL",
+    "LEGACY_CIA_URL",
 ]

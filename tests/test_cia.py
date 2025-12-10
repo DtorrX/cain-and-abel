@@ -1,46 +1,53 @@
+import json
+
 import networkx as nx
 
-from wikinet.cia import CIAOfficial, CIAWorldLeadersClient, GovernmentIndex, CIA_WORLD_LEADERS_URL
+from wikinet.cia import (
+    CIAOfficial,
+    CIAWorldLeadersClient,
+    GovernmentIndex,
+    CIA_WORLD_LEADERS_URL,
+)
 
 
 class DummyHTTP:
-    def __init__(self, payload):
+    def __init__(self, payload=None, text=None):
         self.payload = payload
+        self.text = text
         self.requested = None
 
     def get_json(self, url, headers=None):
         self.requested = (url, headers)
-        return self.payload
+        return self.payload or {}
+
+    def request(self, method, url, headers=None, **kwargs):
+        self.requested = (url, headers)
+
+        class Resp:
+            def __init__(self, text):
+                self.text = text
+
+        return Resp(self.text or "")
 
 
 def test_cia_client_parses_officials():
-    payload = {
-        "result": {
-            "data": {
-                "worldLeadersLeadershipData": {
-                    "countries": [
-                        {
-                            "name": "United Arab Emirates",
-                            "sections": [
-                                {
-                                    "entries": [
-                                        {"name": "Mohammed bin Zayed", "title": "President"},
-                                        {"name": "Tahnoun bin Zayed", "title": "National Security Advisor"},
-                                    ]
-                                },
-                                {
-                                    "entries": [
-                                        {"name": "Mohammed bin Rashid", "title": "Prime Minister"},
-                                    ]
-                                },
-                            ],
-                        }
-                    ]
-                }
+    entities = [
+        {
+            "properties": {
+                "name": ["Mohammed bin Zayed"],
+                "position": ["President"],
+                "country": ["United Arab Emirates"],
             }
-        }
-    }
-    http = DummyHTTP(payload)
+        },
+        {
+            "properties": {
+                "name": ["Tahnoun bin Zayed"],
+                "position": ["National Security Advisor"],
+                "country": ["United Arab Emirates"],
+            }
+        },
+    ]
+    http = DummyHTTP(text="\n".join(json.dumps(entry) for entry in entities))
     client = CIAWorldLeadersClient(http)
     officials = client.fetch()
     assert http.requested[0] == CIA_WORLD_LEADERS_URL
