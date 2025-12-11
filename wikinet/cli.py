@@ -18,6 +18,7 @@ from .resolver import Resolver
 from .utils import RateLimiter, console, logger, set_log_level
 from .wikidata import WikidataClient
 from .wikipedia import WikipediaClient
+from . import api as wikinet_api
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -32,7 +33,11 @@ def build_parser() -> argparse.ArgumentParser:
     crawl.add_argument("--max-depth", type=int, default=1)
     crawl.add_argument("--max-nodes", type=int)
     crawl.add_argument("--max-edges", type=int)
-    crawl.add_argument("--mode", default="family,political", help="family, political, or both")
+    crawl.add_argument(
+        "--mode",
+        default="family,political",
+        help="family, political, security, corporate, or full (comma-separated)",
+    )
     crawl.add_argument("--rate", type=float, default=5.0, help="Max requests per second")
     crawl.add_argument("--out", required=True, help="Output directory")
     crawl.add_argument("--cache-dir", help="Cache directory (default: .wikinet-cache)")
@@ -49,6 +54,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = sub.add_parser("validate", help="Validate exported graph")
     validate.add_argument("path", help="Output directory to validate")
+
+    enrich = sub.add_parser("enrich", help="Enrich an exported graph with analytics")
+    enrich.add_argument("out_dir", help="Directory containing nodes.json and edges.json")
+    enrich.add_argument("--taxonomy", help="Optional taxonomy JSON for role mapping")
 
     return parser
 
@@ -68,11 +77,18 @@ def _collect_seeds(args: argparse.Namespace, resolver: Resolver) -> List[str]:
     return seeds
 
 
-def _parse_mode(mode: str) -> tuple[bool, bool]:
+def _parse_mode(mode: str) -> dict[str, bool]:
     parts = {m.strip().lower() for m in mode.split(",") if m.strip()}
-    include_family = "family" in parts or "family" not in parts and "political" not in parts
-    include_political = "political" in parts or "family" not in parts and "political" not in parts
-    return include_family, include_political
+    if not parts:
+        parts = {"family", "political"}
+    if "full" in parts:
+        parts = {"family", "political", "security", "corporate"}
+    return {
+        "include_family": "family" in parts,
+        "include_political": "political" in parts,
+        "include_security": "security" in parts,
+        "include_corporate": "corporate" in parts,
+    }
 
 
 def run_crawl(args: argparse.Namespace) -> None:
@@ -83,7 +99,7 @@ def run_crawl(args: argparse.Namespace) -> None:
     resolver = Resolver(http, lang=args.lang)
     wikidata_client = WikidataClient(http)
     wikipedia_client = WikipediaClient(http, lang=args.lang)
-    include_family, include_political = _parse_mode(args.mode)
+    modes = _parse_mode(args.mode)
 
     government_index: GovernmentIndex | None = None
     cia_client = CIAWorldLeadersClient(http)
@@ -98,8 +114,10 @@ def run_crawl(args: argparse.Namespace) -> None:
         resolver,
         wikidata_client,
         wikipedia_client,
-        include_family=include_family,
-        include_political=include_political,
+        include_family=modes["include_family"],
+        include_political=modes["include_political"],
+        include_security=modes["include_security"],
+        include_corporate=modes["include_corporate"],
         max_depth=args.max_depth,
         max_nodes=args.max_nodes,
         max_edges=args.max_edges,
@@ -148,6 +166,8 @@ def main(argv: Sequence[str] | None = None) -> None:
         run_crawl(args)
     elif args.command == "validate":
         run_validate(args.path)
+    elif args.command == "enrich":
+        wikinet_api.run_enrichment(args.out_dir, args.taxonomy)
     else:  # pragma: no cover - defensive
         parser.print_help()
 

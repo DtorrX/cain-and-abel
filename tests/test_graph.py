@@ -13,7 +13,7 @@ class DummyWikidata:
         self.edges = edges
         self.labels = labels
 
-    def fetch_relations(self, qids, include_family=True, include_political=True):
+    def fetch_relations(self, qids, include_family=True, include_political=True, **kwargs):
         return [edge for edge in self.edges if edge.source in qids]
 
     def fetch_labels(self, qids):

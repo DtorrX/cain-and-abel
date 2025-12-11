@@ -32,7 +32,28 @@ POLITICAL_PROPS = {
     "P2388": "officeholder",
 }
 
-ALL_PROPERTIES = {**FAMILY_PROPS, **POLITICAL_PROPS}
+SECURITY_PROPS = {
+    "P241": "military_branch",
+    "P410": "military_rank",
+    "P463": "member_of",
+    "P1027": "conferred_by",
+    "P1416": "affiliation",
+    "P797": "military_service",
+    "P611": "religious_order",
+    "P710": "participant",
+}
+
+CORPORATE_PROPS = {
+    "P127": "owned_by",
+    "P355": "subsidiary",
+    "P749": "parent",
+    "P1056": "product_or_service",
+    "P112": "founded_by",
+    "P1037": "director_manager",
+    "P1444": "destination_point",
+}
+
+ALL_PROPERTIES = {**FAMILY_PROPS, **POLITICAL_PROPS, **SECURITY_PROPS, **CORPORATE_PROPS}
 
 BATCH_RELATIONS_TEMPLATE = """
 SELECT ?src ?p ?dst ?srcLabel ?dstLabel WHERE {
@@ -78,12 +99,23 @@ class WikidataClient:
             }
         return result
 
-    def fetch_relations(self, qids: List[str], include_family: bool = True, include_political: bool = True) -> List[Edge]:
+    def fetch_relations(
+        self,
+        qids: List[str],
+        include_family: bool = True,
+        include_political: bool = True,
+        include_security: bool = False,
+        include_corporate: bool = False,
+    ) -> List[Edge]:
         props = []
         if include_family:
             props.extend(FAMILY_PROPS.keys())
         if include_political:
             props.extend(POLITICAL_PROPS.keys())
+        if include_security:
+            props.extend(SECURITY_PROPS.keys())
+        if include_corporate:
+            props.extend(CORPORATE_PROPS.keys())
         if not props:
             return []
         values = " ".join(f"(wd:{qid})" for qid in qids)
@@ -124,6 +156,8 @@ __all__ = [
     "WikidataClient",
     "FAMILY_PROPS",
     "POLITICAL_PROPS",
+    "SECURITY_PROPS",
+    "CORPORATE_PROPS",
     "ALL_PROPERTIES",
     "BATCH_RELATIONS_TEMPLATE",
 ]

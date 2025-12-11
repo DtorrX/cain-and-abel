@@ -22,6 +22,14 @@ Validate the export:
 wikinet validate out/bahrain
 ```
 
+Full-mode crawl + enrichment:
+
+```bash
+# Combine family, political, security, and corporate layers
+wikinet crawl --seed "Mohammed bin Zayed Al Nahyan" --mode full --max-depth 1 --out out/uae_full
+wikinet enrich out/uae_full --taxonomy configs/gulf_taxonomy.json
+```
+
 ## Features
 
 - Resolves page titles, Wikipedia categories, and explicit Q-IDs to Wikidata entities with transparent logging.
@@ -49,7 +57,7 @@ Environment variables may be placed in `.env` (optional) to configure proxies or
 | `--seed` | Seed page title or Q-ID (repeatable). |
 | `--category` | Wikipedia category to expand into seeds. |
 | `--qid` | Direct Wikidata Q-ID seed. |
-| `--mode` | `family`, `political`, or `family,political` (default). |
+| `--mode` | `family`, `political`, `security`, `corporate`, `full`, or comma-separated mix (default `family,political`). |
 | `--max-depth` | BFS depth limit from seed nodes. |
 | `--max-nodes` / `--max-edges` | Hard caps for exploration (useful for budgets). |
 | `--rate` | Maximum requests per second (default 5). |
@@ -98,6 +106,15 @@ python scripts/enrich_network.py \
 The diagnostics report captures how many times each relation/property appeared, the BFS depth distribution, and any infobox warnings so you can rapidly judge whether critical relationships were captured.
 
 The resulting `graph.graphml` and `graph.dot` files can be opened with Gephi, Cytoscape, or Graphviz for exploration. If Graphviz is installed, `graph.png` provides a ready-to-share visualization.
+
+### API snippet
+
+```python
+from wikinet.api import run_pipeline, run_enrichment
+
+graph = run_pipeline(seeds=["House of Khalifa"], mode="full", max_depth=1, out_dir="out/bahrain_full")
+run_enrichment("out/bahrain_full")
+```
 
 ## Debugging and observability
 
