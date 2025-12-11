@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Royal & Elite Network Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    #controls { padding: 10px; background: #f0f0f0; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    #graph { width: 100vw; height: 90vh; }
+    input[type="number"] { width: 80px; }
+    .node circle { stroke: #333; stroke-width: 1px; }
+    .node text { pointer-events: none; font-size: 10px; }
+    .highlight { stroke: #000; stroke-width: 2px; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <input type="file" id="fileInput" multiple>
+    <button id="loadBtn">Load nodes.json/edges.json</button>
+    <label>Min degree <input type="number" id="minDegree" value="0" min="0"></label>
+    <label><input type="checkbox" id="royalOnly"> Royals</label>
+    <label><input type="checkbox" id="securityOnly"> Security</label>
+    <label><input type="checkbox" id="corporateOnly"> Corporate</label>
+    <label>Search <input type="text" id="searchBox" placeholder="Name"></label>
+    <button id="exportPng">Export PNG</button>
+    <button id="exportFiltered">Export filtered JSON</button>
+  </div>
+  <svg id="graph"></svg>
+  <script>
+    const svg = d3.select('#graph');
+    const width = window.innerWidth;
+    const height = window.innerHeight - 60;
+    svg.attr('width', width).attr('height', height);
+
+    const colorByRole = {
+      royal: '#c77b30',
+      political: '#1f77b4',
+      security: '#c8242a',
+      corporate: '#2ca02c',
+      other: '#888'
+    };
+
+    let graphData = {nodes: [], edges: []};
+    let simulation;
+
+    function sizeFor(node) {
+      const importance = node.importance_score || node.degree_centrality || 0.1;
+      return 5 + importance * 20;
+    }
+
+    function layerFor(node) {
+      if ((node.primary_role || '').includes('royal') || (node.layers||[]).includes('royal')) return 'royal';
+      if ((node.primary_role||'') === 'security' || (node.layers||[]).includes('military')) return 'security';
+      if ((node.primary_role||'') === 'corporate') return 'corporate';
+      if ((node.primary_role||'') === 'political' || (node.layers||[]).includes('government')) return 'political';
+      return 'other';
+    }
+
+    function edgeStyle(edge) {
+      const layer = edge.layer || edge.relation;
+      if (['father','mother','child','spouse','relative','family'].includes(layer)) return '#c77b30';
+      if (['political','position_held','member_of'].includes(layer)) return '#1f77b4';
+      if (['security'].includes(layer)) return '#c8242a';
+      if (['corporate','owned_by','subsidiary','parent'].includes(layer)) return '#2ca02c';
+      return '#999';
+    }
+
+    function filterNodes(nodes) {
+      const minDegree = parseInt(document.getElementById('minDegree').value || '0', 10);
+      const royalOnly = document.getElementById('royalOnly').checked;
+      const securityOnly = document.getElementById('securityOnly').checked;
+      const corporateOnly = document.getElementById('corporateOnly').checked;
+      return nodes.filter(n => {
+        const degree = n.degree || 0;
+        const layer = layerFor(n);
+        if (degree < minDegree) return false;
+        if (royalOnly && layer !== 'royal') return false;
+        if (securityOnly && layer !== 'security') return false;
+        if (corporateOnly && layer !== 'corporate') return false;
+        return true;
+      });
+    }
+
+    function draw() {
+      const nodes = filterNodes(graphData.nodes);
+      const nodeIds = new Set(nodes.map(n => n.id));
+      const edges = graphData.edges.filter(e => nodeIds.has(e.source) && nodeIds.has(e.target));
+
+      simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(edges).id(d => d.id).distance(80))
+        .force('charge', d3.forceManyBody().strength(-120))
+        .force('center', d3.forceCenter(width/2, height/2));
+
+      svg.selectAll('*').remove();
+      const link = svg.append('g').attr('stroke-width', 1)
+        .selectAll('line')
+        .data(edges)
+        .join('line')
+        .attr('stroke', d => edgeStyle(d));
+
+      const node = svg.append('g').selectAll('g')
+        .data(nodes)
+        .join('g')
+        .attr('class', 'node')
+        .call(d3.drag()
+          .on('start', dragstarted)
+          .on('drag', dragged)
+          .on('end', dragended));
+
+      node.append('circle')
+        .attr('r', d => sizeFor(d))
+        .attr('fill', d => colorByRole[layerFor(d)] || '#888')
+        .on('click', (_, d) => highlightEgo(d.id));
+
+      node.append('text')
+        .attr('x', 8)
+        .attr('y', 3)
+        .text(d => d.label || d.id);
+
+      simulation.on('tick', () => {
+        link
+          .attr('x1', d => d.source.x)
+          .attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x)
+          .attr('y2', d => d.target.y);
+
+        node.attr('transform', d => `translate(${d.x},${d.y})`);
+      });
+    }
+
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+
+    function highlightEgo(id) {
+      const neighbors = new Set();
+      graphData.edges.forEach(e => {
+        if (e.source === id) neighbors.add(e.target);
+        if (e.target === id) neighbors.add(e.source);
+      });
+      svg.selectAll('circle').classed('highlight', d => d.id === id || neighbors.has(d.id));
+    }
+
+    function handleFiles(files) {
+      let nodes, edges;
+      for (const file of files) {
+        if (file.name.includes('nodes')) nodes = file;
+        if (file.name.includes('edges')) edges = file;
+      }
+      if (!nodes || !edges) {
+        alert('Provide both nodes.json and edges.json');
+        return;
+      }
+      Promise.all([nodes.text(), edges.text()]).then(([nText, eText]) => {
+        graphData.nodes = JSON.parse(nText);
+        graphData.edges = JSON.parse(eText);
+        draw();
+      });
+    }
+
+    document.getElementById('loadBtn').onclick = () => {
+      const files = document.getElementById('fileInput').files;
+      if (files.length) return handleFiles(files);
+      fetch('nodes.json').then(r => r.json()).then(n => { graphData.nodes = n; return fetch('edges.json'); })
+        .then(r => r.json())
+        .then(e => { graphData.edges = e; draw(); })
+        .catch(() => alert('Failed to load nodes.json/edges.json'));
+    };
+
+    document.getElementById('fileInput').addEventListener('change', (e) => handleFiles(e.target.files));
+    document.getElementById('minDegree').addEventListener('change', draw);
+    document.getElementById('royalOnly').addEventListener('change', draw);
+    document.getElementById('securityOnly').addEventListener('change', draw);
+    document.getElementById('corporateOnly').addEventListener('change', draw);
+    document.getElementById('searchBox').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      svg.selectAll('text').classed('highlight', d => (d.label||'').toLowerCase().includes(term));
+    });
+
+    document.getElementById('exportPng').onclick = () => {
+      const serializer = new XMLSerializer();
+      const svgString = serializer.serializeToString(document.querySelector('svg'));
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      const blob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        const a = document.createElement('a');
+        a.download = 'network.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+      };
+      img.src = url;
+    };
+
+    document.getElementById('exportFiltered').onclick = () => {
+      const nodes = filterNodes(graphData.nodes);
+      const nodeIds = new Set(nodes.map(n => n.id));
+      const edges = graphData.edges.filter(e => nodeIds.has(e.source) && nodeIds.has(e.target));
+      const blob = new Blob([JSON.stringify({nodes, edges}, null, 2)], {type: 'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'filtered_network.json';
+      a.click();
+    };
+  </script>
+</body>
+</html>

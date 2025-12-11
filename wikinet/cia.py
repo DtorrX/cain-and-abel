@@ -106,8 +106,9 @@ def _category_keys(position: str) -> Set[str]:
 class CIAWorldLeadersClient:
     """Fetch and parse the CIA World Leaders dataset."""
 
-    def __init__(self, http: HTTPClient) -> None:
+    def __init__(self, http: HTTPClient, cache_path: Path | None = None) -> None:
         self.http = http
+        self.cache_path = cache_path or CACHE_PATH
 
     def fetch(self) -> List[CIAOfficial]:
         """Fetch the CIA leadership dataset and return structured officials.

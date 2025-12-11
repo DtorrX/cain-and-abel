@@ -79,6 +79,8 @@ class GraphBuilder:
         *,
         include_family: bool = True,
         include_political: bool = True,
+        include_security: bool = False,
+        include_corporate: bool = False,
         max_depth: int = 1,
         max_nodes: Optional[int] = None,
         max_edges: Optional[int] = None,
@@ -89,6 +91,8 @@ class GraphBuilder:
         self.wikipedia = wikipedia
         self.include_family = include_family
         self.include_political = include_political
+        self.include_security = include_security
+        self.include_corporate = include_corporate
         self.max_depth = max_depth
         self.max_nodes = max_nodes
         self.max_edges = max_edges
@@ -253,7 +257,13 @@ class GraphBuilder:
             console.log(f"Expanding {qid} at depth {depth}")
             stats.expanded_nodes += 1
             stats.depth_histogram[depth] += 1
-            edges = self.wikidata.fetch_relations([qid], self.include_family, self.include_political)
+            edges = self.wikidata.fetch_relations(
+                [qid],
+                include_family=self.include_family,
+                include_political=self.include_political,
+                include_security=self.include_security,
+                include_corporate=self.include_corporate,
+            )
             neighbor_ids = {edge.target for edge in edges} | {edge.source for edge in edges}
             labels = self.wikidata.fetch_labels(neighbor_ids | {qid})
             if self.government_index:

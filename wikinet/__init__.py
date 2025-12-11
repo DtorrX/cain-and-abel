@@ -2,7 +2,9 @@
 
 from importlib.metadata import version, PackageNotFoundError
 
-__all__ = ["__version__"]
+from .api import run_pipeline, run_enrichment
+
+__all__ = ["__version__", "run_pipeline", "run_enrichment"]
 
 try:
     __version__ = version("wikinet")

@@ -17,6 +17,14 @@ class DummyHTTP:
         self.requested = None
 
     def get_json(self, url, headers=None):
+        if self.error:
+            raise self.error
+        self.requested = (url, headers)
+        return self.payload or {}
+
+    def request(self, method, url, headers=None, **kwargs):
+        if self.error:
+            raise self.error
         self.requested = (url, headers)
         return self.payload or {}
 
@@ -55,6 +63,53 @@ def test_cia_client_parses_officials():
     assert "Mohammed bin Zayed" in names
     defense_categories = next(official.categories for official in officials if official.name == "Tahnoun bin Zayed")
     assert "bureaucrat" in defense_categories or "military" in defense_categories
+
+
+def test_cia_cache_preferred_when_fresh(tmp_path):
+    cache_path = tmp_path / "cache.json"
+    now = datetime.now().timestamp()
+    cache_payload = [
+        {"country": "UAE", "position": "President", "name": "MBZ", "categories": ["government"]}
+    ]
+    cache_path.write_text(json.dumps(cache_payload), encoding="utf-8")
+    os.utime(cache_path, (now, now))
+    http = DummyHTTP(text="")
+    client = CIAWorldLeadersClient(http, cache_path=cache_path)
+    officials = client.fetch()
+    assert officials[0].name == "MBZ"
+    assert http.requested is None
+
+
+def test_cia_cache_fallback_on_error(tmp_path):
+    cache_path = tmp_path / "cache.json"
+    stale_time = (datetime.now() - timedelta(days=30)).timestamp()
+    cache_payload = [
+        {"country": "UAE", "position": "Advisor", "name": "Tahnoun", "categories": ["security"]}
+    ]
+    cache_path.write_text(json.dumps(cache_payload), encoding="utf-8")
+    os.utime(cache_path, (stale_time, stale_time))
+    http = DummyHTTP(error=Exception("boom"))
+    client = CIAWorldLeadersClient(http, cache_path=cache_path)
+    officials = client.fetch()
+    assert officials and officials[0].name == "Tahnoun"
+
+
+def test_cia_cache_refreshed_on_success(tmp_path):
+    cache_path = tmp_path / "cache.json"
+    entities = [
+        {
+            "properties": {
+                "name": ["Leader"],
+                "position": ["President"],
+                "country": ["Freedonia"],
+            }
+        }
+    ]
+    http = DummyHTTP(text="\n".join(json.dumps(entry) for entry in entities))
+    client = CIAWorldLeadersClient(http, cache_path=cache_path)
+    officials = client.fetch()
+    assert officials[0].country == "Freedonia"
+    assert cache_path.exists()
 
 
 def test_government_index_matches_and_annotates():

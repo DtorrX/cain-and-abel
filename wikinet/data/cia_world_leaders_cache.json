@@ -1,0 +1,18 @@
+[
+  {
+    "country": "United Arab Emirates",
+    "position": "President",
+    "name": "Mohammed bin Zayed",
+    "categories": [
+      "government"
+    ]
+  },
+  {
+    "country": "United Arab Emirates",
+    "position": "National Security Advisor",
+    "name": "Tahnoun bin Zayed",
+    "categories": [
+      "bureaucrat"
+    ]
+  }
+]
