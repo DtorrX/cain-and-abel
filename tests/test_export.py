@@ -20,7 +20,7 @@ def test_export_creates_files(tmp_path):
         retrieved_at="2024-01-01T00:00:00Z",
     )
     paths = export_graph(graph, tmp_path)
-    for key in ("nodes", "edges", "graphml", "legend"):
+    for key in ("nodes", "edges", "graphml", "legend", "family_chart"):
         assert (tmp_path / os.path.basename(paths[key])).exists()
     with open(tmp_path / "nodes.json", "r", encoding="utf-8") as fh:
         data = json.load(fh)

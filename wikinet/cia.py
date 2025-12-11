@@ -6,6 +6,8 @@ import json
 import re
 import unicodedata
 from dataclasses import dataclass
+from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set
 
 from .http import HTTPClient, HTTPError
@@ -13,6 +15,8 @@ from .utils import logger
 
 CIA_WORLD_LEADERS_URL = "https://data.opensanctions.org/datasets/latest/us_cia_world_leaders/entities.ftm.json"
 LEGACY_CIA_URL = "https://www.cia.gov/resources/world-leaders/page-data/index/page-data.json"
+CACHE_PATH = Path.home() / ".wikinet-cache" / "cia_world_leaders.json"
+CACHE_TTL = timedelta(days=14)
 
 GOVERNMENT_KEYWORDS = (
     "minister",
@@ -108,7 +112,9 @@ class CIAWorldLeadersClient:
 
     def __init__(self, http: HTTPClient, cache_path: Path | None = None) -> None:
         self.http = http
-        self.cache_path = cache_path or CACHE_PATH
+        self.cache_path = Path(cache_path or CACHE_PATH)
+        self._respect_existing_cache = cache_path is not None
+        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
 
     def fetch(self) -> List[CIAOfficial]:
         """Fetch the CIA leadership dataset and return structured officials.
@@ -119,11 +125,26 @@ class CIAWorldLeadersClient:
         preserve functionality.
         """
 
-        officials = self._fetch_opensanctions()
+        cached = self._read_cache() if self._respect_existing_cache else None
+        if cached and self._cache_fresh():
+            return cached
+
+        try:
+            officials = self._fetch_opensanctions()
+            if not officials:
+                logger.info("Falling back to legacy CIA world leaders endpoint")
+                officials = self._fetch_legacy()
+        except Exception as exc:  # pragma: no cover - network issues
+            logger.warning("CIA fetch failed: %s", exc)
+            return cached or []
+
         if officials:
+            self._write_cache(officials)
+            self._respect_existing_cache = True
             return officials
-        logger.info("Falling back to legacy CIA world leaders endpoint")
-        return self._fetch_legacy()
+
+        # If nothing new was fetched, fall back to whatever stale cache exists
+        return cached or []
 
     def _fetch_opensanctions(self) -> List[CIAOfficial]:
         try:
@@ -212,6 +233,44 @@ class CIAWorldLeadersClient:
                     )
                 )
         return officials
+
+    def _cache_fresh(self) -> bool:
+        try:
+            mtime = datetime.fromtimestamp(self.cache_path.stat().st_mtime)
+        except FileNotFoundError:
+            return False
+        return datetime.now() - mtime <= CACHE_TTL
+
+    def _read_cache(self) -> List[CIAOfficial] | None:
+        if not self.cache_path.exists():
+            return None
+        try:
+            raw = json.loads(self.cache_path.read_text(encoding="utf-8"))
+            officials = [
+                CIAOfficial(
+                    country=item["country"],
+                    position=item["position"],
+                    name=item["name"],
+                    categories=tuple(item.get("categories", ())),
+                )
+                for item in raw
+                if isinstance(item, Mapping)
+            ]
+            return officials or None
+        except Exception:
+            return None
+
+    def _write_cache(self, officials: Sequence[CIAOfficial]) -> None:
+        payload = [
+            {
+                "country": o.country,
+                "position": o.position,
+                "name": o.name,
+                "categories": list(o.categories),
+            }
+            for o in officials
+        ]
+        self.cache_path.write_text(json.dumps(payload), encoding="utf-8")
 
     def _extract_countries(self, payload: Mapping[str, object]) -> List[Mapping[str, object]]:
         """Walk nested payload to find the list of countries."""

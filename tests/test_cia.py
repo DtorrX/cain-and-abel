@@ -1,4 +1,6 @@
 import json
+import os
+from datetime import datetime, timedelta
 
 import networkx as nx
 
@@ -11,10 +13,11 @@ from wikinet.cia import (
 
 
 class DummyHTTP:
-    def __init__(self, payload=None, text=None):
+    def __init__(self, payload=None, text=None, error=None):
         self.payload = payload
         self.text = text
         self.requested = None
+        self.error = error
 
     def get_json(self, url, headers=None):
         if self.error:
