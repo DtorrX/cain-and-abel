@@ -1,0 +1,20 @@
+{
+  "name": "cain-and-abel",
+  "version": "1.0.0",
+  "description": "Production-grade crawler for building enriched socio-political and corporate networks from Wikidata, Wikipedia, and the CIA World Leaders dataset. The crawler is designed to be cost-conscious, observable, and adaptable so you can pivot quickly from royal families to Israeli defense companies (or any other vertical) without rewriting core logic.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "family-chart": "*",
+    "d3": "*"
+  }
+}

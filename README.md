@@ -82,6 +82,45 @@ wikinet crawl --seed "House of Nahyan" --seed "Mohammed bin Rashid Al Maktoum" -
 wikinet validate out/uae
 ```
 
+## Family Tree Viewer (family-chart)
+
+Build an interactive family tree straight from Wikinet outputs using the lightweight [family-chart](https://github.com/donatso/family-chart) library.
+
+```bash
+npm install
+make demo_uae_family_chart
+# Open http://localhost:8000/out/uae/ in your browser
+```
+
+This workflow will crawl UAE royals, export a `family_chart.json`, copy a minimal viewer to `out/uae/index.html`, and serve everything via `python3 -m http.server`.
+
+### `family_chart.json` schema
+
+The viewer expects a list of people with identifiers, presentation data, and relationships:
+
+```jsonc
+[
+  {
+    "id": "Q123",
+    "data": {
+      "first name": "Fatima",
+      "last name": "bint Zayed",
+      "label": "Sheikha Fatima bint Zayed Al Nahyan",
+      "birthday": "1949-07-15",
+      "gender": "F",
+      "qid": "Q123"
+    },
+    "rels": {
+      "spouses": ["Q456"],
+      "children": ["Q789"],
+      "parents": ["Q001", "Q002"]
+    }
+  }
+]
+```
+
+To adapt the viewer to any crawl, replace `out/uae` with your run directory (e.g., `out/bahrain`), rerun the exporter target, and open `http://localhost:8000/out/<run>/`.
+
 ### Israeli defense-industrial complex (arbitrary, non-royal example)
 
 ```bash
