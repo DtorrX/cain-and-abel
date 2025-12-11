@@ -8,6 +8,7 @@ from typing import Dict
 
 import networkx as nx
 
+from .family_chart import export_family_chart
 from .utils import console
 
 EDGE_STYLES = {
@@ -121,12 +122,15 @@ def export_graph(graph: nx.MultiDiGraph, out_dir: str) -> Dict[str, str]:
     with open(legend_path, "w", encoding="utf-8") as fh:
         json.dump(LEGEND, fh, indent=2)
 
+    family_chart_path = export_family_chart(graph, out_dir)
+
     return {
         "nodes": nodes_path,
         "edges": edges_path,
         "graphml": graphml_path,
         "dot": dot_path,
         "legend": legend_path,
+        "family_chart": family_chart_path,
     }
 
 

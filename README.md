@@ -36,7 +36,7 @@ wikinet enrich out/uae_full --taxonomy configs/gulf_taxonomy.json
 - Fetches family, political, corporate governance, ownership, and business relations in batches while preserving the PID metadata that proves provenance.
 - Falls back to Wikipedia infobox parsing when SPARQL results are sparse so that seed relationships are still represented (and clearly tagged as infobox-derived).
 - Optionally augments seeds with the CIA World Leaders roster to automatically include ministers, defense chiefs, or other officials relevant to your investigation.
-- Produces JSON, GraphML, DOT, and optional PNG outputs alongside a styling legend for visualization. A crawl diagnostics report (relation histograms, depth counts, warnings) can also be emitted for QA.
+- Produces JSON, GraphML, DOT, and optional PNG outputs alongside a styling legend for visualization. A crawl diagnostics report (relation histograms, depth counts, warnings) can also be emitted for QA. Family crawls additionally emit a `family_chart.json` inspired by the [family-chart](https://github.com/donatso/family-chart) format so you can plug results straight into lightweight tree viewers.
 - Uses SQLite-backed caching with retries, throttling, and resumable runs to stay frugal on bandwidth/API quotas.
 - Rich CLI with `crawl`, `validate`, and configurable log levels, request budgets, and edge filters.
 - Pytest suite covering resolver, SPARQL, infobox fallback, graph building, export, and CLI parsing.
