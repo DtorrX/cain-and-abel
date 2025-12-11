@@ -1,9 +1,5 @@
 import json
 
-import json
-import os
-from datetime import datetime, timedelta
-
 import networkx as nx
 
 from wikinet.cia import (
@@ -15,10 +11,9 @@ from wikinet.cia import (
 
 
 class DummyHTTP:
-    def __init__(self, payload=None, text=None, error: Exception | None = None):
+    def __init__(self, payload=None, text=None):
         self.payload = payload
         self.text = text
-        self.error = error
         self.requested = None
 
     def get_json(self, url, headers=None):
@@ -31,6 +26,10 @@ class DummyHTTP:
         if self.error:
             raise self.error
         self.requested = (url, headers)
+        return self.payload or {}
+
+    def request(self, method, url, headers=None, **kwargs):
+        self.requested = (url, headers)
 
         class Resp:
             def __init__(self, text):
@@ -39,7 +38,7 @@ class DummyHTTP:
         return Resp(self.text or "")
 
 
-def test_cia_client_parses_officials(tmp_path):
+def test_cia_client_parses_officials():
     entities = [
         {
             "properties": {
@@ -57,7 +56,7 @@ def test_cia_client_parses_officials(tmp_path):
         },
     ]
     http = DummyHTTP(text="\n".join(json.dumps(entry) for entry in entities))
-    client = CIAWorldLeadersClient(http, cache_path=tmp_path / "cache.json")
+    client = CIAWorldLeadersClient(http)
     officials = client.fetch()
     assert http.requested[0] == CIA_WORLD_LEADERS_URL
     names = {official.name for official in officials}
