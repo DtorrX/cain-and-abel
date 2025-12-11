@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Chart Viewer</title>
+  <link rel="stylesheet" href="/node_modules/family-chart/dist/styles/family-chart.css" />
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 12px 16px;
+      background: #111827;
+      border-bottom: 1px solid #1f2937;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.01em;
+      color: #c7d2fe;
+    }
+    #FamilyChart {
+      flex: 1;
+      width: 100%;
+    }
+    .f3-card {
+      background: #111827 !important;
+      color: #e5e7eb !important;
+      border: 1px solid #1f2937 !important;
+    }
+    .f3-card h2 {
+      color: #c7d2fe !important;
+      margin: 0 0 4px;
+      font-size: 1rem;
+    }
+    .f3-card .f3-label {
+      color: #94a3b8 !important;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Family Tree Viewer</h1>
+  </header>
+  <div id="FamilyChart"></div>
+
+  <script type="module">
+    import * as f3 from '/node_modules/family-chart/dist/family-chart.esm.js';
+
+    async function loadChart() {
+      const response = await fetch('./family_chart.json');
+      if (!response.ok) {
+        console.error('Could not load family_chart.json');
+        return;
+      }
+      const data = await response.json();
+
+      const chart = f3.createChart('#FamilyChart', data);
+      chart.setCard((person) => {
+        const first = person.data['first name'] || '';
+        const last = person.data['last name'] || '';
+        const label = person.data.label || '';
+        const birthday = person.data.birthday || '';
+
+        return `
+          <div class="f3-card">
+            <h2>${first} ${last}</h2>
+            <div class="f3-label">${label}</div>
+            <div class="f3-label">${birthday}</div>
+          </div>
+        `;
+      });
+    }
+
+    loadChart();
+  </script>
+</body>
+</html>
