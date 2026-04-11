@@ -1,5 +1,5 @@
-from wikinet.wikipedia import WikipediaClient
 from wikinet.http import HTTPClient
+from wikinet.wikipedia import WikipediaClient
 
 
 class DummyHTTP(HTTPClient):

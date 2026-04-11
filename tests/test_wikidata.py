@@ -1,5 +1,5 @@
-from wikinet.wikidata import WikidataClient, FAMILY_PROPS
 from wikinet.http import HTTPClient
+from wikinet.wikidata import FAMILY_PROPS, WikidataClient
 
 
 class DummyHTTP(HTTPClient):

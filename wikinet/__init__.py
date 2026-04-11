@@ -1,8 +1,8 @@
 """wikinet package initialization."""
 
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, version
 
-from .api import run_pipeline, run_enrichment
+from .api import run_enrichment, run_pipeline
 
 __all__ = ["__version__", "run_pipeline", "run_enrichment"]
 

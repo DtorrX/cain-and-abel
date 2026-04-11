@@ -14,6 +14,7 @@ try:  # pragma: no cover - prefer rich when available
     from rich.console import Console
     from rich.logging import RichHandler
 except Exception:  # pragma: no cover - fallback to stdlib
+
     class Console:  # type: ignore
         def log(self, *args, **kwargs):
             print(*args)
@@ -21,6 +22,7 @@ except Exception:  # pragma: no cover - fallback to stdlib
     class RichHandler(logging.StreamHandler):  # type: ignore
         def __init__(self, *args, **kwargs):
             super().__init__()
+
 
 LOGGER_NAME = "wikinet"
 
@@ -40,13 +42,23 @@ logger = get_logger()
 
 
 def set_log_level(level: str) -> None:
-    """Allow callers (e.g. CLI) to adjust logging verbosity at runtime."""
+    """Set the root ``wikinet`` logger level (library code should log under this name)."""
 
     level_value = getattr(logging, level.upper(), logging.INFO)
-    logger.setLevel(level_value)
+    logging.getLogger(LOGGER_NAME).setLevel(level_value)
 
 
-def hash_request(method: str, url: str, params: Optional[Mapping[str, Any]] = None, data: Optional[Any] = None) -> str:
+def log_fields(level: int, event: str, **fields: Any) -> None:
+    """Emit one grep-friendly line: ``event | key=value ...`` (no new logging deps)."""
+
+    tail = " ".join(f"{k}={v!r}" for k, v in fields.items())
+    msg = f"{event} | {tail}" if tail else event
+    logger.log(level, msg)
+
+
+def hash_request(
+    method: str, url: str, params: Optional[Mapping[str, Any]] = None, data: Optional[Any] = None
+) -> str:
     """Create a stable hash for caching HTTP requests."""
     payload = {
         "method": method.upper(),

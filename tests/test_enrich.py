@@ -1,8 +1,6 @@
 import json
-from pathlib import Path
 
 import networkx as nx
-
 from scripts import enrich_network
 
 

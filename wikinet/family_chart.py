@@ -10,12 +10,11 @@ from __future__ import annotations
 
 import json
 import os
-from typing import Dict, Iterable, List, Mapping, MutableMapping, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Tuple
 
 import networkx as nx
 
 from .wikidata import FAMILY_PROPS
-
 
 FAMILY_RELATIONS = set(FAMILY_PROPS.values())
 PARENTAL_RELATIONS = {"father", "mother", "child"}
@@ -44,10 +43,10 @@ def _parent_child_pairs(graph: nx.MultiDiGraph) -> List[Tuple[str, str, Mapping[
     return pairs
 
 
-def _partnerships(graph: nx.MultiDiGraph) -> Dict[Tuple[str, str], Dict[str, object]]:
+def _partnerships(graph: nx.MultiDiGraph) -> Dict[Tuple[str, str], Dict[str, Any]]:
     """Return deduplicated partnership edges as sorted tuples."""
 
-    unions: Dict[Tuple[str, str], Dict[str, object]] = {}
+    unions: Dict[Tuple[str, str], Dict[str, Any]] = {}
     for u, v, data in graph.edges(data=True):
         relation = data.get("relation")
         if relation not in PARTNER_RELATIONS:
@@ -76,7 +75,9 @@ def _sibling_edges(graph: nx.MultiDiGraph) -> List[Dict[str, object]]:
     return edges
 
 
-def _compute_layout(nodes: Iterable[Tuple[str, MutableMapping[str, object]]]) -> Dict[str, Dict[str, int]]:
+def _compute_layout(
+    nodes: Iterable[Tuple[str, MutableMapping[str, object]]],
+) -> Dict[str, Dict[str, int]]:
     """Build a deterministic, generation-aware layout.
 
     Y coordinates follow the annotated ``family_hierarchy_level`` when present;
@@ -86,10 +87,19 @@ def _compute_layout(nodes: Iterable[Tuple[str, MutableMapping[str, object]]]) ->
 
     levels: Dict[int, List[str]] = {}
     for node_id, attrs in nodes:
-        level = attrs.get("family_hierarchy_level")
-        if level is None:
-            level = 0
-        levels.setdefault(int(level), []).append(node_id)
+        raw_level = attrs.get("family_hierarchy_level")
+        if raw_level is None:
+            level_num = 0
+        elif isinstance(raw_level, int):
+            level_num = raw_level
+        elif isinstance(raw_level, str):
+            try:
+                level_num = int(raw_level)
+            except ValueError:
+                level_num = 0
+        else:
+            level_num = 0
+        levels.setdefault(level_num, []).append(node_id)
 
     layout: Dict[str, Dict[str, int]] = {}
     for level, members in sorted(levels.items()):
@@ -121,8 +131,8 @@ def build_family_chart(graph: nx.MultiDiGraph) -> Dict[str, object]:
     parent_edges = _parent_child_pairs(graph)
     sibling_edges = _sibling_edges(graph)
 
-    unions: Dict[str, Dict[str, object]] = {}
-    for idx, ((a, b), meta) in enumerate(sorted(partnerships.items())):
+    unions: Dict[str, Dict[str, Any]] = {}
+    for idx, ((_a, _b), meta) in enumerate(sorted(partnerships.items())):
         union_id = f"union_{idx + 1}"
         unions[union_id] = {
             "id": union_id,
@@ -136,13 +146,13 @@ def build_family_chart(graph: nx.MultiDiGraph) -> Dict[str, object]:
         frozenset(entry["partners"]): union_id for union_id, entry in unions.items()
     }
     parent_map: Dict[str, List[str]] = {}
-    for parent, child, data in parent_edges:
+    for parent, child, _data in parent_edges:
         parent_map.setdefault(child, []).append(parent)
     for child, parents in parent_map.items():
         parent_set = frozenset(sorted(parents))
-        union_id = partner_lookup.get(parent_set)
-        if union_id:
-            unions[union_id]["children"].append(child)
+        matched_union = partner_lookup.get(parent_set)
+        if matched_union is not None:
+            unions[matched_union]["children"].append(child)
 
     # Build relationship edges for downstream rendering
     relationships: List[Dict[str, object]] = []

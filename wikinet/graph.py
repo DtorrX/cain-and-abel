@@ -110,11 +110,12 @@ class GraphBuilder:
         labels = self.wikidata.fetch_labels(qids)
         for node_id, data in labels.items():
             self.government_index.associate_qid(node_id, data.get("label"))
-        countries = self.government_index.countries_for_labels(
-            data.get("label")
-            for data in labels.values()
-            if data.get("label")
-        )
+        label_strings = [
+            lbl
+            for lbl in (data.get("label") for data in labels.values())
+            if isinstance(lbl, str) and lbl
+        ]
+        countries = self.government_index.countries_for_labels(label_strings)
         augmented: List[str] = list(dict.fromkeys(qids))
         for country in countries:
             for official in self.government_index.officials_by_country(country):
@@ -137,8 +138,7 @@ class GraphBuilder:
 
         family_relations = set(FAMILY_PROPS.values())
         if not any(
-            data.get("relation") in family_relations
-            for _, _, data in graph.edges(data=True)
+            data.get("relation") in family_relations for _, _, data in graph.edges(data=True)
         ):
             return
 
@@ -300,7 +300,9 @@ class GraphBuilder:
                     for relation, payload in info_edges.items():
                         target_label = payload["value"]
                         temp_id = f"{qid}:{relation}:{target_label}"[:64]
-                        graph.add_node(temp_id, label=target_label, description="infobox placeholder")
+                        graph.add_node(
+                            temp_id, label=target_label, description="infobox placeholder"
+                        )
                         graph.add_edge(
                             qid,
                             temp_id,

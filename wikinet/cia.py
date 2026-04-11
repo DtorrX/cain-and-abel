@@ -13,7 +13,9 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set
 from .http import HTTPClient, HTTPError
 from .utils import logger
 
-CIA_WORLD_LEADERS_URL = "https://data.opensanctions.org/datasets/latest/us_cia_world_leaders/entities.ftm.json"
+CIA_WORLD_LEADERS_URL = (
+    "https://data.opensanctions.org/datasets/latest/us_cia_world_leaders/entities.ftm.json"
+)
 LEGACY_CIA_URL = "https://www.cia.gov/resources/world-leaders/page-data/index/page-data.json"
 CACHE_PATH = Path.home() / ".wikinet-cache" / "cia_world_leaders.json"
 CACHE_TTL = timedelta(days=14)
@@ -215,20 +217,27 @@ class CIAWorldLeadersClient:
         countries = self._extract_countries(payload)
         officials: List[CIAOfficial] = []
         for country in countries:
-            country_name = country.get("name") or country.get("country") or country.get("countryName")
-            if not country_name:
+            raw_country = (
+                country.get("name") or country.get("country") or country.get("countryName")
+            )
+            if not isinstance(raw_country, str) or not raw_country.strip():
                 continue
+            country_name = raw_country.strip()
             for entry in self._extract_people(country):
-                name = entry.get("name") or entry.get("person") or entry.get("leader")
-                position = entry.get("title") or entry.get("position") or entry.get("role")
+                raw_name = entry.get("name") or entry.get("person") or entry.get("leader")
+                raw_position = entry.get("title") or entry.get("position") or entry.get("role")
+                if not isinstance(raw_name, str) or not isinstance(raw_position, str):
+                    continue
+                name = raw_name.strip()
+                position = raw_position.strip()
                 if not name or not position:
                     continue
                 categories = tuple(sorted(_category_keys(position)))
                 officials.append(
                     CIAOfficial(
-                        country=country_name.strip(),
-                        position=position.strip(),
-                        name=name.strip(),
+                        country=country_name,
+                        position=position,
+                        name=name,
                         categories=categories,
                     )
                 )

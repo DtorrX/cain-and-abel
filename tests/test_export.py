@@ -2,7 +2,6 @@ import json
 import os
 
 import networkx as nx
-
 from wikinet.export import export_graph, sanitize_graph_for_graphml
 
 

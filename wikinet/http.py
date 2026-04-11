@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import time
 from typing import Any, Dict, Mapping, Optional
@@ -10,7 +11,7 @@ from typing import Any, Dict, Mapping, Optional
 import requests
 
 from .cache import CacheManager
-from .utils import RateLimiter, hash_request, logger, merge_dicts
+from .utils import RateLimiter, hash_request, log_fields, merge_dicts
 
 DEFAULT_HEADERS = {
     "User-Agent": os.getenv("WIKINET_USER_AGENT", "wikinet/1.0 (+https://example.com/contact)"),
@@ -74,7 +75,14 @@ class HTTPClient:
                 return resp
             if resp.status_code in {429, 500, 502, 503, 504}:
                 sleep_for = self.backoff * (2**attempt)
-                logger.warning("HTTP %s returned %s, retrying in %.2fs", url, resp.status_code, sleep_for)
+                log_fields(
+                    logging.WARNING,
+                    "http_retry",
+                    url=url,
+                    status_code=resp.status_code,
+                    attempt=attempt + 1,
+                    sleep_s=round(sleep_for, 3),
+                )
                 time.sleep(sleep_for)
                 continue
             raise HTTPError(f"Request failed with status {resp.status_code}: {resp.text[:200]}")

@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
-from typing import Iterable, Sequence
+from typing import Iterable
 
 import networkx as nx
+from scripts import enrich_network
 
 from .cache import CacheManager
 from .cia import CIAWorldLeadersClient, GovernmentIndex
@@ -18,7 +18,6 @@ from .resolver import Resolver
 from .utils import RateLimiter, console
 from .wikidata import WikidataClient
 from .wikipedia import WikipediaClient
-from scripts import enrich_network
 
 
 def run_pipeline(
