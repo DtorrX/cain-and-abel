@@ -5,6 +5,7 @@ This stays defensive about field names so that older runs (or merged
 outputs) still work. It only depends on `nodes.json` and `edges.json`
 and emits a `family_chart.json` that the `family-chart` viewer can render.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -73,12 +74,7 @@ def collect_people(nodes: List[MutableMapping[str, Any]]) -> Dict[str, Dict[str,
             continue
         label = str(node.get("label") or node.get("name") or node_id)
         first, last = split_name(label)
-        birthdate = (
-            node.get("birth_date")
-            or node.get("date_of_birth")
-            or node.get("dob")
-            or ""
-        )
+        birthdate = node.get("birth_date") or node.get("date_of_birth") or node.get("dob") or ""
         gender = node.get("gender") or node.get("sex") or ""
         people[node_id] = {
             "label": label,

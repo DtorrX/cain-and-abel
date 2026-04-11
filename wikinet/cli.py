@@ -4,30 +4,35 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
-from typing import Iterable, List, Sequence
+from typing import List, Sequence
 
 import networkx as nx
 
+from . import api as wikinet_api
 from .cache import CacheManager
 from .cia import CIAWorldLeadersClient, GovernmentIndex
 from .export import export_graph
 from .graph import GraphBuilder, load_graph
 from .http import HTTPClient
 from .resolver import Resolver
-from .utils import RateLimiter, console, logger, set_log_level
+from .utils import RateLimiter, console, log_fields, set_log_level
 from .wikidata import WikidataClient
 from .wikipedia import WikipediaClient
-from . import api as wikinet_api
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="wikinet", description="Wikidata/Wikipedia network crawler")
+    parser = argparse.ArgumentParser(
+        prog="wikinet", description="Wikidata/Wikipedia network crawler"
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     crawl = sub.add_parser("crawl", help="Crawl Wikidata relations")
     crawl.add_argument("--seed", action="append", help="Seed page title or Q-ID", dest="seeds")
-    crawl.add_argument("--category", action="append", help="Wikipedia category seed (without prefix)")
+    crawl.add_argument(
+        "--category", action="append", help="Wikipedia category seed (without prefix)"
+    )
     crawl.add_argument("--qid", action="append", help="Direct Wikidata Q-ID seed")
     crawl.add_argument("--lang", default="en", help="Wikipedia language (default: en)")
     crawl.add_argument("--max-depth", type=int, default=1)
@@ -125,13 +130,31 @@ def run_crawl(args: argparse.Namespace) -> None:
     )
 
     seeds = _collect_seeds(args, resolver)
+    log_fields(
+        logging.INFO,
+        "crawl_start",
+        out=args.out,
+        mode=args.mode,
+        max_depth=args.max_depth,
+        seeds=len(seeds),
+        resume=bool(args.resume),
+    )
     result = builder.crawl(seeds)
     graph = result.graph
     if args.resume:
         existing = load_graph(args.out)
         graph = nx.compose(existing, graph)
     paths = export_graph(graph, args.out)
-    console.log(f"Export completed with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges")
+    log_fields(
+        logging.INFO,
+        "crawl_export_done",
+        out=args.out,
+        nodes=graph.number_of_nodes(),
+        edges=graph.number_of_edges(),
+    )
+    console.log(
+        f"Export completed with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges"
+    )
     console.log(paths)
     result.stats.total_nodes = graph.number_of_nodes()
     result.stats.total_edges = graph.number_of_edges()
@@ -152,7 +175,9 @@ def run_validate(path: str) -> None:
     with open(edges_path, "r", encoding="utf-8") as fh:
         edges = json.load(fh)
     node_ids = {node["id"] for node in nodes}
-    missing = [edge for edge in edges if edge["source"] not in node_ids or edge["target"] not in node_ids]
+    missing = [
+        edge for edge in edges if edge["source"] not in node_ids or edge["target"] not in node_ids
+    ]
     console.log(f"Nodes: {len(nodes)} Edges: {len(edges)}")
     if missing:
         raise SystemExit(f"Edges reference missing nodes: {missing[:3]}")

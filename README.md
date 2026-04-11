@@ -2,12 +2,23 @@
 
 Production-grade crawler for building enriched socio-political and corporate networks from Wikidata, Wikipedia, and the CIA World Leaders dataset. The crawler is designed to be cost-conscious, observable, and adaptable so you can pivot quickly from royal families to Israeli defense companies (or any other vertical) without rewriting core logic.
 
+**Requirements:** Python 3.10 or newer (see `requires-python` in [pyproject.toml](pyproject.toml)).
+
 ## Quick start
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install -U pip
 pip install -e .
+```
+
+For linting, formatting, types, and tests, use the dev extra (or `make install-dev`):
+
+```bash
+pip install -e ".[dev]"
+# optional: Graphviz + Python bindings for richer DOT/PNG (see below)
+pip install -e ".[visual]"
 ```
 
 Run a crawl:
@@ -29,6 +40,39 @@ Full-mode crawl + enrichment:
 wikinet crawl --seed "Mohammed bin Zayed Al Nahyan" --mode full --max-depth 1 --out out/uae_full
 wikinet enrich out/uae_full --taxonomy configs/gulf_taxonomy.json
 ```
+
+## Local development (macOS)
+
+1. **Python:** Install Python 3.10+ (e.g. [python.org](https://www.python.org/downloads/) or `brew install python@3.12`), then create a venv as in Quick start.
+2. **Install targets:**
+
+   | Command | Purpose |
+   | --- | --- |
+   | `make install` | Editable install: `pip install -e .` |
+   | `make install-dev` | Adds dev tools (pytest, ruff, mypy, stubs): `pip install -e ".[dev]"` |
+   | `make install-visual` | Adds `pydot` + `pygraphviz` for visualization helpers |
+   | `make test` / `make lint` / `make typecheck` | Pytest, Ruff, Mypy (`wikinet` package only) |
+
+3. **Graphviz, pydot, and pygraphviz**
+
+   - **PNG export:** After a crawl, the exporter shells out to the Graphviz `dot` binary when present. On macOS: `brew install graphviz`.
+   - **DOT via NetworkX:** The exporter prefers `networkx.drawing.nx_pydot.write_dot`, which needs the **pydot** Python package (included in the `visual` extra) plus the system `graphviz` install so pydot can talk to `dot`.
+   - **pygraphviz:** Optional native bindings; included in `visual` for compatibility with sample scripts (for example under `out/uae_sample/`). It requires Graphviz headers; if `pip install pygraphviz` fails, rely on **pydot** + **brew graphviz** for CLI exports—the exporter falls back to a minimal hand-written DOT file if pydot is unavailable.
+
+4. **Pre-commit (optional):** `pip install pre-commit && pre-commit install` then `pre-commit run --all-files`.
+
+5. **Observability:** Set `WIKINET_LOG_LEVEL=DEBUG` or pass `--log-level DEBUG` on `crawl`. Crawl boundaries and HTTP retries emit grep-friendly lines via `wikinet.utils.log_fields` (for example `crawl_start | out=... seeds=...` and `http_retry | url=... status_code=...`).
+
+## Repository layout
+
+| Path | Role |
+| --- | --- |
+| [wikinet/](wikinet/) | Library and CLI: HTTP/cache, Wikidata/Wikipedia clients, graph build, export, `family_chart` |
+| [tests/](tests/) | Pytest suite |
+| [scripts/](scripts/) | `enrich_network`, `export_family_chart`, sample generators (also used by `wikinet enrich`) |
+| [web/](web/) | Static family-chart viewer template copied into crawl output |
+| [configs/](configs/) | Sample taxonomy JSON for enrichment |
+| `out/` | Default crawl output (gitignored once generated) |
 
 ## Features
 
@@ -87,10 +131,12 @@ wikinet validate out/uae
 Build an interactive family tree straight from Wikinet outputs using the lightweight [family-chart](https://github.com/donatso/family-chart) library.
 
 ```bash
-npm install
-make demo_uae_family_chart
+make run-demo
+# Or: npm install && make demo_uae_family_chart
 # Open http://localhost:8000/out/uae/ in your browser
 ```
+
+`make run-demo` installs npm dependencies when `node_modules` is missing, then runs the same steps as `make demo_uae_family_chart`: crawl UAE seeds, write `family_chart.json`, copy [web/family_chart_viewer.html](web/family_chart_viewer.html) to `out/uae/index.html`, and start `python3 -m http.server 8000`.
 
 This workflow will crawl UAE royals, export a `family_chart.json`, copy a minimal viewer to `out/uae/index.html`, and serve everything via `python3 -m http.server`.
 
@@ -213,10 +259,13 @@ Pass that file via `--taxonomy` and the enrichment pipeline will classify nodes 
 ## Tests
 
 ```bash
-pytest -q
+make test
+# equivalent: python -m pytest
 ```
 
 When running CI locally, consider `pytest -q -k crawl` for just the crawl-specific behavior, or use `pytest -q --maxfail=1` for a faster feedback loop.
+
+GitHub Actions runs `ruff check`, `ruff format --check`, `mypy wikinet`, and pytest on Python 3.10 and 3.12 (see [.github/workflows/ci.yml](.github/workflows/ci.yml)).
 
 ## Troubleshooting
 

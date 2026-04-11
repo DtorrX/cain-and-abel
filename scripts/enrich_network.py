@@ -12,14 +12,65 @@ import argparse
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Iterable, List, Mapping, MutableMapping, Sequence
+from typing import Dict, List, Mapping, MutableMapping, Sequence
 
 import networkx as nx
 
-FAMILY_RELATIONS = {"father", "mother", "child", "spouse", "partner", "relative", "sibling", "P22", "P25", "P26", "P40", "P1038", "P3373"}
-POLITICAL_RELATIONS = {"position_held", "member_of_party", "member_of", "officeholder", "head_of_state", "head_of_government", "P39", "P102", "P463", "P2388", "P6", "P35"}
-SECURITY_RELATIONS = {"military_branch", "military_rank", "affiliation", "military_service", "participant", "P241", "P410", "P1416", "P797", "P710"}
-CORPORATE_RELATIONS = {"owned_by", "subsidiary", "parent", "product_or_service", "founded_by", "director_manager", "P127", "P355", "P749", "P1056", "P112", "P1037"}
+FAMILY_RELATIONS = {
+    "father",
+    "mother",
+    "child",
+    "spouse",
+    "partner",
+    "relative",
+    "sibling",
+    "P22",
+    "P25",
+    "P26",
+    "P40",
+    "P1038",
+    "P3373",
+}
+POLITICAL_RELATIONS = {
+    "position_held",
+    "member_of_party",
+    "member_of",
+    "officeholder",
+    "head_of_state",
+    "head_of_government",
+    "P39",
+    "P102",
+    "P463",
+    "P2388",
+    "P6",
+    "P35",
+}
+SECURITY_RELATIONS = {
+    "military_branch",
+    "military_rank",
+    "affiliation",
+    "military_service",
+    "participant",
+    "P241",
+    "P410",
+    "P1416",
+    "P797",
+    "P710",
+}
+CORPORATE_RELATIONS = {
+    "owned_by",
+    "subsidiary",
+    "parent",
+    "product_or_service",
+    "founded_by",
+    "director_manager",
+    "P127",
+    "P355",
+    "P749",
+    "P1056",
+    "P112",
+    "P1037",
+}
 
 
 @dataclass
@@ -39,7 +90,11 @@ def load_graph(nodes_path: Path, edges_path: Path) -> nx.MultiDiGraph:
     for node in nodes:
         graph.add_node(node["id"], **{k: v for k, v in node.items() if k != "id"})
     for edge in edges:
-        graph.add_edge(edge["source"], edge["target"], **{k: v for k, v in edge.items() if k not in {"source", "target"}})
+        graph.add_edge(
+            edge["source"],
+            edge["target"],
+            **{k: v for k, v in edge.items() if k not in {"source", "target"}},
+        )
     return graph
 
 
@@ -61,7 +116,7 @@ def compute_metrics(graph: nx.MultiDiGraph) -> Metrics:
         try:
             undirected = graph.to_undirected()  # type: ignore[attr-defined]
             betweenness = nx.betweenness_centrality(undirected, normalized=True)
-            core = nx.core_number(undirected)
+            core = nx.core_number(undirected)  # type: ignore[attr-defined]
             comms = []
             if hasattr(getattr(nx, "algorithms", None), "community"):
                 from networkx.algorithms import community as nx_community
@@ -87,9 +142,21 @@ def _count_matching_edges(graph: nx.MultiDiGraph, node: str, relation_set: set[s
     return count
 
 
-def _role_from_attributes(attrs: Mapping[str, object], counts: Mapping[str, int], taxonomy: Mapping[str, Sequence[str]] | None) -> tuple[str, List[str]]:
+def _role_from_attributes(
+    attrs: Mapping[str, object],
+    counts: Mapping[str, int],
+    taxonomy: Mapping[str, Sequence[str]] | None,
+) -> tuple[str, List[str]]:
     text_blobs: List[str] = []
-    for key in ("label", "description", "government_roles", "occupation", "positions", "categories", "layers"):
+    for key in (
+        "label",
+        "description",
+        "government_roles",
+        "occupation",
+        "positions",
+        "categories",
+        "layers",
+    ):
         value = attrs.get(key)
         if isinstance(value, str):
             text_blobs.append(value)
@@ -124,7 +191,9 @@ def _importance_score(metrics: Metrics, node: str, primary_role: str) -> float:
     return round(deg + bet + (core * 0.05) + role_bonus, 4)
 
 
-def enrich(graph: nx.MultiDiGraph, taxonomy: Mapping[str, Sequence[str]] | None = None) -> tuple[List[MutableMapping[str, object]], List[MutableMapping[str, object]]]:
+def enrich(
+    graph: nx.MultiDiGraph, taxonomy: Mapping[str, Sequence[str]] | None = None
+) -> tuple[List[MutableMapping[str, object]], List[MutableMapping[str, object]]]:
     metrics = compute_metrics(graph)
     enriched_nodes: List[MutableMapping[str, object]] = []
     for node, data in graph.nodes(data=True):
@@ -168,7 +237,9 @@ def enrich(graph: nx.MultiDiGraph, taxonomy: Mapping[str, Sequence[str]] | None 
     return enriched_nodes, enriched_edges
 
 
-def write_enriched(out_dir: Path, nodes: Sequence[Mapping[str, object]], edges: Sequence[Mapping[str, object]]) -> None:
+def write_enriched(
+    out_dir: Path, nodes: Sequence[Mapping[str, object]], edges: Sequence[Mapping[str, object]]
+) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     with (out_dir / "enriched_nodes.json").open("w", encoding="utf-8") as fh:
         json.dump(list(nodes), fh, ensure_ascii=False, indent=2)
@@ -176,7 +247,9 @@ def write_enriched(out_dir: Path, nodes: Sequence[Mapping[str, object]], edges: 
         json.dump(list(edges), fh, ensure_ascii=False, indent=2)
 
 
-def run(nodes_path: Path, edges_path: Path, taxonomy_path: Path | None = None) -> tuple[List[MutableMapping[str, object]], List[MutableMapping[str, object]]]:
+def run(
+    nodes_path: Path, edges_path: Path, taxonomy_path: Path | None = None
+) -> tuple[List[MutableMapping[str, object]], List[MutableMapping[str, object]]]:
     graph = load_graph(nodes_path, edges_path)
     taxonomy = None
     if taxonomy_path and taxonomy_path.exists():
@@ -193,7 +266,9 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser.add_argument("--taxonomy", help="Optional taxonomy JSON")
     args = parser.parse_args(argv)
 
-    enriched_nodes, enriched_edges = run(Path(args.nodes), Path(args.edges), Path(args.taxonomy) if args.taxonomy else None)
+    enriched_nodes, enriched_edges = run(
+        Path(args.nodes), Path(args.edges), Path(args.taxonomy) if args.taxonomy else None
+    )
     write_enriched(Path(args.out_dir), enriched_nodes, enriched_edges)
 
 

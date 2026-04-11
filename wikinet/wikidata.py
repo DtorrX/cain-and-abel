@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, Iterable, List
 
 from .http import HTTPClient
-from .schemas import Edge, Node
+from .schemas import Edge
 from .utils import logger, timestamp
 
 WDQS_ENDPOINT = "https://query.wikidata.org/sparql"
@@ -107,7 +107,7 @@ class WikidataClient:
         include_security: bool = False,
         include_corporate: bool = False,
     ) -> List[Edge]:
-        props = []
+        props: List[str] = []
         if include_family:
             props.extend(FAMILY_PROPS.keys())
         if include_political:
@@ -120,11 +120,7 @@ class WikidataClient:
             return []
         values = " ".join(f"(wd:{qid})" for qid in qids)
         prop_values = " ".join(f"wdt:{pid}" for pid in props)
-        query = (
-            BATCH_RELATIONS_TEMPLATE
-            .replace("%VALUES%", values)
-            .replace("%PROPS%", prop_values)
-        )
+        query = BATCH_RELATIONS_TEMPLATE.replace("%VALUES%", values).replace("%PROPS%", prop_values)
         data = self._run_query(query)
         edges: List[Edge] = []
         for binding in data.get("results", {}).get("bindings", []):

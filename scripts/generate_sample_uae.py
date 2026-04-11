@@ -11,10 +11,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import networkx as nx
-
 from wikinet.export import export_graph
 
 OUT = os.path.join("out", "uae_sample")
+
 
 def main() -> None:
     graph = nx.MultiDiGraph()
@@ -58,6 +58,7 @@ def main() -> None:
     add_edge("QMohammedNahyan", "QMansour", "sibling", "P3373")
 
     export_graph(graph, OUT)
+
 
 if __name__ == "__main__":
     main()

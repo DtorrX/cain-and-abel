@@ -1,7 +1,6 @@
 import json
 
 import networkx as nx
-
 from wikinet.family_chart import build_family_chart, export_family_chart
 
 

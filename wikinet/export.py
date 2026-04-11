@@ -105,7 +105,7 @@ def export_graph(graph: nx.MultiDiGraph, out_dir: str) -> Dict[str, str]:
         with open(dot_path, "w", encoding="utf-8") as fh:
             fh.write("digraph wikinet {\n")
             for node_id, data in graph.nodes(data=True):
-                label = data.get("label", node_id).replace("\"", "'")
+                label = data.get("label", node_id).replace('"', "'")
                 fh.write(f'  "{node_id}" [label="{label}"];\n')
             for u, v, data in graph.edges(data=True):
                 relation = data.get("relation", "related_to")
@@ -115,7 +115,9 @@ def export_graph(graph: nx.MultiDiGraph, out_dir: str) -> Dict[str, str]:
     try:
         import subprocess
 
-        subprocess.run(["dot", "-Tpng", dot_path, "-o", os.path.join(out_dir, "graph.png")], check=True)
+        subprocess.run(
+            ["dot", "-Tpng", dot_path, "-o", os.path.join(out_dir, "graph.png")], check=True
+        )
     except Exception:  # pragma: no cover
         console.log("[yellow]Graphviz PNG export skipped[/yellow]")
 

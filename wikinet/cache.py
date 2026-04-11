@@ -2,14 +2,10 @@
 
 from __future__ import annotations
 
-import json
 import os
 import sqlite3
 from contextlib import closing
 from typing import Optional
-
-from .utils import logger
-
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS http_cache (
