@@ -3,88 +3,552 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Family Chart Viewer</title>
-  <link rel="stylesheet" href="/node_modules/family-chart/dist/styles/family-chart.css" />
+  <title>Wikinet — Family network dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
   <style>
     :root {
       color-scheme: dark;
+      --bg: #0b1220;
+      --panel: #111827;
+      --border: #1f2937;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #818cf8;
+      --link-parent: #38bdf8;
+      --link-union: #a78bfa;
+      --link-partner: #f472b6;
+      --link-sibling: #34d399;
+      --link-default: #64748b;
     }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
     header {
-      padding: 12px 16px;
-      background: #111827;
-      border-bottom: 1px solid #1f2937;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 20px;
+      padding: 10px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
-    h1 {
+    header h1 {
       margin: 0;
-      font-size: 1.1rem;
-      letter-spacing: 0.01em;
+      font-size: 1.05rem;
+      font-weight: 600;
       color: #c7d2fe;
+      letter-spacing: 0.02em;
     }
-    #FamilyChart {
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .chip strong { color: var(--text); }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
       flex: 1;
+      justify-content: flex-end;
+    }
+    .toolbar label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    input[type="search"] {
+      min-width: 200px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--text);
+      font-size: 0.875rem;
+    }
+    input[type="search"]::placeholder { color: #64748b; }
+    button {
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #1e293b;
+      color: var(--text);
+      font-size: 0.8rem;
+    }
+    button:hover { background: #334155; }
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      min-height: 0;
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      aside { max-height: 200px; }
+    }
+    #chart-wrap {
+      position: relative;
+      min-height: 0;
+      background: radial-gradient(ellipse at center, #0f172a 0%, var(--bg) 70%);
+    }
+    #chart-wrap svg {
+      display: block;
       width: 100%;
+      height: 100%;
+      cursor: grab;
     }
-    .f3-card {
-      background: #111827 !important;
-      color: #e5e7eb !important;
-      border: 1px solid #1f2937 !important;
+    #chart-wrap svg:active { cursor: grabbing; }
+    .node circle.person {
+      stroke: #334155;
+      stroke-width: 2px;
     }
-    .f3-card h2 {
-      color: #c7d2fe !important;
-      margin: 0 0 4px;
-      font-size: 1rem;
+    .node.dim circle { opacity: 0.15; }
+    .node.highlight circle.person {
+      stroke: var(--accent);
+      stroke-width: 3px;
     }
-    .f3-card .f3-label {
-      color: #94a3b8 !important;
-      font-size: 0.85rem;
+    .node text {
+      font-size: 11px;
+      fill: var(--text);
+      pointer-events: none;
+      text-shadow: 0 1px 3px #000;
     }
+    .node.union circle {
+      fill: #4c1d95;
+      stroke: #7c3aed;
+      stroke-width: 1.5px;
+    }
+    .links line {
+      stroke-opacity: 0.55;
+    }
+    .links line.dim {
+      stroke-opacity: 0.08;
+    }
+    aside {
+      border-left: 1px solid var(--border);
+      background: var(--panel);
+      overflow: auto;
+      padding: 12px 14px;
+      font-size: 0.8rem;
+    }
+    aside h2 {
+      margin: 0 0 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+      color: var(--muted);
+    }
+    .swatch {
+      width: 22px;
+      height: 3px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    #detail {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    #detail .title { color: var(--text); font-weight: 600; margin-bottom: 6px; }
+    #status {
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: #0f172a;
+    }
+    #status.error { color: #fca5a5; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Family Tree Viewer</h1>
+    <h1>Wikinet — Family network</h1>
+    <div class="stats" id="stats"></div>
+    <div class="toolbar">
+      <label>Filter <input type="search" id="filter" placeholder="Label or Q-id…" autocomplete="off" /></label>
+      <button type="button" id="reset-zoom" aria-label="Reset zoom">Reset zoom</button>
+      <button type="button" id="restart" aria-label="Restart layout">Nudge layout</button>
+    </div>
   </header>
-  <div id="FamilyChart"></div>
+  <main>
+    <div id="chart-wrap"></div>
+    <aside>
+      <h2>Edges</h2>
+      <div class="legend-row"><span class="swatch" style="background:var(--link-parent)"></span> Parent / child</div>
+      <div class="legend-row"><span class="swatch" style="background:var(--link-union)"></span> Union → child</div>
+      <div class="legend-row"><span class="swatch" style="background:var(--link-partner)"></span> Partner</div>
+      <div class="legend-row"><span class="swatch" style="background:var(--link-sibling)"></span> Sibling / relative</div>
+      <div id="detail"></div>
+    </aside>
+  </main>
+  <div id="status">Loading <code>family_chart.json</code>…</div>
 
-  <script type="module">
-    import * as f3 from '/node_modules/family-chart/dist/family-chart.esm.js';
+  <script>
+(function () {
+  const LINK_COLORS = {
+    parent: "var(--link-parent)",
+    union_child: "var(--link-union)",
+    partner: "var(--link-partner)",
+    spouse: "var(--link-partner)",
+    sibling: "var(--link-sibling)",
+    relative: "var(--link-sibling)",
+  };
 
-    async function loadChart() {
-      const response = await fetch('./family_chart.json');
-      if (!response.ok) {
-        console.error('Could not load family_chart.json');
-        return;
+  function hashHue(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
+    return Math.abs(h) % 360;
+  }
+
+  /** Wikinet native export: { people, unions, relationships, layout, summary } */
+  function isNativeShape(d) {
+    return d && typeof d === "object" && !Array.isArray(d) && Array.isArray(d.people);
+  }
+
+  /** Script export: [ { id, data, rels }, … ] for legacy family-chart.js */
+  function isLegacyList(d) {
+    return Array.isArray(d) && d.length > 0 && d[0] && typeof d[0].id === "string";
+  }
+
+  function normalizeFromLegacy(list) {
+    const idSet = new Set(list.map((p) => p.id));
+    const people = list.map((p) => {
+      const data = p.data || {};
+      return {
+        id: p.id,
+        label: data.label || p.id,
+        description: data.description || "",
+        clusters: [],
+        family_hierarchy_level: null,
+      };
+    });
+    const relationships = [];
+    const seen = new Set();
+    function addRel(a, b, type, relation) {
+      if (!idSet.has(a) || !idSet.has(b)) return;
+      const key = a < b ? `${a}|${b}|${type}` : `${b}|${a}|${type}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      relationships.push({ from: a, to: b, type, relation: relation || type });
+    }
+    for (const p of list) {
+      const rels = p.rels || {};
+      for (const par of rels.parents || []) addRel(par, p.id, "parent", "parent");
+      for (const ch of rels.children || []) addRel(p.id, ch, "parent", "child");
+      for (const sp of rels.spouses || []) addRel(p.id, sp, "spouse", "spouse");
+    }
+    return {
+      people,
+      unions: [],
+      relationships,
+      layout: {},
+      summary: {
+        people: people.length,
+        families: 0,
+        parent_edges: relationships.length,
+        sibling_edges: 0,
+        source: "legacy-list",
+      },
+    };
+  }
+
+  function buildGraph(model) {
+    const nodeMap = new Map();
+    for (const p of model.people || []) {
+      nodeMap.set(p.id, {
+        id: p.id,
+        label: String(p.label || p.id),
+        description: p.description,
+        clusters: p.clusters || [],
+        isUnion: false,
+      });
+    }
+    for (const u of model.unions || []) {
+      nodeMap.set(u.id, {
+        id: u.id,
+        label: "Union",
+        isUnion: true,
+        partners: u.partners,
+      });
+    }
+    const nodes = Array.from(nodeMap.values());
+    const links = (model.relationships || [])
+      .filter((r) => r && r.from && r.to && nodeMap.has(r.from) && nodeMap.has(r.to))
+      .map((r) => ({
+        source: r.from,
+        target: r.to,
+        type: r.type || "related",
+        relation: r.relation || "",
+      }));
+    return {
+      nodes,
+      links,
+      nodeMap,
+      layout: model.layout || {},
+      summary: model.summary || {},
+    };
+  }
+
+  function setStatus(msg, isError) {
+    const el = document.getElementById("status");
+    el.textContent = msg;
+    el.classList.toggle("error", !!isError);
+  }
+
+  function renderStats(summary, formatLabel, linkCount) {
+    const s = document.getElementById("stats");
+    const relTotal =
+      summary.parent_edges != null && summary.sibling_edges != null
+        ? summary.parent_edges + summary.sibling_edges
+        : null;
+    const parts = [
+      ["People", summary.people ?? "—"],
+      ["Unions", summary.families ?? summary.unions ?? "—"],
+      ["Links", linkCount != null ? linkCount : relTotal != null ? relTotal : "—"],
+    ];
+    if (summary.family_edges != null) parts.push(["Family edges", summary.family_edges]);
+    s.innerHTML =
+      `<span class="chip"><strong>${formatLabel}</strong> format</span>` +
+      parts.map(([k, v]) => `<span class="chip">${k}: <strong>${v}</strong></span>`).join("");
+  }
+
+  function runChart(model, formatLabel) {
+    const { nodes, links, layout, nodeMap, summary } = buildGraph(model);
+    if (!nodes.length) {
+      setStatus("No nodes to display.", true);
+      return;
+    }
+
+    renderStats(summary, formatLabel, links.length);
+
+    const wrap = document.getElementById("chart-wrap");
+    wrap.innerHTML = "";
+    const width = wrap.clientWidth || 800;
+    const height = wrap.clientHeight || 600;
+
+    const svg = d3
+      .select("#chart-wrap")
+      .append("svg")
+      .attr("viewBox", [0, 0, width, height])
+      .attr("width", "100%")
+      .attr("height", "100%");
+
+    const gRoot = svg.append("g");
+    const gLinks = gRoot.append("g").attr("class", "links");
+    const gNodes = gRoot.append("g").attr("class", "nodes");
+
+    const zoom = d3
+      .zoom()
+      .scaleExtent([0.2, 4])
+      .on("zoom", (ev) => gRoot.attr("transform", ev.transform));
+    svg.call(zoom);
+
+    document.getElementById("reset-zoom").onclick = () =>
+      svg.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+
+    nodes.forEach((d) => {
+      const L = layout[d.id];
+      if (L && typeof L.x === "number" && typeof L.y === "number") {
+        d.x = 140 + L.x * 90;
+        d.y = 100 + L.y * 75;
       }
-      const data = await response.json();
+    });
 
-      const chart = f3.createChart('#FamilyChart', data);
-      chart.setCard((person) => {
-        const first = person.data['first name'] || '';
-        const last = person.data['last name'] || '';
-        const label = person.data.label || '';
-        const birthday = person.data.birthday || '';
+    const sim = d3
+      .forceSimulation(nodes)
+      .force(
+        "link",
+        d3
+          .forceLink(links)
+          .id((d) => d.id)
+          .distance((l) => (l.type === "union_child" ? 55 : 70))
+      )
+      .force("charge", d3.forceManyBody().strength(-180))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius((d) => (d.isUnion ? 14 : 32)));
 
-        return `
-          <div class="f3-card">
-            <h2>${first} ${last}</h2>
-            <div class="f3-label">${label}</div>
-            <div class="f3-label">${birthday}</div>
-          </div>
-        `;
+    const linkSel = gLinks
+      .selectAll("line")
+      .data(links)
+      .join("line")
+      .attr("stroke", (d) => LINK_COLORS[d.type] || "var(--link-default)")
+      .attr("stroke-width", 1.6);
+
+    const nodeSel = gNodes
+      .selectAll("g.node")
+      .data(nodes)
+      .join("g")
+      .attr("class", "node")
+      .call(
+        d3
+          .drag()
+          .on("start", (ev, d) => {
+            if (!ev.active) sim.alphaTarget(0.25).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on("drag", (ev, d) => {
+            d.fx = ev.x;
+            d.fy = ev.y;
+          })
+          .on("end", (ev, d) => {
+            if (!ev.active) sim.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          })
+      );
+
+    nodeSel
+      .append("circle")
+      .attr("class", (d) => (d.isUnion ? "union" : "person"))
+      .attr("r", (d) => (d.isUnion ? 9 : 22))
+      .attr("fill", (d) => {
+        if (d.isUnion) return null;
+        const cs = d.clusters || [];
+        const key = cs.length ? String(cs[0]) : d.id;
+        return `hsl(${hashHue(key)} 55% 42%)`;
+      });
+
+    nodeSel
+      .append("text")
+      .attr("dy", (d) => (d.isUnion ? 4 : 4))
+      .attr("text-anchor", "middle")
+      .text((d) => {
+        if (d.isUnion) return "∩";
+        const t = d.label;
+        return t.length > 18 ? t.slice(0, 16) + "…" : t;
+      });
+
+    const detailEl = document.getElementById("detail");
+
+    function applyFilter(q) {
+      const qq = (q || "").trim().toLowerCase();
+      nodeSel.classed("dim", (d) => {
+        if (!qq) return false;
+        const hay = (d.id + " " + (d.label || "")).toLowerCase();
+        return !hay.includes(qq);
+      });
+      linkSel.classed("dim", (d) => {
+        if (!qq) return false;
+        const s = d.source;
+        const t = d.target;
+        const sid = typeof s === "object" ? s.id : s;
+        const tid = typeof t === "object" ? t.id : t;
+        const sn = nodeMap.get(sid);
+        const tn = nodeMap.get(tid);
+        const match =
+          (sn && (sn.id + sn.label).toLowerCase().includes(qq)) ||
+          (tn && (tn.id + tn.label).toLowerCase().includes(qq));
+        return !match;
       });
     }
 
-    loadChart();
+    document.getElementById("filter").addEventListener("input", (e) => applyFilter(e.target.value));
+
+    nodeSel
+      .on("mouseenter", (ev, d) => {
+        nodeSel.classed("highlight", (n) => n.id === d.id);
+        const bits = [`<div class="title">${d.label || d.id}</div>`, `<code>${d.id}</code>`];
+        if (d.description) bits.push(`<div>${String(d.description).slice(0, 280)}</div>`);
+        if (d.clusters && d.clusters.length) bits.push(`<div>Clusters: ${d.clusters.join(", ")}</div>`);
+        if (d.isUnion && d.partners) bits.push(`<div>Partners: ${d.partners.join(", ")}</div>`);
+        detailEl.innerHTML = bits.join("");
+      })
+      .on("mouseleave", () => {
+        nodeSel.classed("highlight", false);
+      });
+
+    sim.on("tick", () => {
+      linkSel
+        .attr("x1", (d) => d.source.x)
+        .attr("y1", (d) => d.source.y)
+        .attr("x2", (d) => d.target.x)
+        .attr("y2", (d) => d.target.y);
+      nodeSel.attr("transform", (d) => `translate(${d.x},${d.y})`);
+    });
+
+    document.getElementById("restart").onclick = () => {
+      sim.alpha(0.6).restart();
+    };
+
+    setStatus(`Rendering ${nodes.length} nodes, ${links.length} links. Scroll to zoom, drag background to pan, drag nodes to arrange.`);
+  }
+
+  async function main() {
+    if (typeof d3 === "undefined") {
+      setStatus("D3 failed to load from CDN. Check network or CSP.", true);
+      return;
+    }
+    let raw;
+    try {
+      const res = await fetch("./family_chart.json", { cache: "no-store" });
+      if (!res.ok) {
+        setStatus(`Could not load family_chart.json (${res.status}). Serve this folder over HTTP (e.g. python -m http.server).`, true);
+        return;
+      }
+      raw = await res.json();
+    } catch (e) {
+      setStatus(String(e), true);
+      return;
+    }
+
+    let model;
+    let formatLabel;
+    if (isNativeShape(raw)) {
+      model = raw;
+      formatLabel = "Wikinet graph";
+    } else if (Array.isArray(raw)) {
+      if (!raw.length) {
+        setStatus("family_chart.json is an empty array.", true);
+        return;
+      }
+      if (isLegacyList(raw)) {
+        model = normalizeFromLegacy(raw);
+        formatLabel = "Legacy list";
+      } else {
+        setStatus(
+          "Array format not recognized (expected entries with id + rels, or native object with people[]).",
+          true
+        );
+        return;
+      }
+    } else {
+      setStatus("Unrecognized family_chart.json (expected native object or legacy array).", true);
+      return;
+    }
+
+    runChart(model, formatLabel);
+  }
+
+  main();
+})();
   </script>
 </body>
 </html>
