@@ -70,7 +70,7 @@ wikinet enrich out/uae_full --taxonomy configs/gulf_taxonomy.json
 | [wikinet/](wikinet/) | Library and CLI: HTTP/cache, Wikidata/Wikipedia clients, graph build, export, `family_chart` |
 | [tests/](tests/) | Pytest suite |
 | [scripts/](scripts/) | `enrich_network`, `export_family_chart`, sample generators (also used by `wikinet enrich`) |
-| [web/](web/) | Static family-chart viewer template copied into crawl output |
+| [web/](web/) | D3-based dashboard (`family_chart_viewer.html`) copied next to crawl output as `index.html` |
 | [configs/](configs/) | Sample taxonomy JSON for enrichment |
 | `out/` | Default crawl output (gitignored once generated) |
 
@@ -126,19 +126,25 @@ wikinet crawl --seed "House of Nahyan" --seed "Mohammed bin Rashid Al Maktoum" -
 wikinet validate out/uae
 ```
 
-## Family Tree Viewer (family-chart)
+## Family network dashboard (D3)
 
-Build an interactive family tree straight from Wikinet outputs using the lightweight [family-chart](https://github.com/donatso/family-chart) library.
+The viewer at [web/family_chart_viewer.html](web/family_chart_viewer.html) is a **self-contained** dashboard: it loads [D3 v7](https://d3js.org/) from jsDelivr (no `npm install` required to view). It supports both JSON shapes you might have next to `index.html`:
+
+| Source | `family_chart.json` shape |
+| --- | --- |
+| `wikinet crawl` → `export_graph` | Object: `people`, `unions`, `relationships`, `layout`, `summary` |
+| `python scripts/export_family_chart.py …` | Legacy array: `[{ id, data, rels }, …]` (same shape the old [family-chart](https://github.com/donatso/family-chart) npm widget used) |
+
+Features: force-directed graph with **zoom/pan**, **search** (dims non-matches), **drag** nodes, summary chips, edge legend, hover detail. Union nodes (native export) render as compact “household” nodes.
 
 ```bash
 make run-demo
-# Or: npm install && make demo_uae_family_chart
-# Open http://localhost:8000/out/uae/ in your browser
+# Open http://localhost:8000/out/uae/ in your browser (serve repo root, as the Makefile does)
 ```
 
-`make run-demo` installs npm dependencies when `node_modules` is missing, then runs the same steps as `make demo_uae_family_chart`: crawl UAE seeds, write `family_chart.json`, copy [web/family_chart_viewer.html](web/family_chart_viewer.html) to `out/uae/index.html`, and start `python3 -m http.server 8000`.
+`make run-demo` runs the same steps as `make demo_uae_family_chart`: crawl UAE seeds, regenerate `family_chart.json` via the script, copy the dashboard to `out/uae/index.html`, and start `python3 -m http.server 8000`.
 
-This workflow will crawl UAE royals, export a `family_chart.json`, copy a minimal viewer to `out/uae/index.html`, and serve everything via `python3 -m http.server`.
+**Note:** If you only ran `wikinet crawl … --out out/my_run` without the script exporter, overwrite or copy `family_chart.json` from that directory—the dashboard still works on the **native** object format produced by the crawler.
 
 ### `family_chart.json` schema
 

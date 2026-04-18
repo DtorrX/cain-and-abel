@@ -20,7 +20,6 @@ typecheck:
 	python -m mypy wikinet
 
 run-demo:
-	@test -d node_modules || npm install
 	@$(MAKE) demo_uae_family_chart
 
 crawl_uae_family:
