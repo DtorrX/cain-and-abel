@@ -13,6 +13,7 @@ import networkx as nx
 from . import api as wikinet_api
 from .cache import CacheManager
 from .cia import CIAWorldLeadersClient, GovernmentIndex
+from .documents import ingest_documents
 from .export import export_graph
 from .graph import GraphBuilder, load_graph
 from .http import HTTPClient
@@ -63,6 +64,39 @@ def build_parser() -> argparse.ArgumentParser:
     enrich = sub.add_parser("enrich", help="Enrich an exported graph with analytics")
     enrich.add_argument("out_dir", help="Directory containing nodes.json and edges.json")
     enrich.add_argument("--taxonomy", help="Optional taxonomy JSON for role mapping")
+
+    ingest = sub.add_parser("ingest", help="Parse documents for intel and export/merge graph")
+    ingest.add_argument(
+        "paths",
+        nargs="+",
+        help="Document file(s) or directory(ies) (.txt, .md, .html, .pdf, .docx, .rtf, .json)",
+    )
+    ingest.add_argument("--out", required=True, help="Output directory for graph export")
+    ingest.add_argument(
+        "--merge-into",
+        help="Merge parsed intel into an existing crawl output directory (overrides --out)",
+    )
+    ingest.add_argument(
+        "--patterns",
+        help="Optional JSON file with legal/intel extraction patterns (see configs/legal_patterns.json)",
+    )
+    ingest.add_argument(
+        "--resolve",
+        action="store_true",
+        help="Attempt to resolve extracted person/org names to Wikidata Q-IDs",
+    )
+    ingest.add_argument("--lang", default="en", help="Language for Wikidata resolution (default: en)")
+    ingest.add_argument("--cache-dir", help="Cache directory for resolution HTTP calls")
+    ingest.add_argument("--rate", type=float, default=5.0, help="Max requests per second")
+    ingest.add_argument(
+        "--report-path",
+        help="Optional path for document intel JSON report (also written to out/document_intel.json)",
+    )
+    ingest.add_argument(
+        "--log-level",
+        default=os.getenv("WIKINET_LOG_LEVEL", "INFO"),
+        help="Python logging level (DEBUG, INFO, WARNING, ERROR)",
+    )
 
     return parser
 
@@ -184,6 +218,26 @@ def run_validate(path: str) -> None:
     console.log("Validation OK")
 
 
+def run_ingest(args: argparse.Namespace) -> None:
+    set_log_level(args.log_level)
+    resolver = None
+    if args.resolve:
+        cache = CacheManager(args.cache_dir)
+        rate_limiter = RateLimiter(rate=args.rate)
+        http = HTTPClient(cache=cache, rate_limiter=rate_limiter)
+        resolver = Resolver(http, lang=args.lang)
+    out_dir = args.merge_into or args.out
+    ingest_documents(
+        args.paths,
+        out_dir=out_dir,
+        patterns_path=args.patterns,
+        merge_into=args.merge_into,
+        resolve_entities=args.resolve,
+        resolver=resolver,
+        report_path=args.report_path,
+    )
+
+
 def main(argv: Sequence[str] | None = None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -193,6 +247,8 @@ def main(argv: Sequence[str] | None = None) -> None:
         run_validate(args.path)
     elif args.command == "enrich":
         wikinet_api.run_enrichment(args.out_dir, args.taxonomy)
+    elif args.command == "ingest":
+        run_ingest(args)
     else:  # pragma: no cover - defensive
         parser.print_help()
 

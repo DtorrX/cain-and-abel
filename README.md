@@ -63,6 +63,47 @@ wikinet enrich out/uae_full --taxonomy configs/gulf_taxonomy.json
 
 5. **Observability:** Set `WIKINET_LOG_LEVEL=DEBUG` or pass `--log-level DEBUG` on `crawl`. Crawl boundaries and HTTP retries emit grep-friendly lines via `wikinet.utils.log_fields` (for example `crawl_start | out=... seeds=...` and `http_retry | url=... status_code=...`).
 
+## Document intel layer
+
+Submit arbitrary documents (court filings, contracts, reports) and extract entities,
+relationships, and metadata into the same graph format used by Wikidata crawls.
+
+Supported formats: `.txt`, `.md`, `.html`, `.rtf`, `.json` (stdlib). PDF and DOCX
+require the optional documents extra: `pip install -e ".[documents]"`.
+
+```bash
+# Parse a single filing or a folder of docs
+wikinet ingest path/to/complaint.pdf path/to/exhibits/ \
+  --patterns configs/legal_patterns.json \
+  --out out/case_intel
+
+# Merge document intel into an existing crawl
+wikinet crawl --seed "House of Khalifa" --out out/bahrain
+wikinet ingest path/to/court_docs/ --merge-into out/bahrain
+
+# Optionally resolve extracted names to Wikidata Q-IDs
+wikinet ingest docs/ --out out/merged --resolve --lang en
+```
+
+Each ingest run writes:
+
+| File | Contents |
+| --- | --- |
+| `document_intel.json` | Structured extractions: case numbers, courts, dates, entities, relationships |
+| `nodes.json` / `edges.json` | Graph with `source_system: "document"` and evidence excerpts |
+| `graph.graphml`, `graph.dot` | Same export formats as crawl output |
+
+Extraction is rule-based (regex patterns for parties, org suffixes, legal phrases like
+*director of*, *employed by*, *owned by*). Customize patterns via
+`configs/legal_patterns.json` or pass `--patterns`.
+
+```python
+from wikinet.api import run_document_ingest, run_pipeline
+
+run_pipeline(seeds=["House of Khalifa"], out_dir="out/bahrain")
+run_document_ingest(["court_docs/"], merge_into="out/bahrain", patterns_path="configs/legal_patterns.json")
+```
+
 ## Repository layout
 
 | Path | Role |
@@ -71,7 +112,8 @@ wikinet enrich out/uae_full --taxonomy configs/gulf_taxonomy.json
 | [tests/](tests/) | Pytest suite |
 | [scripts/](scripts/) | `enrich_network`, `export_family_chart`, sample generators (also used by `wikinet enrich`) |
 | [web/](web/) | D3-based dashboard (`family_chart_viewer.html`) copied next to crawl output as `index.html` |
-| [configs/](configs/) | Sample taxonomy JSON for enrichment |
+| [wikinet/documents/](wikinet/documents/) | Document ingestion: text extraction, intel parsing, graph merge |
+| [configs/](configs/) | Sample taxonomy and legal extraction patterns |
 | `out/` | Default crawl output (gitignored once generated) |
 
 ## Features
@@ -109,6 +151,8 @@ Environment variables may be placed in `.env` (optional) to configure proxies or
 | `--cache-dir` | Custom cache location (default `.wikinet-cache`). |
 | `--log-level` | Toggle verbosity (DEBUG for deep dives, INFO for defaults). |
 | `--report-path` | Persist crawl diagnostics (relation histograms, depth counts, warnings). |
+
+`wikinet ingest` accepts document paths, `--patterns`, `--merge-into`, and `--resolve` — see [Document intel layer](#document-intel-layer).
 
 ## Example pipelines
 

@@ -11,6 +11,7 @@ from scripts import enrich_network
 
 from .cache import CacheManager
 from .cia import CIAWorldLeadersClient, GovernmentIndex
+from .documents import ingest_documents
 from .export import export_graph
 from .graph import GraphBuilder
 from .http import HTTPClient
@@ -87,4 +88,35 @@ def run_enrichment(out_dir: str, taxonomy_path: str | None = None) -> None:
         json.dump(legend, fh, indent=2)
 
 
-__all__ = ["run_pipeline", "run_enrichment"]
+def run_document_ingest(
+    paths: Iterable[str],
+    *,
+    out_dir: str,
+    patterns_path: str | None = None,
+    merge_into: str | None = None,
+    resolve_entities: bool = False,
+    lang: str = "en",
+    cache_dir: str | None = None,
+    rate: float = 5.0,
+    report_path: str | None = None,
+) -> object:
+    """Parse arbitrary documents and export intel into the wikinet graph format."""
+
+    resolver = None
+    if resolve_entities:
+        cache = CacheManager(cache_dir)
+        rate_limiter = RateLimiter(rate=rate)
+        http = HTTPClient(cache=cache, rate_limiter=rate_limiter)
+        resolver = Resolver(http, lang=lang)
+    return ingest_documents(
+        list(paths),
+        out_dir=out_dir,
+        patterns_path=patterns_path,
+        merge_into=merge_into,
+        resolve_entities=resolve_entities,
+        resolver=resolver,
+        report_path=report_path,
+    )
+
+
+__all__ = ["run_pipeline", "run_enrichment", "run_document_ingest"]

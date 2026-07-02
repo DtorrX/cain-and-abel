@@ -9,6 +9,8 @@ def test_build_parser_has_commands():
     parser = cli.build_parser()
     args = parser.parse_args(["validate", "out"])
     assert args.command == "validate"
+    ingest_args = parser.parse_args(["ingest", "docs/", "--out", "out/docs"])
+    assert ingest_args.command == "ingest"
 
 
 def test_validate_command(tmp_path):

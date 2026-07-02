@@ -1,0 +1,35 @@
+{
+  "case_number": [
+    "(?i)\\b(?:case|docket|file|matter)\\s*(?:no\\.?|number|#)\\s*[:.]?\\s*([A-Z0-9][\\w./-]{2,})",
+    "(?i)\\b(?:civil|criminal)\\s+(?:action|case)\\s+no\\.?\\s*([A-Z0-9][\\w./-]{2,})"
+  ],
+  "court": [
+    "(?i)\\b((?:United States|U\\.S\\.) District Court[^,\\n]{0,80})",
+    "(?i)\\b((?:Supreme|Superior|Circuit|Appellate|Family|Probate) Court[^,\\n]{0,80})"
+  ],
+  "relationship_phrases": [
+    {
+      "relation": "director_of",
+      "pattern": "(?i)\\b([A-Z][\\w'.-]+(?:\\s+[A-Z][\\w'.-]+){0,4})\\s*,?\\s*director of\\s+([A-Z][\\w&'.-]+(?:\\s+[A-Z][\\w&'.-]+){0,6})"
+    },
+    {
+      "relation": "employed_by",
+      "pattern": "(?i)\\b([A-Z][\\w'.-]+(?:\\s+[A-Z][\\w'.-]+){0,4})\\s*,?\\s*(?:employed by|employee of)\\s+([A-Z][\\w&'.-]+(?:\\s+[A-Z][\\w&'.-]+){0,6})"
+    },
+    {
+      "relation": "represented_by",
+      "pattern": "(?i)\\b([A-Z][\\w'.-]+(?:\\s+[A-Z][\\w'.-]+){0,4})\\s*,?\\s*represented by\\s+([A-Z][\\w'.-]+(?:\\s+[A-Z][\\w'.-]+){0,4})"
+    },
+    {
+      "relation": "owned_by",
+      "pattern": "(?i)\\b([A-Z][\\w&'.-]+(?:\\s+[A-Z][\\w&'.-]+){0,6})\\s+(?:is\\s+)?owned by\\s+([A-Z][\\w&'.-]+(?:\\s+[A-Z][\\w&'.-]+){0,6})"
+    }
+  ],
+  "organization_suffixes": [
+    "\\b([A-Z][\\w&'.-]+(?:\\s+[A-Z][\\w&'.-]+){0,5}\\s+(?:Inc\\.?|LLC|L\\.L\\.C\\.|Ltd\\.?|Corp\\.?|Corporation|Company|Co\\.?|LP|LLP|PLC))\\b"
+  ],
+  "person_titles": [
+    "\\b(?:Mr\\.|Ms\\.|Mrs\\.|Dr\\.|Hon\\.|Judge|Justice)\\s+([A-Z][\\w'.-]+(?:\\s+[A-Z][\\w'.-]+){0,3})\\b",
+    "\\b([A-Z][\\w'.-]+(?:\\s+[A-Z][\\w'.-]+){0,3})\\s*,\\s*(?:Esq\\.|Attorney|Counsel)\\b"
+  ]
+}
