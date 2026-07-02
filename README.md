@@ -72,10 +72,17 @@ Supported formats: `.txt`, `.md`, `.html`, `.rtf`, `.json` (stdlib). PDF and DOC
 require the optional documents extra: `pip install -e ".[documents]"`.
 
 ```bash
-# Parse a single filing or a folder of docs
+# Requires a running Ollama instance (https://ollama.com)
+export OLLAMA_HOST=http://localhost:11434
+export OLLAMA_MODEL=llama3.2
+
+# Parse a single filing or a folder of docs (default: Ollama LLM)
 wikinet ingest path/to/complaint.pdf path/to/exhibits/ \
-  --patterns configs/legal_patterns.json \
+  --ollama-model llama3.2 \
   --out out/case_intel
+
+# Regex fallback (offline, no LLM)
+wikinet ingest docs/ --parser rules --patterns configs/legal_patterns.json --out out/case_intel
 
 # Merge document intel into an existing crawl
 wikinet crawl --seed "House of Khalifa" --out out/bahrain
@@ -93,15 +100,21 @@ Each ingest run writes:
 | `nodes.json` / `edges.json` | Graph with `source_system: "document"` and evidence excerpts |
 | `graph.graphml`, `graph.dot` | Same export formats as crawl output |
 
-Extraction is rule-based (regex patterns for parties, org suffixes, legal phrases like
-*director of*, *employed by*, *owned by*). Customize patterns via
-`configs/legal_patterns.json` or pass `--patterns`.
+**Default parser: Ollama.** The ingest pipeline sends extracted document text to a local
+Ollama model (`OLLAMA_HOST`, `OLLAMA_MODEL`) and expects structured JSON back (entities,
+relationships, case metadata). Use `--parser rules` for offline regex extraction via
+`configs/legal_patterns.json`.
 
 ```python
 from wikinet.api import run_document_ingest, run_pipeline
 
 run_pipeline(seeds=["House of Khalifa"], out_dir="out/bahrain")
-run_document_ingest(["court_docs/"], merge_into="out/bahrain", patterns_path="configs/legal_patterns.json")
+run_document_ingest(
+    ["court_docs/"],
+    merge_into="out/bahrain",
+    parser="ollama",
+    ollama_model="llama3.2",
+)
 ```
 
 ## Repository layout
@@ -112,7 +125,7 @@ run_document_ingest(["court_docs/"], merge_into="out/bahrain", patterns_path="co
 | [tests/](tests/) | Pytest suite |
 | [scripts/](scripts/) | `enrich_network`, `export_family_chart`, sample generators (also used by `wikinet enrich`) |
 | [web/](web/) | D3-based dashboard (`family_chart_viewer.html`) copied next to crawl output as `index.html` |
-| [wikinet/documents/](wikinet/documents/) | Document ingestion: text extraction, intel parsing, graph merge |
+| [wikinet/documents/](wikinet/documents/) | Document ingestion: text extraction, Ollama/rules parsing, graph merge |
 | [configs/](configs/) | Sample taxonomy and legal extraction patterns |
 | `out/` | Default crawl output (gitignored once generated) |
 
@@ -152,7 +165,7 @@ Environment variables may be placed in `.env` (optional) to configure proxies or
 | `--log-level` | Toggle verbosity (DEBUG for deep dives, INFO for defaults). |
 | `--report-path` | Persist crawl diagnostics (relation histograms, depth counts, warnings). |
 
-`wikinet ingest` accepts document paths, `--patterns`, `--merge-into`, and `--resolve` — see [Document intel layer](#document-intel-layer).
+`wikinet ingest` accepts document paths, `--parser ollama|rules`, `--ollama-model`, `--merge-into`, and `--resolve` — see [Document intel layer](#document-intel-layer).
 
 ## Example pipelines
 

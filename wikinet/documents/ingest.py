@@ -15,7 +15,13 @@ from ..graph import load_graph
 from ..resolver import Resolver
 from ..utils import console, timestamp
 from .extract import collect_document_paths, extract_text
-from .parse import DocumentIntel, intel_to_graph_payload, load_patterns, parse_document_intel
+from .parse import (
+    DocumentIntel,
+    ParserName,
+    intel_to_graph_payload,
+    load_patterns,
+    parse_document_intel,
+)
 
 
 @dataclass
@@ -108,6 +114,11 @@ def ingest_documents(
     resolve_entities: bool = False,
     resolver: Resolver | None = None,
     report_path: str | None = None,
+    parser: ParserName = "ollama",
+    ollama_client: object | None = None,
+    ollama_model: str | None = None,
+    ollama_host: str | None = None,
+    max_chars: int | None = None,
 ) -> DocumentIngestResult:
     """Parse documents and export (or merge) a wikinet graph."""
 
@@ -118,8 +129,14 @@ def ingest_documents(
     all_edges: List[MutableMapping[str, object]] = []
     retrieved_at = timestamp()
 
+    client = ollama_client
+    if parser == "ollama" and client is None and (ollama_model or ollama_host):
+        from .ollama import OllamaClient
+
+        client = OllamaClient(host=ollama_host, model=ollama_model)
+
     for doc_path in doc_paths:
-        console.log(f"Parsing document {doc_path}")
+        console.log(f"Parsing document {doc_path} via {parser}")
         try:
             text = extract_text(doc_path)
         except Exception as exc:
@@ -127,7 +144,14 @@ def ingest_documents(
             result.warnings.append(warning)
             console.log(f"[yellow]{warning}[/yellow]")
             continue
-        intel = parse_document_intel(source_path=doc_path, text=text, patterns=patterns)
+        intel = parse_document_intel(
+            source_path=doc_path,
+            text=text,
+            patterns=patterns,
+            parser=parser,
+            ollama_client=client,
+            max_chars=max_chars,
+        )
         result.documents.append(intel)
         result.warnings.extend(intel.warnings)
         nodes, edges = intel_to_graph_payload(intel, retrieved_at=retrieved_at)

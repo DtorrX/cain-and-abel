@@ -78,14 +78,37 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest.add_argument(
         "--patterns",
-        help="Optional JSON file with legal/intel extraction patterns (see configs/legal_patterns.json)",
+        help="Optional JSON file with regex patterns when --parser rules (see configs/legal_patterns.json)",
+    )
+    ingest.add_argument(
+        "--parser",
+        choices=["ollama", "rules"],
+        default=os.getenv("WIKINET_DOC_PARSER", "ollama"),
+        help="Document parser backend (default: ollama)",
+    )
+    ingest.add_argument(
+        "--ollama-host",
+        default=os.getenv("OLLAMA_HOST"),
+        help="Ollama base URL (default: OLLAMA_HOST env or http://localhost:11434)",
+    )
+    ingest.add_argument(
+        "--ollama-model",
+        default=os.getenv("OLLAMA_MODEL"),
+        help="Ollama model name (default: OLLAMA_MODEL env or llama3.2)",
+    )
+    ingest.add_argument(
+        "--max-chars",
+        type=int,
+        help="Max document characters sent to Ollama (default: 24000)",
     )
     ingest.add_argument(
         "--resolve",
         action="store_true",
         help="Attempt to resolve extracted person/org names to Wikidata Q-IDs",
     )
-    ingest.add_argument("--lang", default="en", help="Language for Wikidata resolution (default: en)")
+    ingest.add_argument(
+        "--lang", default="en", help="Language for Wikidata resolution (default: en)"
+    )
     ingest.add_argument("--cache-dir", help="Cache directory for resolution HTTP calls")
     ingest.add_argument("--rate", type=float, default=5.0, help="Max requests per second")
     ingest.add_argument(
@@ -235,6 +258,10 @@ def run_ingest(args: argparse.Namespace) -> None:
         resolve_entities=args.resolve,
         resolver=resolver,
         report_path=args.report_path,
+        parser=args.parser,
+        ollama_model=args.ollama_model,
+        ollama_host=args.ollama_host,
+        max_chars=args.max_chars,
     )
 
 

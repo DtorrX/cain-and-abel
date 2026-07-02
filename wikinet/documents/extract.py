@@ -93,7 +93,9 @@ def collect_document_paths(paths: Iterable[str]) -> List[Path]:
         else:
             raise ValueError(f"Not a file or directory: {path}")
     if not discovered:
-        raise ValueError("No supported documents found (.txt, .md, .html, .pdf, .docx, .rtf, .json)")
+        raise ValueError(
+            "No supported documents found (.txt, .md, .html, .pdf, .docx, .rtf, .json)"
+        )
     return discovered
 
 
