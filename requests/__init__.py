@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
-import json
+import json as json_module
 import os
 import urllib.error
 import urllib.parse
@@ -47,7 +47,7 @@ else:  # pragma: no cover - lightweight fallback
             return self._content.decode("utf-8", errors="replace")
 
         def json(self) -> Any:
-            return json.loads(self.text)
+            return json_module.loads(self.text)
 
         def raise_for_status(self) -> None:
             if not (200 <= self.status_code < 400):
@@ -86,7 +86,7 @@ else:  # pragma: no cover - lightweight fallback
             separator = '&' if urllib.parse.urlparse(url).query else '?'
             url = f"{url}{separator}{query}"
         if json is not None:
-            data = json.dumps(json).encode("utf-8")
+            data = json_module.dumps(json).encode("utf-8")
             headers = {**headers, "Content-Type": "application/json"}
         req = urllib.request.Request(url, data=data, headers=dict(headers), method=method)
         resp = Response()
@@ -104,8 +104,16 @@ else:  # pragma: no cover - lightweight fallback
             raise HTTPError(str(exc)) from exc
         return resp
 
+    def get(url: str, **kwargs: Any) -> Response:
+        return request("GET", url, **kwargs)
+
+    def post(url: str, **kwargs: Any) -> Response:
+        return request("POST", url, **kwargs)
+
     __all__ = [
         "request",
+        "get",
+        "post",
         "Response",
         "HTTPError",
         "Timeout",
