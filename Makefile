@@ -1,4 +1,4 @@
-.PHONY: install install-dev install-visual test lint typecheck run-demo \
+.PHONY: install install-dev install-documents install-visual test lint typecheck run-demo setup-local ingest-demo \
 	crawl_uae_family export_uae_family_chart demo_uae_family_chart .demo_copy
 
 install:
@@ -7,8 +7,17 @@ install:
 install-dev:
 	python -m pip install -e ".[dev]"
 
+install-documents:
+	python -m pip install -e ".[documents]"
+
 install-visual:
 	python -m pip install -e ".[visual]"
+
+setup-local:
+	bash scripts/setup_local.sh
+
+ingest-demo:
+	bash scripts/run_local_ingest.sh docs/sample_complaint.txt out/local_ingest
 
 test:
 	python -m pytest
