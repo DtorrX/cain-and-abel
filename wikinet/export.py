@@ -28,12 +28,22 @@ EDGE_STYLES = {
     "head_of_state": {"color": "#ff9896", "style": "solid"},
     "chairperson": {"color": "#c5b0d5", "style": "solid"},
     "officeholder": {"color": "#c49c94", "style": "solid"},
+    "mentions": {"color": "#ff6b6b", "style": "dotted"},
+    "director_of": {"color": "#4ecdc4", "style": "solid"},
+    "employed_by": {"color": "#45b7d1", "style": "solid"},
+    "represented_by": {"color": "#96ceb4", "style": "dashed"},
+    "owned_by": {"color": "#f7ca18", "style": "solid"},
+    "subsidiary_of": {"color": "#f39c12", "style": "solid"},
+    "on_behalf_of": {"color": "#9b59b6", "style": "dotted"},
+    "spouse_of": {"color": "#e91e63", "style": "solid"},
+    "officer_of": {"color": "#3498db", "style": "solid"},
 }
 
 NODE_LAYERS = {
     "government": {"color": "#004170"},
     "military": {"color": "#8b0000"},
     "bureaucrat": {"color": "#556b2f"},
+    "document": {"color": "#6c3483"},
 }
 
 LEGEND = {"edges": EDGE_STYLES, "node_layers": NODE_LAYERS}

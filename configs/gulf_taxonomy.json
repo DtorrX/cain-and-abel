@@ -1,0 +1,17 @@
+{
+  "role_keywords": {
+    "royal": ["sheikh", "emir", "prince", "princess", "royal"],
+    "defense_exec": ["defense", "weapons", "missile", "aerospace"],
+    "legal": ["attorney", "counsel", "esq", "judge", "court"]
+  },
+  "country_keywords": {
+    "Bahrain": ["bahrain", "manama"],
+    "United Arab Emirates": ["uae", "dubai", "abu dhabi", "emirati"],
+    "Israel": ["idf", "israeli", "tel aviv"]
+  },
+  "edge_type_by_pid": {
+    "P355": "corporate_structure",
+    "P127": "ownership",
+    "DOC": "document_intel"
+  }
+}
