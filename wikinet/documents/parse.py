@@ -3,90 +3,12 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Literal, Mapping, MutableMapping, Sequence, Tuple
+from typing import Dict, List, MutableMapping, Tuple
 
 from ..utils import timestamp
-
-ParserName = Literal["ollama", "rules"]
-
-NAME_FRAGMENT = r"[A-Z][\w'.-]*"
-PERSON_NAME = rf"(?:{NAME_FRAGMENT}(?:\s+{NAME_FRAGMENT}){{0,4}})"
-ORG_NAME = rf"(?:{NAME_FRAGMENT}(?:\s+{NAME_FRAGMENT}){{0,6}}(?:\s+(?:Inc\.?|LLC|L\.L\.C\.|Ltd\.?|Corp\.?|Corporation|Company|Co\.?))?)"
-
-DEFAULT_LEGAL_PATTERNS: Dict[str, object] = {
-    "case_number": [
-        r"(?i)\b(?:case|docket|file|matter)\s*(?:no\.?|number|#)\s*[:.]?\s*([A-Z0-9][\w./-]{2,})",
-        r"(?i)\b(?:civil|criminal)\s+(?:action|case)\s+no\.?\s*([A-Z0-9][\w./-]{2,})",
-    ],
-    "court": [
-        r"(?i)\b((?:United States|U\.S\.) District Court[^,\n]{0,80})",
-        r"(?i)\b((?:Supreme|Superior|Circuit|Appellate|Family|Probate) Court[^,\n]{0,80})",
-    ],
-    "party_roles": {
-        "plaintiff": [r"(?i)\bplaintiffs?\b", r"(?i)\bpetitioners?\b", r"(?i)\bclaimants?\b"],
-        "defendant": [r"(?i)\bdefendants?\b", r"(?i)\brespondents?\b"],
-    },
-    "relationship_phrases": [
-        {
-            "relation": "director_of",
-            "pattern": rf"\b({PERSON_NAME})\s*,?\s*(?i:director of)\s+({ORG_NAME})",
-        },
-        {
-            "relation": "employed_by",
-            "pattern": rf"\b({PERSON_NAME})\s*,?\s*(?:(?i:was)\s+)?(?i:employed by|employee of)\s+({ORG_NAME})",
-        },
-        {
-            "relation": "officer_of",
-            "pattern": rf"\b({PERSON_NAME})\s*,?\s*(?i:chief executive officer|ceo|cfo|president|chairman) of\s+({ORG_NAME})",
-        },
-        {
-            "relation": "owned_by",
-            "pattern": rf"\b({ORG_NAME})\s+(?:(?i:is)\s+)?(?i:owned by)\s+({ORG_NAME})",
-        },
-        {
-            "relation": "subsidiary_of",
-            "pattern": rf"\b({ORG_NAME})\s*,?\s*(?i:a subsidiary of)\s+({ORG_NAME})",
-        },
-        {
-            "relation": "represented_by",
-            "pattern": rf"\b({PERSON_NAME})\s*,?\s*(?i:represented by)\s+({PERSON_NAME})",
-        },
-        {
-            "relation": "spouse_of",
-            "pattern": rf"\b({PERSON_NAME})\s*,?\s*(?i:spouse of)\s+({PERSON_NAME})",
-        },
-        {"relation": "on_behalf_of", "pattern": rf"(?i:on behalf of)\s+({ORG_NAME})"},
-    ],
-    "organization_suffixes": [
-        r"\b([A-Z][\w&'.-]+(?:\s+[A-Z][\w&'.-]+){0,5}\s+(?:Inc\.?|LLC|L\.L\.C\.|Ltd\.?|Corp\.?|Corporation|Company|Co\.?|LP|LLP|PLC))\b",
-    ],
-    "person_titles": [
-        r"\b(?:Mr\.|Ms\.|Mrs\.|Dr\.|Hon\.|Judge|Justice)\s+([A-Z][\w'.-]+(?:\s+[A-Z][\w'.-]+){0,3})\b",
-        r"\b([A-Z][\w'.-]+(?:\s+[A-Z][\w'.-]+){0,3})\s*,\s*(?:Esq\.|Attorney|Counsel)\b",
-    ],
-}
-
-NOISE_WORDS = {
-    "complaint",
-    "plaintiff",
-    "defendant",
-    "alleges",
-    "that",
-    "was",
-    "and",
-    "by",
-    "is",
-    "the",
-    "parties",
-    "agreed",
-    "damages",
-    "on",
-    "january",
-}
 
 
 @dataclass
@@ -137,6 +59,7 @@ class DocumentIntel:
     text_length: int
     parser: str = "ollama"
     model: str | None = None
+    chunks_processed: int = 1
     case_numbers: List[str] = field(default_factory=list)
     courts: List[str] = field(default_factory=list)
     dates: List[str] = field(default_factory=list)
@@ -152,6 +75,7 @@ class DocumentIntel:
             "title": self.title,
             "text_length": self.text_length,
             "parser": self.parser,
+            "chunks_processed": self.chunks_processed,
             "case_numbers": list(self.case_numbers),
             "courts": list(self.courts),
             "dates": list(self.dates),
@@ -165,51 +89,9 @@ class DocumentIntel:
         return payload
 
 
-def load_patterns(patterns_path: Path | None = None) -> Dict[str, object]:
-    if patterns_path and patterns_path.exists():
-        with patterns_path.open("r", encoding="utf-8") as fh:
-            loaded = json.load(fh)
-        merged = DEFAULT_LEGAL_PATTERNS.copy()
-        merged.update(loaded)
-        return merged
-    return DEFAULT_LEGAL_PATTERNS.copy()
-
-
-def _clean_label(label: str) -> str:
-    label = re.sub(r"\s+", " ", label.strip(" .,;"))
-    if len(label) < 2 or len(label) > 120:
-        return ""
-    lower = label.lower()
-    if any(
-        word in lower.split() for word in NOISE_WORDS if word in {"complaint", "alleges", "damages"}
-    ):
-        return ""
-    if lower in NOISE_WORDS:
-        return ""
-    return label
-
-
 def _entity_id(doc_id: str, label: str) -> str:
     digest = hashlib.sha1(f"{doc_id}:{label.lower()}".encode("utf-8")).hexdigest()[:12]
     return f"docent:{digest}"
-
-
-def _excerpt(text: str, start: int, end: int, radius: int = 80) -> str:
-    left = max(0, start - radius)
-    right = min(len(text), end + radius)
-    snippet = text[left:right].replace("\n", " ")
-    return re.sub(r"\s+", " ", snippet).strip()
-
-
-def _find_matches(text: str, patterns: Sequence[str]) -> List[str]:
-    found: List[str] = []
-    for pattern in patterns:
-        for match in re.finditer(pattern, text):
-            value = match.group(1) if match.lastindex else match.group(0)
-            value = value.strip(" .,;")
-            if value and value not in found:
-                found.append(value)
-    return found
 
 
 def _register_entity(
@@ -222,7 +104,7 @@ def _register_entity(
     excerpt: str | None = None,
     apply_clean: bool = True,
 ) -> str:
-    label = _clean_label(label) if apply_clean else re.sub(r"\s+", " ", label.strip(" .,;"))
+    label = re.sub(r"\s+", " ", label.strip(" .,;")) if not apply_clean else _clean_label(label)
     if not label or len(label) < 2:
         return ""
     entity_id = _entity_id(doc_id, label)
@@ -241,29 +123,35 @@ def _register_entity(
     return entity_id
 
 
+def _clean_label(label: str) -> str:
+    label = re.sub(r"\s+", " ", label.strip(" .,;"))
+    if len(label) < 2 or len(label) > 120:
+        return ""
+    return label
+
+
 def parse_document_intel(
     *,
     source_path: Path,
     text: str,
-    patterns: Mapping[str, object] | None = None,
-    parser: ParserName = "ollama",
     ollama_client: object | None = None,
-    max_chars: int | None = None,
+    chunk_chars: int | None = None,
+    chunk_overlap: int | None = None,
 ) -> DocumentIntel:
-    """Parse a single document body into structured intel."""
+    """Parse a single document body into structured intel via Ollama."""
 
-    if parser == "rules":
-        from .parse_rules import parse_document_intel_rules
-
-        return parse_document_intel_rules(source_path=source_path, text=text, patterns=patterns)
-
-    from .ollama import DEFAULT_MAX_CHARS, parse_document_intel_ollama
+    from .ollama import (
+        DEFAULT_CHUNK_CHARS,
+        DEFAULT_CHUNK_OVERLAP,
+        parse_document_intel_ollama,
+    )
 
     return parse_document_intel_ollama(
         source_path=source_path,
         text=text,
         ollama_client=ollama_client,  # type: ignore[arg-type]
-        max_chars=max_chars or DEFAULT_MAX_CHARS,
+        chunk_chars=chunk_chars or DEFAULT_CHUNK_CHARS,
+        chunk_overlap=chunk_overlap or DEFAULT_CHUNK_OVERLAP,
     )
 
 
@@ -287,6 +175,7 @@ def intel_to_graph_payload(
             "dates": intel.dates,
             "amounts": intel.amounts,
             "parser": intel.parser,
+            "chunks_processed": intel.chunks_processed,
             "layers": ["document"],
         }
     ]
@@ -339,12 +228,9 @@ def intel_to_graph_payload(
 
 
 __all__ = [
-    "DEFAULT_LEGAL_PATTERNS",
     "DocumentIntel",
     "ExtractedEntity",
     "ExtractedRelationship",
-    "ParserName",
     "intel_to_graph_payload",
-    "load_patterns",
     "parse_document_intel",
 ]

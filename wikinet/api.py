@@ -92,17 +92,16 @@ def run_document_ingest(
     paths: Iterable[str],
     *,
     out_dir: str,
-    patterns_path: str | None = None,
     merge_into: str | None = None,
     resolve_entities: bool = False,
     lang: str = "en",
     cache_dir: str | None = None,
     rate: float = 5.0,
     report_path: str | None = None,
-    parser: str = "ollama",
     ollama_model: str | None = None,
     ollama_host: str | None = None,
-    max_chars: int | None = None,
+    chunk_chars: int | None = None,
+    chunk_overlap: int | None = None,
 ) -> object:
     """Parse arbitrary documents and export intel into the wikinet graph format."""
 
@@ -115,15 +114,14 @@ def run_document_ingest(
     return ingest_documents(
         list(paths),
         out_dir=out_dir,
-        patterns_path=patterns_path,
         merge_into=merge_into,
         resolve_entities=resolve_entities,
         resolver=resolver,
         report_path=report_path,
-        parser=parser,  # type: ignore[arg-type]
         ollama_model=ollama_model,
         ollama_host=ollama_host,
-        max_chars=max_chars,
+        chunk_chars=chunk_chars,
+        chunk_overlap=chunk_overlap,
     )
 
 
