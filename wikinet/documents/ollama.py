@@ -7,11 +7,12 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Mapping
+from typing import Any, Dict, List, Mapping, MutableMapping, Sequence
 
 import requests
 
-from ..utils import logger
+from ..utils import console, logger
+from .chunking import DEFAULT_CHUNK_CHARS, DEFAULT_CHUNK_OVERLAP, chunk_text
 from .parse import (
     DocumentIntel,
     ExtractedEntity,
@@ -21,7 +22,7 @@ from .parse import (
 
 DEFAULT_OLLAMA_HOST = "http://localhost:11434"
 DEFAULT_OLLAMA_MODEL = "llama3.2"
-DEFAULT_MAX_CHARS = 24_000
+DEFAULT_MAX_CHARS = DEFAULT_CHUNK_CHARS
 
 EXTRACTION_SCHEMA: Dict[str, Any] = {
     "case_numbers": [],
@@ -73,12 +74,6 @@ Rules:
 - Do not invent entities or facts not present in the document."""
 
 
-def _truncate_text(text: str, max_chars: int) -> tuple[str, bool]:
-    if len(text) <= max_chars:
-        return text, False
-    return text[:max_chars] + "\n\n[... document truncated for model context ...]", True
-
-
 def extract_json_payload(raw: str) -> Dict[str, Any]:
     """Parse JSON from an Ollama response, tolerating markdown fences."""
 
@@ -96,6 +91,83 @@ def extract_json_payload(raw: str) -> Dict[str, Any]:
     if not isinstance(payload, dict):
         raise ValueError("Ollama response JSON must be an object")
     return payload
+
+
+def merge_chunk_payloads(payloads: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    """Merge intel payloads from multiple document chunks."""
+
+    merged: Dict[str, Any] = {
+        "case_numbers": [],
+        "courts": [],
+        "dates": [],
+        "amounts": [],
+        "entities": [],
+        "relationships": [],
+    }
+    scalar_fields = ("case_numbers", "courts", "dates", "amounts")
+    seen_scalars = {field: set() for field in scalar_fields}
+    entities_by_label: Dict[str, MutableMapping[str, Any]] = {}
+    seen_relations: set[tuple[str, str, str]] = set()
+
+    for payload in payloads:
+        for field in scalar_fields:
+            for value in payload.get(field, []):
+                text = str(value).strip()
+                if not text:
+                    continue
+                key = text.casefold()
+                if key in seen_scalars[field]:
+                    continue
+                seen_scalars[field].add(key)
+                merged[field].append(text)
+
+        for item in payload.get("entities", []):
+            if not isinstance(item, dict):
+                continue
+            label = str(item.get("label", "")).strip()
+            if not label:
+                continue
+            key = label.casefold()
+            if key not in entities_by_label:
+                entities_by_label[key] = {
+                    "label": label,
+                    "entity_type": str(item.get("entity_type", "other")),
+                    "roles": [],
+                    "excerpt": "",
+                }
+            existing = entities_by_label[key]
+            for role in item.get("roles", []):
+                role_text = str(role).strip()
+                if role_text and role_text not in existing["roles"]:
+                    existing["roles"].append(role_text)
+            excerpt = str(item.get("excerpt", "")).strip()
+            if excerpt and not existing["excerpt"]:
+                existing["excerpt"] = excerpt
+
+        for item in payload.get("relationships", []):
+            if not isinstance(item, dict):
+                continue
+            source = str(item.get("source", "")).strip()
+            target = str(item.get("target", "")).strip()
+            relation = str(item.get("relation", "related_to")).strip().lower().replace(" ", "_")
+            if not source or not target:
+                continue
+            relation_key = (source.casefold(), target.casefold(), relation)
+            if relation_key in seen_relations:
+                continue
+            seen_relations.add(relation_key)
+            merged["relationships"].append(
+                {
+                    "source": source,
+                    "target": target,
+                    "relation": relation,
+                    "excerpt": str(item.get("excerpt", "")).strip(),
+                    "confidence": item.get("confidence", 0.75),
+                }
+            )
+
+    merged["entities"] = list(entities_by_label.values())
+    return merged
 
 
 class OllamaClient:
@@ -136,16 +208,24 @@ class OllamaClient:
             raise ValueError("Ollama returned an empty response")
         return content
 
-    def extract_intel(
-        self, *, title: str, text: str, max_chars: int = DEFAULT_MAX_CHARS
+    def extract_intel_chunk(
+        self,
+        *,
+        title: str,
+        text: str,
+        chunk_index: int,
+        chunk_total: int,
     ) -> Dict[str, Any]:
-        clipped, truncated = _truncate_text(text, max_chars)
         user_prompt = (
-            f"Extract intelligence from this document ({title}).\n\n"
-            f"Document text:\n---\n{clipped}\n---"
+            f"Extract intelligence from this document ({title}), "
+            f"chunk {chunk_index} of {chunk_total}.\n\n"
+            f"Document text:\n---\n{text}\n---"
         )
-        if truncated:
-            user_prompt += "\n\nNote: the document was truncated to fit the model context window."
+        if chunk_total > 1:
+            user_prompt += (
+                "\n\nThis is one section of a longer document. "
+                "Extract every entity and relationship present in this section only."
+            )
         raw = self.chat(
             [
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -153,6 +233,44 @@ class OllamaClient:
             ]
         )
         return extract_json_payload(raw)
+
+    def extract_intel(
+        self,
+        *,
+        title: str,
+        text: str,
+        chunk_chars: int = DEFAULT_CHUNK_CHARS,
+        chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
+    ) -> tuple[Dict[str, Any], int]:
+        chunks = chunk_text(text, chunk_chars=chunk_chars, overlap=chunk_overlap)
+        if not chunks:
+            return (
+                {
+                    "case_numbers": [],
+                    "courts": [],
+                    "dates": [],
+                    "amounts": [],
+                    "entities": [],
+                    "relationships": [],
+                },
+                0,
+            )
+
+        payloads: List[Dict[str, Any]] = []
+        total = len(chunks)
+        for index, chunk in enumerate(chunks, start=1):
+            console.log(
+                f"Ollama chunk {index}/{total} for {title} ({len(chunk):,} chars)"
+            )
+            payloads.append(
+                self.extract_intel_chunk(
+                    title=title,
+                    text=chunk,
+                    chunk_index=index,
+                    chunk_total=total,
+                )
+            )
+        return merge_chunk_payloads(payloads), total
 
 
 def _label_to_entity_type(label: str, hinted: str) -> str:
@@ -170,7 +288,7 @@ def build_document_intel_from_payload(
     text: str,
     payload: Mapping[str, Any],
     model: str,
-    truncated: bool = False,
+    chunks_processed: int = 1,
 ) -> DocumentIntel:
     doc_hash = hashlib.sha1(str(source_path).encode("utf-8")).hexdigest()[:12]
     document_id = f"doc:{doc_hash}"
@@ -185,9 +303,12 @@ def build_document_intel_from_payload(
         courts=[str(v) for v in payload.get("courts", []) if v],
         dates=[str(v) for v in payload.get("dates", []) if v],
         amounts=[str(v) for v in payload.get("amounts", []) if v],
+        chunks_processed=chunks_processed,
     )
-    if truncated:
-        intel.warnings.append("Document text was truncated before sending to Ollama")
+    if chunks_processed > 1:
+        intel.warnings.append(
+            f"Document processed in {chunks_processed} Ollama chunks ({len(text):,} chars total)"
+        )
     if not text.strip():
         intel.warnings.append("Document contained no extractable text")
         return intel
@@ -278,13 +399,13 @@ def parse_document_intel_ollama(
     source_path: Path,
     text: str,
     ollama_client: OllamaClient | None = None,
-    max_chars: int = DEFAULT_MAX_CHARS,
+    chunk_chars: int = DEFAULT_CHUNK_CHARS,
+    chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
 ) -> DocumentIntel:
-    """Parse a document by calling a local Ollama model."""
+    """Parse a document by calling a local Ollama model (chunked for long texts)."""
 
     client = ollama_client or OllamaClient()
-    clipped, truncated = _truncate_text(text, max_chars)
-    if not clipped.strip():
+    if not text.strip():
         doc_hash = hashlib.sha1(str(source_path).encode("utf-8")).hexdigest()[:12]
         intel = DocumentIntel(
             document_id=f"doc:{doc_hash}",
@@ -297,22 +418,29 @@ def parse_document_intel_ollama(
         intel.warnings.append("Document contained no extractable text")
         return intel
 
-    payload = client.extract_intel(title=source_path.name, text=text, max_chars=max_chars)
+    payload, chunks_processed = client.extract_intel(
+        title=source_path.name,
+        text=text,
+        chunk_chars=chunk_chars,
+        chunk_overlap=chunk_overlap,
+    )
     return build_document_intel_from_payload(
         source_path=source_path,
         text=text,
         payload=payload,
         model=client.model,
-        truncated=truncated,
+        chunks_processed=chunks_processed,
     )
 
 
 __all__ = [
+    "DEFAULT_CHUNK_OVERLAP",
     "DEFAULT_MAX_CHARS",
     "DEFAULT_OLLAMA_HOST",
     "DEFAULT_OLLAMA_MODEL",
     "OllamaClient",
     "build_document_intel_from_payload",
     "extract_json_payload",
+    "merge_chunk_payloads",
     "parse_document_intel_ollama",
 ]

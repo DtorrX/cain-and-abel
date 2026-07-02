@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence
 
 import networkx as nx
@@ -15,13 +14,8 @@ from ..graph import load_graph
 from ..resolver import Resolver
 from ..utils import console, timestamp
 from .extract import collect_document_paths, extract_text
-from .parse import (
-    DocumentIntel,
-    ParserName,
-    intel_to_graph_payload,
-    load_patterns,
-    parse_document_intel,
-)
+from .ollama import DEFAULT_CHUNK_CHARS, DEFAULT_CHUNK_OVERLAP, OllamaClient
+from .parse import DocumentIntel, intel_to_graph_payload, parse_document_intel
 
 
 @dataclass
@@ -109,34 +103,36 @@ def ingest_documents(
     paths: Sequence[str],
     *,
     out_dir: str,
-    patterns_path: str | None = None,
     merge_into: str | None = None,
     resolve_entities: bool = False,
     resolver: Resolver | None = None,
     report_path: str | None = None,
-    parser: ParserName = "ollama",
     ollama_client: object | None = None,
     ollama_model: str | None = None,
     ollama_host: str | None = None,
-    max_chars: int | None = None,
+    chunk_chars: int | None = None,
+    chunk_overlap: int | None = None,
 ) -> DocumentIngestResult:
-    """Parse documents and export (or merge) a wikinet graph."""
+    """Parse documents with Ollama and export (or merge) a wikinet graph."""
 
     doc_paths = collect_document_paths(paths)
-    patterns = load_patterns(Path(patterns_path) if patterns_path else None)
     result = DocumentIngestResult()
     all_nodes: List[MutableMapping[str, object]] = []
     all_edges: List[MutableMapping[str, object]] = []
     retrieved_at = timestamp()
 
     client = ollama_client
-    if parser == "ollama" and client is None and (ollama_model or ollama_host):
-        from .ollama import OllamaClient
-
+    if client is None:
         client = OllamaClient(host=ollama_host, model=ollama_model)
 
+    effective_chunk_chars = chunk_chars or DEFAULT_CHUNK_CHARS
+    effective_chunk_overlap = chunk_overlap or DEFAULT_CHUNK_OVERLAP
+
     for doc_path in doc_paths:
-        console.log(f"Parsing document {doc_path} via {parser}")
+        console.log(
+            f"Parsing document {doc_path} via Ollama "
+            f"(chunks <= {effective_chunk_chars:,} chars)"
+        )
         try:
             text = extract_text(doc_path)
         except Exception as exc:
@@ -147,10 +143,9 @@ def ingest_documents(
         intel = parse_document_intel(
             source_path=doc_path,
             text=text,
-            patterns=patterns,
-            parser=parser,
             ollama_client=client,
-            max_chars=max_chars,
+            chunk_chars=effective_chunk_chars,
+            chunk_overlap=effective_chunk_overlap,
         )
         result.documents.append(intel)
         result.warnings.extend(intel.warnings)
@@ -174,6 +169,9 @@ def ingest_documents(
             raise ValueError("resolver is required when resolve_entities=True")
         result.resolved_entities = _try_resolve_entities(graph, resolver)
 
+    result.nodes_added = graph.number_of_nodes()
+    result.edges_added = graph.number_of_edges()
+
     os.makedirs(out_dir, exist_ok=True)
     export_graph(graph, out_dir)
     intel_report_path = os.path.join(out_dir, "document_intel.json")
@@ -183,8 +181,6 @@ def ingest_documents(
         with open(report_path, "w", encoding="utf-8") as fh:
             json.dump(result.to_dict(), fh, indent=2)
 
-    result.nodes_added = graph.number_of_nodes()
-    result.edges_added = graph.number_of_edges()
     console.log(
         f"Document ingest complete: {len(result.documents)} docs, "
         f"{result.nodes_added} nodes, {result.edges_added} edges"

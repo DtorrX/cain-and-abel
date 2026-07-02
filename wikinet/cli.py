@@ -77,16 +77,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="Merge parsed intel into an existing crawl output directory (overrides --out)",
     )
     ingest.add_argument(
-        "--patterns",
-        help="Optional JSON file with regex patterns when --parser rules (see configs/legal_patterns.json)",
-    )
-    ingest.add_argument(
-        "--parser",
-        choices=["ollama", "rules"],
-        default=os.getenv("WIKINET_DOC_PARSER", "ollama"),
-        help="Document parser backend (default: ollama)",
-    )
-    ingest.add_argument(
         "--ollama-host",
         default=os.getenv("OLLAMA_HOST"),
         help="Ollama base URL (default: OLLAMA_HOST env or http://localhost:11434)",
@@ -97,9 +87,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="Ollama model name (default: OLLAMA_MODEL env or llama3.2)",
     )
     ingest.add_argument(
-        "--max-chars",
+        "--chunk-chars",
         type=int,
-        help="Max document characters sent to Ollama (default: 24000)",
+        help="Max characters per Ollama chunk (default: 12000)",
+    )
+    ingest.add_argument(
+        "--chunk-overlap",
+        type=int,
+        help="Character overlap between consecutive chunks (default: 800)",
     )
     ingest.add_argument(
         "--resolve",
@@ -253,15 +248,14 @@ def run_ingest(args: argparse.Namespace) -> None:
     ingest_documents(
         args.paths,
         out_dir=out_dir,
-        patterns_path=args.patterns,
         merge_into=args.merge_into,
         resolve_entities=args.resolve,
         resolver=resolver,
         report_path=args.report_path,
-        parser=args.parser,
         ollama_model=args.ollama_model,
         ollama_host=args.ollama_host,
-        max_chars=args.max_chars,
+        chunk_chars=args.chunk_chars,
+        chunk_overlap=args.chunk_overlap,
     )
 
 

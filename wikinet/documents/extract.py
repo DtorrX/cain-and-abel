@@ -32,7 +32,9 @@ def _strip_rtf(raw: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _extract_pdf(path: Path) -> str:
+def extract_pdf_pages(path: Path) -> List[str]:
+    """Return per-page plain text for a PDF (empty pages omitted)."""
+
     try:
         from pypdf import PdfReader  # type: ignore[import-untyped]
     except ImportError as exc:  # pragma: no cover - optional dependency
@@ -42,8 +44,17 @@ def _extract_pdf(path: Path) -> str:
     reader = PdfReader(str(path))
     pages: List[str] = []
     for page in reader.pages:
-        pages.append(page.extract_text() or "")
-    return "\n".join(pages).strip()
+        page_text = (page.extract_text() or "").strip()
+        if page_text:
+            pages.append(page_text)
+    return pages
+
+
+def _extract_pdf(path: Path) -> str:
+    pages = extract_pdf_pages(path)
+    if not pages:
+        return ""
+    return "\n\n".join(f"[Page {index}]\n{page}" for index, page in enumerate(pages, start=1))
 
 
 def _extract_docx(path: Path) -> str:
@@ -99,4 +110,9 @@ def collect_document_paths(paths: Iterable[str]) -> List[Path]:
     return discovered
 
 
-__all__ = ["SUPPORTED_EXTENSIONS", "collect_document_paths", "extract_text"]
+__all__ = [
+    "SUPPORTED_EXTENSIONS",
+    "collect_document_paths",
+    "extract_pdf_pages",
+    "extract_text",
+]
