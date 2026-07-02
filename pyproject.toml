@@ -38,7 +38,7 @@ documents = [
 wikinet = "wikinet.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["wikinet*"]
+include = ["wikinet*", "scripts*"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

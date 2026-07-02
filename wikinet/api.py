@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Iterable
 
 import networkx as nx
-from scripts import enrich_network
 
 from .cache import CacheManager
 from .cia import CIAWorldLeadersClient, GovernmentIndex
@@ -73,6 +72,8 @@ def run_pipeline(
 
 
 def run_enrichment(out_dir: str, taxonomy_path: str | None = None) -> None:
+    from scripts import enrich_network
+
     nodes_path = Path(out_dir) / "nodes.json"
     edges_path = Path(out_dir) / "edges.json"
     if not nodes_path.exists() or not edges_path.exists():

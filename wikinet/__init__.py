@@ -2,9 +2,16 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
-from .api import run_enrichment, run_pipeline
+__all__ = ["__version__", "run_pipeline", "run_enrichment", "run_document_ingest"]
 
-__all__ = ["__version__", "run_pipeline", "run_enrichment"]
+
+def __getattr__(name: str):
+    if name in {"run_pipeline", "run_enrichment", "run_document_ingest"}:
+        from . import api
+
+        return getattr(api, name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 try:
     __version__ = version("wikinet")
